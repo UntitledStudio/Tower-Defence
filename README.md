@@ -3,5 +3,4 @@
 Future Information will be written here.
 
 Thank you.
-
 A kind regards, your bitch.
