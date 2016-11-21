@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import javax.swing.JPanel;
 
 public class RenderUtil {
     public static int centerStringX(String s, int comparison_width, Graphics g, int x) {
@@ -13,10 +11,6 @@ public class RenderUtil {
     }
     
     public static int centerStringY(String s, int comparison_height, Graphics g, int y) {
-        /*FontRenderContext frc = g.getFontRenderContext();
-        GlyphVector gv = g.getFont().createGlyphVector(frc, s);
-        Rectangle2D box = gv.getVisualBounds();
-        return y + (int)(((comparison_height - box.getHeight()) / 2d) + (-box.getY()));*/
         FontMetrics fm = g.getFontMetrics();
         int yy = ((comparison_height - fm.getHeight()) / 2) + fm.getAscent();
         return y + yy;

@@ -4,16 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Log {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/y HH:mm:ss");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/y HH:mm:ss");
     //private static final List<String> total_output = new ArrayList<>();
     
     public static void info(String output) {
-        String formatted = "[" + dateFormat.format(new Date()) + "] " + output;
+        String formatted = "[" + DATE_FORMAT.format(new Date()) + "] " + output;
         System.out.println(formatted);
     }
     
     public static void error(String output) {
-        String formatted = "[" + dateFormat.format(new Date()) + "] " + output;
+        String formatted = "[" + DATE_FORMAT.format(new Date()) + "] " + output;
         System.err.println(formatted);
     }
     
@@ -24,6 +24,6 @@ public class Log {
     }*/
     
     public static SimpleDateFormat getDateFormat() {
-        return dateFormat;
+        return DATE_FORMAT;
     }
 }
