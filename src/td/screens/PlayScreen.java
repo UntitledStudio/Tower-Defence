@@ -101,8 +101,15 @@ public class PlayScreen implements Screen {
                 int x = e.getX();
                 int y = e.getY();
                 
-                if(menuBar.isOpen() || !menuBar.getState().equalsIgnoreCase("static")) {
-                    if(!Util.isWithinArea(x, y, menuBar.getHitbox())) {
+                if(!Util.isWithinArea(x, y, menuBar.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
+                    if(menuBar.isOpen() || menuBar.getState().equalsIgnoreCase("opening")) {
+                        menuBar.toggle();
+                        return;
+                    }
+                }
+                
+                if(Util.isWithinArea(x, y, infoAreaTexture)) {
+                    if(!menuBar.isOpen() || menuBar.getState().equalsIgnoreCase("closing")) {
                         menuBar.toggle();
                     }
                 }
@@ -219,16 +226,9 @@ public class PlayScreen implements Screen {
             g.drawString("Wave: " + player.getWave(), x, 65);
             
             /**
-             * Menu open/close animation.
+             * Menu Bar
              */
             g.drawImage(barTexture.getImage(), menuBar.getX(), menuBar.getY(), null);
-            
-            /**
-             * 
-             */
-            /*if(isOpen) {
-                g.drawImage(barTexture.getImage(), menuBar.getX(), menuBar.getY(), null);
-            }*/
         }
         
         public void toggle() {
