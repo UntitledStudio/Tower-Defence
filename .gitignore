@@ -1,0 +1,7 @@
+# Various folders/files.
+dist
+build
+test
+
+# NetBeans.
+nbproject
