@@ -32,6 +32,11 @@ public class PlayScreen implements Screen {
     @Override
     public void create(GameWindow window) {
         this.window = window;
+        
+        if(MapManager.getCurrentMap() == null) {
+            Log.info("[PlayScreen] No map has been set. Loading default map ..");
+            MapManager.setMap(MapManager.getMaps().get(0), true);
+        }
         this.player = new Player(100, 1000);
         
         try {
@@ -54,6 +59,8 @@ public class PlayScreen implements Screen {
     public void render(Graphics2D g) {
         MapManager.getCurrentMap().render(g, this);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        //g.drawImage(ImageCache.TOWER_BASIC, Rows.ROW_5.getX(), Columns.COLUMN_3.getY(), null);
         
         /**
          * Menu Bar

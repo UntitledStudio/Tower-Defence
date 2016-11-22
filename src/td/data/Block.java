@@ -8,14 +8,18 @@ import td.screens.PlayScreen;
 import td.util.Log;
 
 public class Block {
-    private final Rows row;
-    private final Columns column;
+    //private final Rows row;
+    //private final Columns column;
+    private final int x;
+    private final int y;
     private BlockType type;
     private Texture texture = null;
     
-    public Block(Rows row, Columns column, BlockType type) {
-        this.row = row;
-        this.column = column;
+    public Block(int x, int y, BlockType type) {
+        //this.row = row;
+        //this.column = column;
+        this.x = x;
+        this.y = y;
         this.type = type;
         
         try {
@@ -26,11 +30,11 @@ public class Block {
     }    
     
     public int getX() {
-        return row.getX();
+        return x;
     }
 
     public int getY() {
-        return column.getY();
+        return y;
     }
 
     public BlockType getType() {
@@ -59,10 +63,10 @@ public class Block {
             case TOWER: setTexture(new Texture(Image.BLOCK_TOWER)); break;
             default: setTexture(new Texture(Image.BLOCK_UNKNOWN)); break;
         }
-        texture.createHitbox(row.getX(), column.getY());
+        texture.createHitbox(x, y);
     }
     
     public void render(Graphics2D g, PlayScreen screen) {
-        g.drawImage(texture.getImage(), row.getX(), column.getY(), null);
+        g.drawImage(texture.getImage(), x, y, null);
     }
 }

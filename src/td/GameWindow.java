@@ -5,16 +5,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import td.assets.ImageCache;
 import td.data.Colors;
-import td.maps.DefaultMap;
-import td.maps.Map;
 import td.maps.MapManager;
 import td.screens.MenuScreen;
 import td.screens.ScreenManager;
 import td.util.Debug;
 import td.util.Input;
+import td.util.Log;
 
 public class GameWindow {
     protected final JFrame frame;
@@ -38,16 +39,25 @@ public class GameWindow {
         frame.pack();
         frame.setLocationRelativeTo(null);
         ImageCache.load();
-        loadMap();
+        handleMaps();
         ScreenManager.setGameWindow(this);
         ScreenManager.setScreen(new MenuScreen());
         panel.startGameLoop();
         loadGlobalInputHandlers();
         frame.setVisible(true);
+        
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Log.info("Game exiting ..");
+            }
+        });
     }
     
-    private void loadMap() {
-        MapManager.setMap(new DefaultMap(), true);
+    private void handleMaps() {
+        MapManager.loadRowsAndColumns();
+        MapManager.loadDefaultMaps();
+        MapManager.setMap(MapManager.getDefaultMap(), true);
     }
     
     private void setupPanel() {

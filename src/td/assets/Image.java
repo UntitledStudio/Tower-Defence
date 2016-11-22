@@ -12,6 +12,7 @@ public enum Image {
     BLOCK_TOWER("assets/block_tower_4.jpg"),
     BLOCK_UNKNOWN("assets/block_unknown_80x.png"),
     BLOCK_HIGHLIGHT("assets/block_highlight.png"),
+    TOWER_BASIC("assets/tower_basic.png"),
     BUTTON_PLAY("assets/button_play.png"),
     INFO_AREA("assets/info_area.png"),
     MENU_BAR("assets/menu_bar.png");
