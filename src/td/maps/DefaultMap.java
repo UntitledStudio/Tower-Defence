@@ -27,50 +27,50 @@ public class DefaultMap implements Map {
     public void buildMap() {
         for(Rows row : Rows.values()) {
             for(Columns column : Columns.values()) {
-                BlockType type = BlockType.TOWER_BLOCK;
+                BlockType type = BlockType.TOWER;
                 
                 switch(row) {
-                    case ROW_1: if(column == Columns.COLUMN_6) type = BlockType.PATH_BLOCK; break;
-                    case ROW_2: if(column == Columns.COLUMN_6) type = BlockType.PATH_BLOCK; break;
-                    case ROW_3: if(column == Columns.COLUMN_6) type = BlockType.PATH_BLOCK; break;
-                    case ROW_4: if(column == Columns.COLUMN_6) type = BlockType.PATH_BLOCK; break;
+                    case ROW_1: if(column == Columns.COLUMN_6) type = BlockType.PATH; break;
+                    case ROW_2: if(column == Columns.COLUMN_6) type = BlockType.PATH; break;
+                    case ROW_3: if(column == Columns.COLUMN_6) type = BlockType.PATH; break;
+                    case ROW_4: if(column == Columns.COLUMN_6) type = BlockType.PATH; break;
                     case ROW_5: {
                         switch(column) {
-                            case COLUMN_6: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_5: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_4: type = BlockType.PATH_BLOCK; break;
+                            case COLUMN_6: type = BlockType.PATH; break;
+                            case COLUMN_5: type = BlockType.PATH; break;
+                            case COLUMN_4: type = BlockType.PATH; break;
                         }
                         break;
                     }
-                    case ROW_6: if(column == Columns.COLUMN_4) type = BlockType.PATH_BLOCK; break;
-                    case ROW_7: if(column == Columns.COLUMN_4) type = BlockType.PATH_BLOCK; break;
+                    case ROW_6: if(column == Columns.COLUMN_4) type = BlockType.PATH; break;
+                    case ROW_7: if(column == Columns.COLUMN_4) type = BlockType.PATH; break;
                     case ROW_8: {
                         switch(column) {
-                            case COLUMN_4: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_5: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_6: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_7: type = BlockType.PATH_BLOCK; break;
+                            case COLUMN_4: type = BlockType.PATH; break;
+                            case COLUMN_5: type = BlockType.PATH; break;
+                            case COLUMN_6: type = BlockType.PATH; break;
+                            case COLUMN_7: type = BlockType.PATH; break;
                         }
                         break;
                     }
-                    case ROW_9: if(column == Columns.COLUMN_7) type = BlockType.PATH_BLOCK; break;
-                    case ROW_10: if(column == Columns.COLUMN_7) type = BlockType.PATH_BLOCK; break;
+                    case ROW_9: if(column == Columns.COLUMN_7) type = BlockType.PATH; break;
+                    case ROW_10: if(column == Columns.COLUMN_7) type = BlockType.PATH; break;
                     case ROW_11: {
                         switch(column) {
-                            case COLUMN_7: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_6: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_5: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_4: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_3: type = BlockType.PATH_BLOCK; break;
-                            case COLUMN_2: type = BlockType.PATH_BLOCK; break;
+                            case COLUMN_7: type = BlockType.PATH; break;
+                            case COLUMN_6: type = BlockType.PATH; break;
+                            case COLUMN_5: type = BlockType.PATH; break;
+                            case COLUMN_4: type = BlockType.PATH; break;
+                            case COLUMN_3: type = BlockType.PATH; break;
+                            case COLUMN_2: type = BlockType.PATH; break;
                         }
                         break;
                     }
-                    case ROW_12: if(column == Columns.COLUMN_2) type = BlockType.PATH_BLOCK; break;
-                    case ROW_13: if(column == Columns.COLUMN_2) type = BlockType.PATH_BLOCK; break;
-                    case ROW_14: if(column == Columns.COLUMN_2) type = BlockType.PATH_BLOCK; break;
-                    case ROW_15: if(column == Columns.COLUMN_2) type = BlockType.PATH_BLOCK; break;
-                    case ROW_16: if(column == Columns.COLUMN_2) type = BlockType.PATH_BLOCK; break;
+                    case ROW_12: if(column == Columns.COLUMN_2) type = BlockType.PATH; break;
+                    case ROW_13: if(column == Columns.COLUMN_2) type = BlockType.PATH; break;
+                    case ROW_14: if(column == Columns.COLUMN_2) type = BlockType.PATH; break;
+                    case ROW_15: if(column == Columns.COLUMN_2) type = BlockType.PATH; break;
+                    case ROW_16: if(column == Columns.COLUMN_2) type = BlockType.PATH; break;
                 }
                 blocks.add(new Block(row, column, type));
             }
@@ -94,7 +94,7 @@ public class DefaultMap implements Map {
         if(screen.getInput().isMouseInWindow()) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
-            if(b.getType() == BlockType.TOWER_BLOCK) {
+            if(b.getType() == BlockType.TOWER) {
                 if(Util.isWithinArea(screen.getInput(), b.getTexture().getHitbox())) {
                     g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
                 }

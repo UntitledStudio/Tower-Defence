@@ -8,20 +8,15 @@ import td.screens.PlayScreen;
 import td.util.Log;
 
 public class Block {
-    //private final int x;
-    //private final int y;
     private final Rows row;
     private final Columns column;
     private BlockType type;
     private Texture texture = null;
-
+    
     public Block(Rows row, Columns column, BlockType type) {
         this.row = row;
         this.column = column;
         this.type = type;
-
-        //this.x = row.getX();
-        //this.y = column.getY();
         
         try {
             determineTexture();
@@ -60,8 +55,8 @@ public class Block {
      */
     public void determineTexture() throws IOException {
         switch(type) {
-            case PATH_BLOCK: setTexture(new Texture(Image.BLOCK_PATH)); break;
-            case TOWER_BLOCK: setTexture(new Texture(Image.BLOCK_TOWER)); break;
+            case PATH: setTexture(new Texture(Image.BLOCK_PATH)); break;
+            case TOWER: setTexture(new Texture(Image.BLOCK_TOWER)); break;
             default: setTexture(new Texture(Image.BLOCK_UNKNOWN)); break;
         }
         texture.createHitbox(row.getX(), column.getY());

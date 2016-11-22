@@ -49,7 +49,4 @@ public interface Screen {
      * Use this method to get rid of garbage.
      */
     public void dispose();
-
-    @Override
-    public String toString();
 }

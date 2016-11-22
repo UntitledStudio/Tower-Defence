@@ -23,11 +23,6 @@ import td.util.Log;
 import td.util.Util;
 
 public class PlayScreen implements Screen {
-    /**
-     * Set to true once the create() method has completed loading.
-     * Used to prevent update and render calls while the screen is being loaded.
-     */
-    protected boolean loaded = false;
     private GameWindow window;
     private Texture infoAreaTexture = null;
     private Player player = null;
@@ -46,19 +41,16 @@ public class PlayScreen implements Screen {
             ex.printStackTrace();
         }
         this.menuBar = new MenuBar(infoAreaTexture);
-        loaded = true;
     }
 
     @Override
     public void update(double dt) {
-        if(!loaded) return;
         window.getMap().update(dt);
         menuBar.update(dt);
     }
 
     @Override
     public void render(Graphics2D g) {
-        if(!loaded) return;
         window.getMap().render(g, this);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
