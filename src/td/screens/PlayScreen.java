@@ -16,6 +16,7 @@ import td.assets.Image;
 import td.assets.Texture;
 import td.data.Fonts;
 import td.data.Player;
+import td.maps.MapManager;
 import td.util.Debug;
 import td.util.Hitbox;
 import td.util.Input;
@@ -45,13 +46,13 @@ public class PlayScreen implements Screen {
 
     @Override
     public void update(double dt) {
-        window.getMap().update(dt);
+        MapManager.getCurrentMap().update(dt);
         menuBar.update(dt);
     }
 
     @Override
     public void render(Graphics2D g) {
-        window.getMap().render(g, this);
+        MapManager.getCurrentMap().render(g, this);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
         /**

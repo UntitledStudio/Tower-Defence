@@ -28,10 +28,19 @@ public class ScreenManager {
      */
     private static int fps = -1;
     
+    /**
+     * Defines the GameWindow instance.
+     * @param window 
+     */
     public static void setGameWindow(GameWindow window) {
         gameWindow = window;
     }
     
+    /**
+     * Set the current active screen.
+     * Will handle switching between screens automatically.
+     * @param screen 
+     */
     public static void setScreen(Screen screen) {
         Log.info("Switching screens .. (" + (currentScreen != null ? currentScreen.toString() + " -> " + screen.toString().concat(")") : "null -> " + screen.toString().concat(")")));
         long start = System.currentTimeMillis();
@@ -49,10 +58,18 @@ public class ScreenManager {
         Log.info("Screens switched! Took " + (System.currentTimeMillis()-start) + "ms");
     }
     
+    /**
+     * Returns the current active screen.
+     * @return 
+     */
     public static Screen getCurrentScreen() {
         return currentScreen;
     }
     
+    /**
+     * Request a screen to update logic.
+     * @param dt 
+     */
     public static void update(double dt) {
         if(currentScreen != null) {
             if(isLoaded()) {
@@ -63,6 +80,10 @@ public class ScreenManager {
         }
     }
     
+    /**
+     * Request a screen to render itself.
+     * @param g 
+     */
     public static void render(Graphics2D g) {
         if(currentScreen != null) {
             if(isLoaded()) {
@@ -73,14 +94,26 @@ public class ScreenManager {
         }
     }
     
+    /**
+     * Returns the latest FPS information.
+     * @return 
+     */
     public static int getFPS() {
         return fps;
     }
     
+    /**
+     * Report the latest FPS information.
+     * @param fps 
+     */
     public static void reportFPS(int fps) {
         ScreenManager.fps = fps;
     }
     
+    /**
+     * Returns whether or not the current active screen has been loaded or not.
+     * @return 
+     */
     public static boolean isLoaded() {
         return loaded;
     }

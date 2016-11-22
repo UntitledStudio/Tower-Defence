@@ -10,6 +10,7 @@ import td.assets.ImageCache;
 import td.data.Colors;
 import td.maps.DefaultMap;
 import td.maps.Map;
+import td.maps.MapManager;
 import td.screens.MenuScreen;
 import td.screens.ScreenManager;
 import td.util.Debug;
@@ -28,7 +29,6 @@ public class GameWindow {
         this.panel = new GamePanel();
         this.input = new Input(panel);
     }
-    private Map map = null;
     
     public void run() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,8 +47,7 @@ public class GameWindow {
     }
     
     private void loadMap() {
-        map = new DefaultMap();
-        map.buildMap();
+        MapManager.setMap(new DefaultMap(), true);
     }
     
     private void setupPanel() {
@@ -86,10 +85,6 @@ public class GameWindow {
     
     public GamePanel getPanel() {
         return panel;
-    }
-    
-    public Map getMap() {
-        return map;
     }
     
     public void disposeInputHandlers() {
