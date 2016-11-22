@@ -14,6 +14,7 @@ import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
 import td.assets.Texture;
+import td.data.Colors;
 import td.data.Fonts;
 import td.data.Player;
 import td.maps.MapManager;
@@ -219,16 +220,33 @@ public class PlayScreen implements Screen {
              */
             infoAreaTexture.draw(g);
             g.setColor(Color.WHITE);
-            g.setFont(Fonts.INFO_AREA_FONT);
-            int x = menuBar.getX() + menuBar.getWidth() + 15;
-            g.drawString("Cash: $" + player.getCash(), x, 25);
-            g.drawString("Health: " + player.getHealth(), x, 45);
-            g.drawString("Wave: " + player.getWave(), x, 65);
+            g.setFont(Fonts.INFO_AREA);
+            int x1 = getX() + getWidth() + 15;
+            int x2 = x1 + 60;
+            
+            // - Cash
+            g.drawString("Cash:", x1, 25);
+            g.drawString("$" + player.getCash(), x2, 25);
+            
+            // - Health
+            g.drawString("Health:", x1, 45);
+            g.drawString("" + player.getHealth(), x2, 45);
+            
+            // - Wave
+            g.drawString("Wave:", x1, 65);
+            g.drawString("" + player.getWave(), x2, 65);
+            
             
             /**
              * Menu Bar
              */
-            g.drawImage(barTexture.getImage(), menuBar.getX(), menuBar.getY(), null);
+            // - Background
+            g.drawImage(barTexture.getImage(), getX(), getY(), null);
+            
+            // - Title
+            g.setFont(Fonts.MENU_BAR_TITLE);
+            g.setColor(Colors.MENU_BAR_TITLE);
+            g.drawString("BUILD MENU", getX() + 30, 40);
         }
         
         public void toggle() {

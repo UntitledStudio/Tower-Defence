@@ -1,8 +1,8 @@
 package td.maps;
 
 import java.awt.Graphics2D;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
@@ -20,7 +20,7 @@ public class Map {
         this.name = name;
         this.structure = structure;
     }
-    private Set<Block> blocks = new HashSet<>();
+    private List<Block> blocks = new ArrayList<>();
     
     public void buildMap() {
         Log.info("[Map: " + getName() + "] Building ..");
@@ -84,7 +84,7 @@ public class Map {
         return null;
     }
     
-    public Set<Block> getBlocks() {
+    public List<Block> getBlocks() {
         return blocks;
     }
     
