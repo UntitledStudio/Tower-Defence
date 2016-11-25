@@ -15,7 +15,8 @@ public enum Image {
     TOWER_BASIC("assets/tower_basic.png"),
     BUTTON_PLAY("assets/button_play.png"),
     INFO_AREA("assets/info_area.png"),
-    MENU_BAR("assets/menu_bar.png");
+    BUILD_MENU("assets/build_menu.png"),
+    TOWER_SECTION("assets/tower_section.png");
     
     private final String path;
     

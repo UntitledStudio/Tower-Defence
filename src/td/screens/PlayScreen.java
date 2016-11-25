@@ -1,6 +1,5 @@
 package td.screens;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
@@ -10,16 +9,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
-import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
 import td.assets.Texture;
-import td.data.Colors;
-import td.data.Fonts;
 import td.data.Player;
 import td.maps.MapManager;
+import td.screens.buildmenu.BuildMenu;
+import td.screens.buildmenu.BuildMenuState;
 import td.util.Debug;
-import td.util.Hitbox;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
@@ -28,7 +25,7 @@ public class PlayScreen implements Screen {
     private GameWindow window;
     private Texture infoAreaTexture = null;
     private Player player = null;
-    private MenuBar menuBar = null;
+    private BuildMenu menuBar = null;
     
     @Override
     public void create(GameWindow window) {
@@ -47,7 +44,7 @@ public class PlayScreen implements Screen {
             Log.error("[PlayScreen] Failed to load textures");
             ex.printStackTrace();
         }
-        this.menuBar = new MenuBar(infoAreaTexture);
+        this.menuBar = new BuildMenu(infoAreaTexture, player);
     }
 
     @Override
@@ -82,11 +79,11 @@ public class PlayScreen implements Screen {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    if(!menuBar.isOpen() || !menuBar.getState().equalsIgnoreCase("static")) {
+                    if(!menuBar.isOpen() || menuBar.getState() != BuildMenuState.STATIC) {
                         menuBar.toggle();
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    if(menuBar.isOpen() || !menuBar.getState().equalsIgnoreCase("static")) {
+                    if(menuBar.isOpen() || menuBar.getState() != BuildMenuState.STATIC) {
                         menuBar.toggle();
                     }
                 }
@@ -103,14 +100,14 @@ public class PlayScreen implements Screen {
                 int y = e.getY();
                 
                 if(!Util.isWithinArea(x, y, menuBar.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(menuBar.isOpen() || menuBar.getState().equalsIgnoreCase("opening")) {
+                    if(menuBar.isOpen() || menuBar.getState() == BuildMenuState.OPENING) {
                         menuBar.toggle();
                         return;
                     }
                 }
                 
                 if(Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(!menuBar.isOpen() || menuBar.getState().equalsIgnoreCase("closing")) {
+                    if(!menuBar.isOpen() || menuBar.getState() == BuildMenuState.CLOSING) {
                         menuBar.toggle();
                     }
                 }
@@ -136,156 +133,5 @@ public class PlayScreen implements Screen {
     
     public Input getInput() {
         return window.getInput();
-    }
-    
-    private class MenuBar {
-        protected Texture barTexture = null;
-        protected Texture infoAreaTexture = null;
-        private boolean isOpen = false;
-        private String state = "static"; // States: static, opening, closing;
-        
-        public MenuBar(Texture infoAreaTexture) {
-            this.infoAreaTexture = infoAreaTexture;
-            
-            try {
-                barTexture = new Texture(Image.MENU_BAR);
-                barTexture.createHitbox(0, 0);
-                barTexture.getHitbox().setX(-barTexture.getHitbox().getWidth());
-            } catch (IOException ex) {
-                Log.error("[MenuBar] Failed to load texture");
-            }
-        }
-        
-        public int getX() {
-            return getHitbox().getX();
-        }
-        
-        public int getY() {
-            return getHitbox().getY();
-        }
-        
-        public int getWidth() {
-            return getHitbox().getWidth();
-        }
-        
-        public int getHeight() {
-            return getHitbox().getHeight();
-        }
-        
-        public Hitbox getHitbox() {
-            return barTexture.getHitbox();
-        }
-        
-        public boolean isOpen() {
-            return isOpen;
-        }
-        
-        public String getState() {
-            return state;
-        }
-        
-        public void update(double dt) {
-            /**
-             * Menu open/close animation.
-             */
-            if(!state.equalsIgnoreCase("static")) {
-                if(state.equalsIgnoreCase("opening")) {
-                    // Opening
-                    int x = (int)(menuBar.getX() + (25 * dt));
-                    
-                    if(x >= 0) {
-                        x = 0;
-                        state = "static";
-                        isOpen = true;
-                    }
-                    menuBar.getHitbox().setX(x);
-                } else {
-                    // Closing
-                    int x = (int)(menuBar.getX() - (25 * dt));
-                    
-                    if(x <= -menuBar.getWidth()) {
-                        x = -menuBar.getWidth();
-                        state = "static";
-                        isOpen = false;
-                    }
-                    menuBar.getHitbox().setX(x);
-                }
-                infoAreaTexture.getHitbox().setX(menuBar.getX() + menuBar.getWidth());
-            }
-        }
-        
-        public void render(Graphics2D g) {
-            /**
-             * Info Area
-             */
-            infoAreaTexture.draw(g);
-            g.setColor(Color.WHITE);
-            g.setFont(Fonts.INFO_AREA);
-            int x1 = getX() + getWidth() + 15;
-            int x2 = x1 + 60;
-            
-            // - Cash
-            g.drawString("Cash:", x1, 25);
-            g.drawString("$" + player.getCash(), x2, 25);
-            
-            // - Health
-            g.drawString("Health:", x1, 45);
-            g.drawString("" + player.getHealth(), x2, 45);
-            
-            // - Wave
-            g.drawString("Wave:", x1, 65);
-            g.drawString("" + player.getWave(), x2, 65);
-            
-            
-            /**
-             * Menu Bar
-             */
-            // - Background
-            g.drawImage(barTexture.getImage(), getX(), getY(), null);
-            
-            // - Title
-            g.setFont(Fonts.MENU_BAR_TITLE);
-            g.setColor(Colors.MENU_BAR_TITLE);
-            g.drawString("BUILD MENU", getX() + 30, 40);
-        }
-        
-        public void toggle() {
-            Hitbox hitbox = barTexture.getHitbox();
-            
-            if(!state.equalsIgnoreCase("static")) {
-                if(Configuration.ANIMATIONS_ENABLED) {
-                    if(state.equalsIgnoreCase("opening")) {
-                        state = "closing";
-                    } else {
-                        state = "opening";
-                    }
-                    return;
-                }
-            }
-            
-            if(isOpen) {
-                /**
-                 * Close
-                 */
-                if(Configuration.ANIMATIONS_ENABLED) {
-                    state = "closing";
-                } else {
-                    hitbox.setX(-hitbox.getWidth());
-                    infoAreaTexture.getHitbox().setX(0);
-                    isOpen = false;
-                }
-            } else {
-                /**
-                 * Open
-                 */
-                if(Configuration.ANIMATIONS_ENABLED) {
-                    state = "opening";
-                } else {
-                    hitbox.setX(0);
-                    infoAreaTexture.getHitbox().setX(hitbox.getWidth());
-                    isOpen = true;
-                }
-            }
-        }
     }
 }

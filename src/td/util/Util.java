@@ -1,12 +1,14 @@
 package td.util;
 
 import java.awt.AWTException;
+import java.awt.AlphaComposite;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
@@ -45,24 +47,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import td.assets.Texture;
 
 public class Util {
-    private static final Random random = new Random();
-    private static Robot robot = null;
-    
-    public static Random getRandom() {
-        return random;
-    }
-    
-    public static Robot getRobot() {
-        if(robot == null) {
-            try {
-                robot = new Robot();
-            } catch (AWTException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return robot;
-    }
-    
     public static void applyDesign() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -246,33 +230,23 @@ public class Util {
         return nf.format(d).replace(",", ".");
     }
     
-    public static String fixURL(String url) {
-        url = url.toLowerCase();
-        
-        if(!url.contains(".")) {
-            url = url + ".com/";
-        }
-        
-        if(!url.contains("www.")) {
-            url = "http://www." + url;
-        }
-        
-        if(!url.startsWith("http")) {
-            url = "http://" + url;
-        }
-        
-        if(!url.endsWith("/")) {
-            url = url + "/";
-        }
-        return url;
+    public static BufferedImage resizeImage(BufferedImage image, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(image, 0, 0, width, height, null);
+        g.dispose();
+        return resizedImage;
     }
     
-    public static String fixURLtoINet(String url) {
-        url = url.toLowerCase();
-        
-        url = url.replace("http://", "");
-        url = url.replace("https://", "");
-        url = url.replaceAll("/", "");
-        return url;
+    public static BufferedImage resizeImageHQ(BufferedImage image, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
+        Graphics2D g = resizedImage.createGraphics();
+        g.setComposite(AlphaComposite.Src);
+	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.drawImage(image, 0, 0, width, height, null);
+        g.dispose();
+        return resizedImage;
     }
 }
