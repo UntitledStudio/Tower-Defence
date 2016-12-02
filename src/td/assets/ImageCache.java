@@ -3,6 +3,7 @@ package td.assets;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import td.util.Log;
+import td.util.Util;
 
 public class ImageCache {
     public static BufferedImage BLOCK_HIGHLIGHT = null;
@@ -13,7 +14,7 @@ public class ImageCache {
             BLOCK_HIGHLIGHT = Image.BLOCK_HIGHLIGHT.getBufferedImage();
             TOWER_BASIC = Image.TOWER_BASIC.getBufferedImage();
         } catch (IOException ex) {
-            Log.error("[ImageCache] Failed to load an image");
+            Log.error("[ImageCache] Failed to load!");
             ex.printStackTrace();
         }
     }

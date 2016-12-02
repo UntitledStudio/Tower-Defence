@@ -1,5 +1,6 @@
 package td.towers;
 
+import java.awt.Graphics2D;
 import td.data.Block;
 import td.entities.Entity;
 
@@ -7,49 +8,49 @@ public abstract class Tower implements Entity {
     /**
      * Max number of levels this tower can have.
      */
-    private int maxLevel = 5;
+    int maxLevel = 5;
     
     /**
      * Current level of the tower.
      */
-    private int currentLevel = 1;
+    int currentLevel = 1;
     
     /**
      * Tower damage to monsters.
      */
-    private int damage;
+    int damage = 1;
     
     /**
      * The chance (%) that this tower will critical strike a monster.
      */
-    private int critChance;
+    int critChance = 0;
     
     /**
      * Defines the critical strike damage multiplier relative to the default damage of this tower.
      * A critMultiplier of 2.0 means that the tower deals double the normal damage.
      */
-    private double critMultiplier;
+    double critMultiplier = 2.0;
     
     /**
      * The cost of this tower.
      */
-    private int buyCost;
+    int buyCost = -1;
     
     /**
      * Returns the amount of cash you get from refunding the tower.
      */
-    private int refundAmount;
+    int refundAmount = -1;
     
     /**
      * How much the cost (relative to buy cost) of upgrading this tower increases.
      * So a upgradeMultiplier of 2.0 would make the next upgrade of this tower double the buy cost.
      */
-    private double upgradeCostMultiplier;
+    double upgradeCostMultiplier = 2;
     
     /**
      * How much the default damage of this tower increases on each upgrade. 
      */
-    private double upgradeDamageMultiplier;
+    double upgradeDamageMultiplier = 2;
     
     private boolean isSelected = false;
     private TowerState state = TowerState.DISABLED;
@@ -156,5 +157,20 @@ public abstract class Tower implements Entity {
     }
     
     public abstract String getName();
-    public abstract String getDescription();
+
+    @Override
+    public void create() {
+    }
+
+    @Override
+    public void update(double dt) {
+    }
+
+    @Override
+    public void render(Graphics2D g) {
+    }
+    
+    @Override
+    public void remove() {
+    }
 } 

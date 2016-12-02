@@ -13,6 +13,10 @@ public class Texture {
         this.image = image.getBufferedImage();
     }
     
+    public Texture(BufferedImage image) {
+        this.image = image;
+    }
+    
     public BufferedImage getImage() {
         return image;
     }
