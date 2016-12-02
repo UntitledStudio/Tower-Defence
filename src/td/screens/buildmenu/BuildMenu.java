@@ -5,10 +5,12 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 import td.Configuration;
 import td.assets.Image;
+import td.assets.ImageCache;
 import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
 import td.data.Player;
+import td.util.Debug;
 import td.util.Hitbox;
 import td.util.Log;
 import td.util.Util;
@@ -62,7 +64,8 @@ public class BuildMenu {
             Log.error("[MenuBar] Failed to load texture");
         }
         this.player = player;
-        this.tower_section = new TowerSection(this, 110);
+        this.tower_section = new TowerSection(this, 120);
+        Debug.feedInstance(this);
     }
     
     /**
@@ -152,23 +155,19 @@ public class BuildMenu {
         /**
          * Info Area
          */
+        
+        // todo: performance opt. !!
+        
         infoAreaTexture.draw(g);
-        g.setColor(Color.WHITE);
+        g.setColor(Colors.INFO_AREA_TEXT);
         g.setFont(Fonts.INFO_AREA);
         int x1 = getX() + getWidth() + 15;
-        int x2 = x1 + 60;
-
-        // - Cash
-        g.drawString("Cash:", x1, 25);
-        g.drawString("$" + player.getCash(), x2, 25);
-
-        // - Health
-        g.drawString("Health:", x1, 45);
-        g.drawString("" + player.getHealth(), x2, 45);
-
-        // - Wave
-        g.drawString("Wave:", x1, 65);
-        g.drawString("" + player.getWave(), x2, 65);
+        
+        g.drawImage(ImageCache.CASH_ICON, x1, 12, null);
+        g.drawString(Util.cleanNumber(player.getCash()), x1 + ImageCache.CASH_ICON.getWidth() + 5, 30);
+        
+        g.drawImage(ImageCache.HEART_ICON, x1, 45, null);
+        g.drawString("" + player.getHealth(), x1 + ImageCache.HEART_ICON.getWidth() + 5, 64);
 
 
         /**

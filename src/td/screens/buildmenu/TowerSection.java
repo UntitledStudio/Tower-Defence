@@ -1,5 +1,6 @@
 package td.screens.buildmenu;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,13 +10,14 @@ import td.assets.ImageCache;
 import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
+import td.util.Hitbox;
 import td.util.Log;
 import td.util.Util;
 
 public class TowerSection {
     private final int y;
     private final BuildMenu menu;
-    private Texture texture = null;
+    private final Hitbox hitbox;
     private final String title = "Towers";
     private final List<TowerIcon> icons;
     private final int iconSize = 60;
@@ -24,16 +26,13 @@ public class TowerSection {
         this.menu = menu;
         this.y = y;
         this.icons = new ArrayList<>();
+        this.hitbox = new Hitbox(menu.getX(), y, menu.getWidth(), 0); // test
         
         try {
-            // Load background
-            this.texture = new Texture(Image.TOWER_SECTION);
-            this.texture.createHitbox(menu.getX(), y);
-            
             // Load tower icons
             this.icons.add(new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize))));
         } catch (IOException ex) {
-            Log.error("[BuildMenu: TowerSection] Failed to load texture");
+            Log.error("[BuildMenu: TowerSection] Failed to load tower icon(s)");
         }
     }
     
@@ -42,7 +41,7 @@ public class TowerSection {
      * @param dt 
      */
     public void update(double dt) {
-        getTexture().getHitbox().setX(menu.getX());
+        getHitbox().setX(menu.getX());
     }
     
     /**
@@ -50,9 +49,6 @@ public class TowerSection {
      * @param g 
      */
     public void render(Graphics2D g) {
-        // Background
-        getTexture().draw(g);
-        
         // Title
         g.setFont(Fonts.BUILD_MENU_SECTIONS);
         g.setColor(Colors.BUILD_MENU_SECTION_TITLES);
@@ -61,7 +57,8 @@ public class TowerSection {
         // Icons
         // !! Consider: Hard coding all towericon variables instead for better performance?
         for(TowerIcon icon : icons) {
-            icon.setX(getX() + 10); // todo: put somewhere else
+            icon.setBackground(new Color(50, 50, 50));
+            icon.setX(getX() + 20); // todo: put somewhere else
             icon.setY(getY() + 30); // todo: put somewhere else
             icon.draw(g);
         }
@@ -71,8 +68,8 @@ public class TowerSection {
         
     }
     
-    public Texture getTexture() {
-        return texture;
+    public Hitbox getHitbox() {
+        return hitbox;
     }
     
     public int getY() {
@@ -80,19 +77,28 @@ public class TowerSection {
     }
     
     public int getX() {
-        return getTexture().getHitbox().getX();
+        return getHitbox().getX();
     }
     
     public int getWidth() {
-        return getTexture().getHitbox().getWidth();
+        return getHitbox().getWidth();
     }
     
     private class TowerIcon {
         private final Texture texture;
+        private Color background = Color.WHITE;
 
         public TowerIcon(Texture texture) {
             this.texture = texture;
             texture.createHitbox(0, 0);
+        }
+        
+        public void setBackground(Color bg) {
+            this.background = bg;
+        }
+        
+        public Color getBackground() {
+            return background;
         }
         
         public int getX() {
@@ -124,6 +130,8 @@ public class TowerSection {
         }
         
         public void draw(Graphics2D g) {
+            g.setColor(background);
+            g.fillRect(getX(), getY(), getWidth(), getHeight());
             getTexture().draw(g);
         }
     }
