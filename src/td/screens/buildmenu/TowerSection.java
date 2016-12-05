@@ -30,7 +30,9 @@ public class TowerSection {
         
         try {
             // Load tower icons
-            this.icons.add(new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize))));
+            TowerIcon basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)));
+            basicTower.setY(y + 30);
+            this.icons.add(basicTower);
         } catch (IOException ex) {
             Log.error("[BuildMenu: TowerSection] Failed to load tower icon(s)");
         }
@@ -51,15 +53,13 @@ public class TowerSection {
     public void render(Graphics2D g) {
         // Title
         g.setFont(Fonts.BUILD_MENU_SECTIONS);
-        g.setColor(Colors.BUILD_MENU_SECTION_TITLES);
+        g.setColor(Colors.BMENU_SECTION_TITLES);
         g.drawString(title, Util.centerStringX(title, getWidth(), g, getX()), y + 20);
         
         // Icons
         // !! Consider: Hard coding all towericon variables instead for better performance?
         for(TowerIcon icon : icons) {
-            icon.setBackground(new Color(50, 50, 50));
-            icon.setX(getX() + 20); // todo: put somewhere else
-            icon.setY(getY() + 30); // todo: put somewhere else
+            icon.setX(getX() + 20);
             icon.draw(g);
         }
     }
@@ -86,19 +86,10 @@ public class TowerSection {
     
     private class TowerIcon {
         private final Texture texture;
-        private Color background = Color.WHITE;
 
         public TowerIcon(Texture texture) {
             this.texture = texture;
             texture.createHitbox(0, 0);
-        }
-        
-        public void setBackground(Color bg) {
-            this.background = bg;
-        }
-        
-        public Color getBackground() {
-            return background;
         }
         
         public int getX() {
@@ -130,7 +121,11 @@ public class TowerSection {
         }
         
         public void draw(Graphics2D g) {
-            g.setColor(background);
+            if(Util.isWithinArea(menu.getInput(), texture.getHitbox())) {
+                g.setColor(Colors.BMENU_SECTION_ICON_BG_HIGHLIGHTED);
+            } else {
+                g.setColor(Colors.BMENU_SECTION_ICON_BG);
+            }
             g.fillRect(getX(), getY(), getWidth(), getHeight());
             getTexture().draw(g);
         }

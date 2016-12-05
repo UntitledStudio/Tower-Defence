@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
             Log.error("[PlayScreen] Failed to load textures");
             ex.printStackTrace();
         }
-        this.menuBar = new BuildMenu(infoAreaTexture, player);
+        this.menuBar = new BuildMenu(this);
     }
 
     @Override
@@ -133,5 +133,13 @@ public class PlayScreen implements Screen {
     
     public Input getInput() {
         return window.getInput();
+    }
+    
+    public Texture getInfoArea() {
+        return infoAreaTexture;
+    }
+    
+    public Player getPlayer() {
+        return player;
     }
 }

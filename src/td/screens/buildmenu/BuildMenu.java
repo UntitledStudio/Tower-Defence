@@ -10,21 +10,23 @@ import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
 import td.data.Player;
+import td.screens.PlayScreen;
 import td.util.Debug;
 import td.util.Hitbox;
+import td.util.Input;
 import td.util.Log;
 import td.util.Util;
 
 public class BuildMenu {
     /**
+     * 
+     */
+    private final PlayScreen playScreen;
+    
+    /**
      * The texture that is the build menu. This defines the position of all elements placed inside this menu.
      */
     private Texture menuTexture = null;
-    
-    /**
-     * The small display box up in the left corner of the screen displaying information about the player and active game.
-     */
-    private Texture infoAreaTexture = null;
     
     /**
      * Returns true if the menu is completely open. Meaning that it is open and static.
@@ -46,15 +48,10 @@ public class BuildMenu {
      */
     private BuildMode mode = BuildMode.DEFAULT;
     
-    /**
-     * An instance of the player object.
-     */
-    private final Player player;
-    
     private TowerSection tower_section = null;
 
-    public BuildMenu(Texture infoAreaTexture, Player player) {
-        this.infoAreaTexture = infoAreaTexture;
+    public BuildMenu(PlayScreen playScreen) {
+        this.playScreen = playScreen;
 
         try {
             menuTexture = new Texture(Image.BUILD_MENU);
@@ -63,7 +60,6 @@ public class BuildMenu {
         } catch (IOException ex) {
             Log.error("[MenuBar] Failed to load texture");
         }
-        this.player = player;
         this.tower_section = new TowerSection(this, 120);
         Debug.feedInstance(this);
     }
@@ -138,7 +134,7 @@ public class BuildMenu {
                 }
                 getHitbox().setX(x);
             }
-            infoAreaTexture.getHitbox().setX(getX() + getWidth());
+            getInfoArea().getHitbox().setX(getX() + getWidth());
         } else {
             if(!isOpen()) {
                 return;
@@ -158,16 +154,16 @@ public class BuildMenu {
         
         // todo: performance opt. !!
         
-        infoAreaTexture.draw(g);
+        getInfoArea().draw(g);
         g.setColor(Colors.INFO_AREA_TEXT);
         g.setFont(Fonts.INFO_AREA);
         int x1 = getX() + getWidth() + 15;
         
         g.drawImage(ImageCache.CASH_ICON, x1, 12, null);
-        g.drawString(Util.cleanNumber(player.getCash()), x1 + ImageCache.CASH_ICON.getWidth() + 5, 30);
+        g.drawString(Util.cleanNumber(getPlayer().getCash()), x1 + ImageCache.CASH_ICON.getWidth() + 5, 30);
         
         g.drawImage(ImageCache.HEART_ICON, x1, 45, null);
-        g.drawString("" + player.getHealth(), x1 + ImageCache.HEART_ICON.getWidth() + 5, 64);
+        g.drawString("" + getPlayer().getHealth(), x1 + ImageCache.HEART_ICON.getWidth() + 5, 64);
 
 
         /**
@@ -179,7 +175,7 @@ public class BuildMenu {
 
         // - Title
         g.setFont(Fonts.BUILD_MENU_TITLE);
-        g.setColor(Colors.BUILD_MENU_TITLE);
+        g.setColor(Colors.BMENU_TITLE);
         g.drawString("BUILD MENU", Util.centerStringX("BUILD MENU", getWidth(), g, getX()), 40);
         
         // - Render Sections
@@ -208,7 +204,7 @@ public class BuildMenu {
                 state = BuildMenuState.CLOSING;
             } else {
                 hitbox.setX(-hitbox.getWidth());
-                infoAreaTexture.getHitbox().setX(0);
+                getInfoArea().getHitbox().setX(0);
                 isOpen = false;
             }
         } else {
@@ -219,9 +215,21 @@ public class BuildMenu {
                 state = BuildMenuState.OPENING;
             } else {
                 hitbox.setX(0);
-                infoAreaTexture.getHitbox().setX(hitbox.getWidth());
+                getInfoArea().getHitbox().setX(hitbox.getWidth());
                 isOpen = true;
             }
         }
+    }
+    
+    public Texture getInfoArea() {
+        return playScreen.getInfoArea();
+    }
+    
+    public Player getPlayer() {
+        return playScreen.getPlayer();
+    }
+    
+    public Input getInput() {
+        return playScreen.getInput();
     }
 }

@@ -32,7 +32,7 @@ public class Debug {
             if(buildMenu != null) {
                 RenderUtil.drawString("BuildMenu: " + buildMenu.getState().name() + ", " + (buildMenu.isOpen() ? "open" : "closed"), 8, baseY * 13, Color.WHITE, bgClr, g);
             } else {
-                RenderUtil.drawString("BuildMenu: INSTANCE IS NULL", baseY, baseY, bgClr, bgClr, g);
+                RenderUtil.drawString("BuildMenu: INSTANCE IS NULL", 8, baseY * 13, Color.WHITE, bgClr, g);
             }
         }
     }
