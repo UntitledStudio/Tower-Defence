@@ -11,6 +11,7 @@ import td.data.Colors;
 import td.data.Fonts;
 import td.data.Player;
 import td.screens.PlayScreen;
+import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Hitbox;
 import td.util.Input;
@@ -187,7 +188,9 @@ public class BuildMenu {
 
     public void toggle() {
         Hitbox hitbox = menuTexture.getHitbox();
-
+        
+        TowerPlacer.setActive(false);
+        
         if(state != BuildMenuState.STATIC) {
             if(Configuration.ANIMATIONS_ENABLED) {
                 if(state == BuildMenuState.OPENING) {

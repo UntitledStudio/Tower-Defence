@@ -7,6 +7,8 @@ import td.assets.Image;
 import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
+import td.towers.TowerPlacer;
+import td.towers.TowerType;
 import td.util.Hitbox;
 import td.util.Log;
 import td.util.Util;
@@ -66,6 +68,10 @@ public class TowerSection implements Section {
         
         if(Util.isWithinArea(x, y, TOWER_BASIC.getTexture())) {
             Log.info("[TowerSection] Registered mousePress at icon: TOWER_BASIC");
+            
+            menu.toggle();
+            TowerPlacer.setActive(true);
+            TowerPlacer.setSelectedTower(TowerType.BASIC_TOWER);
         }
     }
     

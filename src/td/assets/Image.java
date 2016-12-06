@@ -10,7 +10,6 @@ import td.TowerDefence;
 public enum Image {
     BLOCK_PATH("assets/block_path_2.png"),
     BLOCK_TOWER("assets/block_tower_4.jpg"),
-    BLOCK_UNKNOWN("assets/block_unknown_80x.png"),
     BLOCK_HIGHLIGHT("assets/block_highlight.png"),
     TOWER_BASIC("assets/tower_basic.png"),
     BUTTON_PLAY("assets/button_play.png"),
@@ -18,7 +17,8 @@ public enum Image {
     BUILD_MENU("assets/build_menu.png"),
     TOWER_SECTION("assets/tower_section.png"),
     CASH_ICON("assets/cash_icon.png"),
-    HEART_ICON("assets/heart_icon.png");
+    HEART_ICON("assets/heart_icon.png"),
+    UNKNOWN("assets/unknown.png");
     
     private final String path;
     

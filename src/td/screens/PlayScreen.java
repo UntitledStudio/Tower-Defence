@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
+import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
 import td.assets.Texture;
@@ -17,6 +18,7 @@ import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
+import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
 import td.util.Log;
@@ -64,8 +66,12 @@ public class PlayScreen implements Screen {
          */
         bmenu.render(g);
         
-        g.setColor(Color.red);
-        g.drawRect(bmenu.getTowerSection().getX(), bmenu.getTowerSection().getY(), bmenu.getTowerSection().getWidth(), bmenu.getTowerSection().getHeight());
+        /**
+         * TowerPlacer
+         */
+        if(TowerPlacer.isActive()) {
+            g.drawImage(TowerPlacer.getIcon(), getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
+        }
         
         /**
          * Handle debug.

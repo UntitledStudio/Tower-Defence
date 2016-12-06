@@ -2,11 +2,13 @@ package td.util;
 
 import java.awt.AWTException;
 import java.awt.AlphaComposite;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -248,5 +250,16 @@ public class Util {
         g.drawImage(image, 0, 0, width, height, null);
         g.dispose();
         return resizedImage;
+    }
+    
+    public static void setCursorVisible(boolean visible, JFrame window) {
+        if(visible) {
+            window.setCursor(Cursor.getDefaultCursor());
+        } else {
+            // Cache?
+            BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(0, 0), "blank cursor");
+            window.setCursor(cursor);
+        }
     }
 }

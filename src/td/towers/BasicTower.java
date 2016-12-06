@@ -7,8 +7,9 @@ public class BasicTower extends Tower {
     
     public BasicTower(Block block) {
         super(block);
+        towerType               = BasicTowerDefaults.TOWER_TYPE;
         maxLevel                = BasicTowerDefaults.MAX_LEVEL;
-        currentLevel            = 1;
+        currentLevel            = BasicTowerDefaults.START_LEVEL;
         damage                  = BasicTowerDefaults.DAMAGE;
         critChance              = BasicTowerDefaults.CRIT_CHANCE;
         critMultiplier          = BasicTowerDefaults.CRIT_MULTIPLIER;

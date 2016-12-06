@@ -52,6 +52,11 @@ public abstract class Tower implements Entity {
      */
     double upgradeDamageMultiplier = 2;
     
+    /**
+     * What type of tower is this?
+     */
+    TowerType towerType = TowerType.UNKNOWN;
+    
     private boolean isSelected = false;
     private TowerState state = TowerState.DISABLED;
     private Block block;
@@ -154,6 +159,10 @@ public abstract class Tower implements Entity {
     
     public void setUpgradeDamageMultiplier(double upgradeDamageMultiplier) {
         this.upgradeDamageMultiplier = upgradeDamageMultiplier;
+    }
+    
+    public TowerType getTowerType() {
+        return towerType;
     }
     
     public abstract String getName();

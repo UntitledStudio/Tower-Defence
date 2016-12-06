@@ -3,6 +3,7 @@ package td.data;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import td.assets.Image;
+import td.assets.ImageCache;
 import td.assets.Texture;
 import td.screens.PlayScreen;
 import td.util.Log;
@@ -61,7 +62,7 @@ public class Block {
         switch(type) {
             case PATH: setTexture(new Texture(Image.BLOCK_PATH)); break;
             case TOWER: setTexture(new Texture(Image.BLOCK_TOWER)); break;
-            default: setTexture(new Texture(Image.BLOCK_UNKNOWN)); break;
+            default: setTexture(new Texture(ImageCache.UNKNOWN)); break;
         }
         texture.createHitbox(x, y);
     }
