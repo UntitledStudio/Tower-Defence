@@ -1,5 +1,6 @@
 package td.screens;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
@@ -25,7 +26,7 @@ public class PlayScreen implements Screen {
     private GameWindow window;
     private Texture infoAreaTexture = null;
     private Player player = null;
-    private BuildMenu menuBar = null;
+    private BuildMenu bmenu = null;
     
     @Override
     public void create(GameWindow window) {
@@ -44,13 +45,13 @@ public class PlayScreen implements Screen {
             Log.error("[PlayScreen] Failed to load textures");
             ex.printStackTrace();
         }
-        this.menuBar = new BuildMenu(this);
+        this.bmenu = new BuildMenu(this);
     }
 
     @Override
     public void update(double dt) {
         MapManager.getCurrentMap().update(dt);
-        menuBar.update(dt);
+        bmenu.update(dt);
     }
 
     @Override
@@ -58,12 +59,13 @@ public class PlayScreen implements Screen {
         MapManager.getCurrentMap().render(g, this);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
-        //g.drawImage(ImageCache.TOWER_BASIC, Rows.ROW_5.getX(), Columns.COLUMN_3.getY(), null);
-        
         /**
-         * Menu Bar
+         * Build Menu
          */
-        menuBar.render(g);
+        bmenu.render(g);
+        
+        g.setColor(Color.red);
+        g.drawRect(bmenu.getTowerSection().getX(), bmenu.getTowerSection().getY(), bmenu.getTowerSection().getWidth(), bmenu.getTowerSection().getHeight());
         
         /**
          * Handle debug.
@@ -79,12 +81,12 @@ public class PlayScreen implements Screen {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    if(!menuBar.isOpen() || menuBar.getState() != BuildMenuState.STATIC) {
-                        menuBar.toggle();
+                    if(!bmenu.isOpen() || bmenu.getState() != BuildMenuState.STATIC) {
+                        bmenu.toggle();
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    if(menuBar.isOpen() || menuBar.getState() != BuildMenuState.STATIC) {
-                        menuBar.toggle();
+                    if(bmenu.isOpen() || bmenu.getState() != BuildMenuState.STATIC) {
+                        bmenu.toggle();
                     }
                 }
             }
@@ -99,16 +101,24 @@ public class PlayScreen implements Screen {
                 int x = e.getX();
                 int y = e.getY();
                 
-                if(!Util.isWithinArea(x, y, menuBar.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(menuBar.isOpen() || menuBar.getState() == BuildMenuState.OPENING) {
-                        menuBar.toggle();
+                if(!Util.isWithinArea(x, y, bmenu.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
+                    if(bmenu.isOpen() || bmenu.getState() == BuildMenuState.OPENING) {
+                        bmenu.toggle();
+                        return;
+                    }
+                }
+                
+                if(bmenu.isOpen() && bmenu.getState() == BuildMenuState.STATIC) {
+                    if(Util.isWithinArea(x, y, bmenu.getTowerSection().getHitbox())) {
+                        Log.info("[PlayScreen] Registered mousePress at section: TOWER_SECTION");
+                        bmenu.getTowerSection().mousePressed(e);
                         return;
                     }
                 }
                 
                 if(Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(!menuBar.isOpen() || menuBar.getState() == BuildMenuState.CLOSING) {
-                        menuBar.toggle();
+                    if(!bmenu.isOpen() || bmenu.getState() == BuildMenuState.CLOSING) {
+                        bmenu.toggle();
                     }
                 }
             }

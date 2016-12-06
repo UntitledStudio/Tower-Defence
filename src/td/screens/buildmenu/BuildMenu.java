@@ -48,6 +48,9 @@ public class BuildMenu {
      */
     private BuildMode mode = BuildMode.DEFAULT;
     
+    /**
+     * The tower section of the menu.
+     */
     private TowerSection tower_section = null;
 
     public BuildMenu(PlayScreen playScreen) {
@@ -219,6 +222,18 @@ public class BuildMenu {
                 isOpen = true;
             }
         }
+    }
+    
+    public TowerSection getTowerSection() {
+        return tower_section;
+    }
+    
+    public InfoSection getInfoSection() {
+        return null;
+    }
+    
+    public UpgradeSection getUpgradeSection() {
+        return null;
     }
     
     public Texture getInfoArea() {

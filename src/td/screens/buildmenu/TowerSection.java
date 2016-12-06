@@ -1,12 +1,9 @@
 package td.screens.buildmenu;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import td.assets.Image;
-import td.assets.ImageCache;
 import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
@@ -14,34 +11,34 @@ import td.util.Hitbox;
 import td.util.Log;
 import td.util.Util;
 
-public class TowerSection {
-    private final int y;
+public class TowerSection implements Section {
     private final BuildMenu menu;
     private final Hitbox hitbox;
     private final String title = "Towers";
-    private final List<TowerIcon> icons;
     private final int iconSize = 60;
+    private final TowerIcon TOWER_BASIC;
     
     public TowerSection(BuildMenu menu, int y) {
         this.menu = menu;
-        this.y = y;
-        this.icons = new ArrayList<>();
-        this.hitbox = new Hitbox(menu.getX(), y, menu.getWidth(), 0); // test
+        this.hitbox = new Hitbox(menu.getX(), y, menu.getWidth(), 300);
         
+        TowerIcon basicTower = null;
         try {
             // Load tower icons
-            TowerIcon basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)));
+            basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)));
             basicTower.setY(y + 30);
-            this.icons.add(basicTower);
         } catch (IOException ex) {
             Log.error("[BuildMenu: TowerSection] Failed to load tower icon(s)");
+            ex.printStackTrace();
         }
+        this.TOWER_BASIC = basicTower;
     }
     
     /**
      * Update this section.
      * @param dt 
      */
+    @Override
     public void update(double dt) {
         getHitbox().setX(menu.getX());
     }
@@ -50,38 +47,51 @@ public class TowerSection {
      * Render this section.
      * @param g 
      */
+    @Override
     public void render(Graphics2D g) {
         // Title
         g.setFont(Fonts.BUILD_MENU_SECTIONS);
         g.setColor(Colors.BMENU_SECTION_TITLES);
-        g.drawString(title, Util.centerStringX(title, getWidth(), g, getX()), y + 20);
+        g.drawString(title, Util.centerStringX(title, getWidth(), g, getX()), getY() + 20);
         
-        // Icons
-        // !! Consider: Hard coding all towericon variables instead for better performance?
-        for(TowerIcon icon : icons) {
-            icon.setX(getX() + 20);
-            icon.draw(g);
+        // Tower icons
+        TOWER_BASIC.setX(getX() + 20);
+        TOWER_BASIC.draw(g);
+    }
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        
+        if(Util.isWithinArea(x, y, TOWER_BASIC.getTexture())) {
+            Log.info("[TowerSection] Registered mousePress at icon: TOWER_BASIC");
         }
     }
     
-    public void addTowers() {
-        
-    }
-    
+    @Override
     public Hitbox getHitbox() {
         return hitbox;
     }
     
+    @Override
     public int getY() {
-        return y;
+        return getHitbox().getY();
     }
     
+    @Override
     public int getX() {
         return getHitbox().getX();
     }
     
+    @Override
     public int getWidth() {
         return getHitbox().getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return getHitbox().getHeight();
     }
     
     private class TowerIcon {

@@ -26,7 +26,7 @@ public class GameWindow {
     protected MouseWheelListener mouseWheelListener = null;
     
     public GameWindow(String title) {
-        this.frame = new JFrame(title);
+        this.frame = new JFrame(title + " - WIP");
         this.panel = new GamePanel();
         this.input = new Input(panel);
     }
