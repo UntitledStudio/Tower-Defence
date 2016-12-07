@@ -2,7 +2,8 @@ package td.towers;
 
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
-import td.GameWindow;
+import td.data.Block;
+import td.entities.TowerEntity;
 import td.util.Log;
 import td.util.Util;
 
@@ -18,12 +19,15 @@ public class TowerPlacer {
     
     public static void setSelectedTower(TowerType type) {
         Log.info("[TowerPlacer] Selecting new tower for placement: " + type.name() + " ..");
-        if(SELECTED_TOWER != null) {
-            //Log.info("[TowerPlacer] There's already a tower selected, removing ..");
-            
-        }
         SELECTED_TOWER = type;
         icon = SELECTED_TOWER.getImage(); // !wip!
+    }
+    
+    public static void place(Block block) {
+        Log.info("[TowerPlacer] Placing a " + SELECTED_TOWER.name() + " at " + block.getX() + "," + block.getY() + " ..");
+        //TowerEntity te = new TowerEntity();
+        //block.setTowerEntity(te);
+        Log.info("[TowerPlacer] Tower placed!");
     }
     
     public static TowerType getSelectedTower() {

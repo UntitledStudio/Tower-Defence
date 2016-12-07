@@ -14,6 +14,7 @@ import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
 import td.assets.Texture;
+import td.data.Block;
 import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
@@ -94,6 +95,12 @@ public class PlayScreen implements Screen {
                     if(bmenu.isOpen() || bmenu.getState() != BuildMenuState.STATIC) {
                         bmenu.toggle();
                     }
+                } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    if(TowerPlacer.isActive()) {
+                        TowerPlacer.setActive(false);
+                    } else {
+                        // pause menu
+                    }
                 }
             }
         };
@@ -125,6 +132,28 @@ public class PlayScreen implements Screen {
                 if(Util.isWithinArea(x, y, infoAreaTexture)) {
                     if(!bmenu.isOpen() || bmenu.getState() == BuildMenuState.CLOSING) {
                         bmenu.toggle();
+                        return;
+                    }
+                }
+                
+                if(TowerPlacer.isActive()) {
+                    if(e.getButton() == MouseEvent.BUTTON3) {
+                        TowerPlacer.setActive(false);
+                        bmenu.toggle();
+                    } else {
+                        Block b = MapManager.getCurrentMap().getHighlightedBlock(getInput());
+                        
+                        if(b != null) {
+                            if(b.hasTowerEntity()) {
+                                // alert player in some way
+                                Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an occupied location.");
+                            } else {
+                                TowerPlacer.place(b);
+                            }
+                        } else {
+                            // alert player in some way
+                            Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an invalid location.");
+                        }
                     }
                 }
             }

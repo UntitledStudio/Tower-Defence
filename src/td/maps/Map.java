@@ -8,6 +8,7 @@ import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
 import td.screens.PlayScreen;
+import td.util.Input;
 import td.util.Log;
 import td.util.Util;
 
@@ -15,12 +16,13 @@ public class Map {
     private final String name;
     private final int[][] structure;
     private boolean userMade = false;
+    private final List<Block> blocks = new ArrayList<>();
+    private Block highlightedBlock = null;
     
     public Map(String name, int[][] structure) {
         this.name = name;
         this.structure = structure;
     }
-    private List<Block> blocks = new ArrayList<>();
     
     public void buildMap() {
         Log.info("[Map: " + getName() + "] Building ..");
@@ -53,7 +55,7 @@ public class Map {
         if(screen.getInput().isMouseInWindow()) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
-            if(b.getType() == BlockType.TOWER) {
+            if(b != null && b.getType() == BlockType.TOWER) {
                 if(Util.isWithinArea(screen.getInput(), b.getTexture().getHitbox())) {
                     g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
                 }
@@ -77,6 +79,25 @@ public class Map {
                 int maxY = minY + Configuration.BLOCK_SIZE;
 
                 if(y == minY || (y > minY && y <= maxY)) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the currently highlighted block.
+     * Returns null if no block is highlighted.
+     * @param input
+     * @return 
+     */
+    public Block getHighlightedBlock(Input input) {
+        if(input.isMouseInWindow()) {
+            Block b = getBlockAt(input.getMouseX(), input.getMouseY());
+            
+            if(b != null && b.getType() == BlockType.TOWER) {
+                if(Util.isWithinArea(input, b.getTexture().getHitbox())) {
                     return b;
                 }
             }

@@ -5,20 +5,18 @@ import java.io.IOException;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
+import td.entities.TowerEntity;
 import td.screens.PlayScreen;
 import td.util.Log;
 
 public class Block {
-    //private final Rows row;
-    //private final Columns column;
     private final int x;
     private final int y;
     private BlockType type;
     private Texture texture = null;
+    private TowerEntity towerEntity = null;
     
     public Block(int x, int y, BlockType type) {
-        //this.row = row;
-        //this.column = column;
         this.x = x;
         this.y = y;
         this.type = type;
@@ -52,6 +50,18 @@ public class Block {
     
     public Texture getTexture() {
         return texture;
+    }
+    
+    public void setTowerEntity(TowerEntity te) {
+        this.towerEntity = te;
+    }
+    
+    public TowerEntity getTowerEntity() {
+        return towerEntity;
+    }
+    
+    public boolean hasTowerEntity() {
+        return getTowerEntity() != null;
     }
     
     /**
