@@ -101,6 +101,24 @@ public class PlayScreen implements Screen {
                     } else {
                         // pause menu
                     }
+                } else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    if(e.isAltDown() || e.isControlDown()) {
+                        Log.info("[~] Performing reset ..");
+                        int i = 0;
+                        
+                        for(Block b : MapManager.getCurrentMap().getBlocks()) {
+                            if(b.hasTowerEntity()) {
+                                b.getTowerEntity().remove();
+                                i++;
+                            }
+                        }
+                        
+                        player.setCash(player.getStartingCash());
+                        player.setHealth(player.getMaxHealth());
+                        Log.info("[~] Reset completed.");
+                        Log.info("[~] - Removed " + i + " tower entities.");
+                        Log.info("[~] - Refreshed player data.");
+                    }
                 }
             }
         };

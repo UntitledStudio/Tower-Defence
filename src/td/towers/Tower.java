@@ -187,5 +187,6 @@ public abstract class Tower implements Entity {
     
     @Override
     public void remove() {
+        block.setTowerEntity(null);
     }
 } 
