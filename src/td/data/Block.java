@@ -5,8 +5,8 @@ import java.io.IOException;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
-import td.entities.TowerEntity;
 import td.screens.PlayScreen;
+import td.towers.Tower;
 import td.util.Log;
 
 public class Block {
@@ -14,7 +14,7 @@ public class Block {
     private final int y;
     private BlockType type;
     private Texture texture = null;
-    private TowerEntity towerEntity = null;
+    private Tower towerEntity = null;
     
     public Block(int x, int y, BlockType type) {
         this.x = x;
@@ -52,11 +52,11 @@ public class Block {
         return texture;
     }
     
-    public void setTowerEntity(TowerEntity te) {
+    public void setTowerEntity(Tower te) {
         this.towerEntity = te;
     }
     
-    public TowerEntity getTowerEntity() {
+    public Tower getTowerEntity() {
         return towerEntity;
     }
     
@@ -78,6 +78,12 @@ public class Block {
     }
     
     public void render(Graphics2D g, PlayScreen screen) {
+        // Texture
         g.drawImage(texture.getImage(), x, y, null);
+        
+        // Tower Entities
+        if(hasTowerEntity()) {
+            g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
+        }
     }
 }

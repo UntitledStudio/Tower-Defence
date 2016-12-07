@@ -6,5 +6,6 @@ public interface Entity {
     public void create();
     public void update(double dt);
     public void render(Graphics2D g);
+    public EntityType getType();
     public void remove();
 }

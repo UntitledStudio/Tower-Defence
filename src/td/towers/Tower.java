@@ -3,6 +3,7 @@ package td.towers;
 import java.awt.Graphics2D;
 import td.data.Block;
 import td.entities.Entity;
+import td.entities.EntityType;
 
 public abstract class Tower implements Entity {
     /**
@@ -177,6 +178,11 @@ public abstract class Tower implements Entity {
 
     @Override
     public void render(Graphics2D g) {
+    }
+
+    @Override
+    public EntityType getType() {
+        return EntityType.TOWER;
     }
     
     @Override

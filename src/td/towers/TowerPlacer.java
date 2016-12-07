@@ -3,7 +3,6 @@ package td.towers;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import td.data.Block;
-import td.entities.TowerEntity;
 import td.util.Log;
 import td.util.Util;
 
@@ -25,8 +24,19 @@ public class TowerPlacer {
     
     public static void place(Block block) {
         Log.info("[TowerPlacer] Placing a " + SELECTED_TOWER.name() + " at " + block.getX() + "," + block.getY() + " ..");
-        //TowerEntity te = new TowerEntity();
-        //block.setTowerEntity(te);
+        
+        switch(SELECTED_TOWER) {
+            case BASIC_TOWER: {
+                BasicTower te = new BasicTower(block);
+                block.setTowerEntity(te);
+                break;
+            }
+            default: {
+                Log.error("[TowerPlacer] Attempted to place an invalid tower! "  + SELECTED_TOWER.name());
+                // alert player somehow
+            }
+        }
+        setActive(false);
         Log.info("[TowerPlacer] Tower placed!");
     }
     
