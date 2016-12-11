@@ -53,6 +53,11 @@ public class BuildMenu {
      * The tower section of the menu.
      */
     private TowerSection tower_section = null;
+    
+    /**
+     * The info section of the menu.
+     */
+    private InfoSection info_section = null;
 
     public BuildMenu(PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -65,6 +70,8 @@ public class BuildMenu {
             Log.error("[MenuBar] Failed to load texture");
         }
         this.tower_section = new TowerSection(this, 120);
+        this.info_section = new InfoSection(this);
+        info_section.setMode(InfoSection.BUILD_MODE);
         Debug.feedInstance(this);
     }
     
@@ -149,6 +156,10 @@ public class BuildMenu {
         * Update sections.
         */
         tower_section.update(dt);
+        
+        if(info_section.isDisplayed()) {
+            info_section.update(dt);
+        }
     }
 
     public void render(Graphics2D g) {
@@ -184,6 +195,10 @@ public class BuildMenu {
         
         // - Render Sections
         tower_section.render(g);
+        
+        if(info_section.isDisplayed()) {
+            info_section.render(g);
+        }
     }
 
     public void toggle() {
@@ -232,7 +247,7 @@ public class BuildMenu {
     }
     
     public InfoSection getInfoSection() {
-        return null;
+        return info_section;
     }
     
     public UpgradeSection getUpgradeSection() {

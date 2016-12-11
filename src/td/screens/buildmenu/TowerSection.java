@@ -27,7 +27,7 @@ public class TowerSection implements Section {
         TowerIcon basicTower = null;
         try {
             // Load tower icons
-            basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)));
+            basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)), TowerType.BASIC_TOWER);
             basicTower.setY(y + 30);
         } catch (IOException ex) {
             Log.error("[BuildMenu: TowerSection] Failed to load tower icon(s)");
@@ -66,12 +66,14 @@ public class TowerSection implements Section {
         int x = e.getX();
         int y = e.getY();
         
-        if(Util.isWithinArea(x, y, TOWER_BASIC.getTexture())) {
-            Log.info("[TowerSection] Registered mousePress at icon: TOWER_BASIC");
-            
-            menu.toggle();
-            TowerPlacer.setActive(true);
-            TowerPlacer.setSelectedTower(TowerType.BASIC_TOWER);
+        if(e.getButton() == MouseEvent.BUTTON1) {
+            if(Util.isWithinArea(x, y, TOWER_BASIC.getTexture())) {
+                Log.info("[TowerSection] Registered mousePress at icon: TOWER_BASIC");
+                
+                menu.toggle();
+                TowerPlacer.setActive(true);
+                TowerPlacer.setSelectedTower(TowerType.BASIC_TOWER);
+            }
         }
     }
     
@@ -102,10 +104,12 @@ public class TowerSection implements Section {
     
     private class TowerIcon {
         private final Texture texture;
+        private final TowerType type;
 
-        public TowerIcon(Texture texture) {
+        public TowerIcon(Texture texture, TowerType type) {
             this.texture = texture;
             texture.createHitbox(0, 0);
+            this.type = type;
         }
         
         public int getX() {
@@ -136,11 +140,17 @@ public class TowerSection implements Section {
             return texture;
         }
         
+        public TowerType getType() {
+            return type;
+        }
+        
         public void draw(Graphics2D g) {
             if(Util.isWithinArea(menu.getInput(), texture.getHitbox())) {
                 g.setColor(Colors.BMENU_SECTION_ICON_BG_HIGHLIGHTED);
+                menu.getInfoSection().setDisplayed(true, type);
             } else {
                 g.setColor(Colors.BMENU_SECTION_ICON_BG);
+                menu.getInfoSection().setDisplayed(false);
             }
             g.fillRect(getX(), getY(), getWidth(), getHeight());
             getTexture().draw(g);
