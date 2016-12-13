@@ -1,9 +1,12 @@
 package td.towers;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+import td.Configuration;
 import td.data.Block;
 import td.entities.Entity;
 import td.entities.EntityType;
+import td.util.Util;
 
 public abstract class Tower implements Entity {
     /**
@@ -20,6 +23,11 @@ public abstract class Tower implements Entity {
      * Tower damage to monsters.
      */
     int damage = 1;
+    
+    /**
+     * Tower range in radius.
+     */
+    int range = 160;
     
     /**
      * The chance (%) that this tower will critical strike a monster.
@@ -61,6 +69,7 @@ public abstract class Tower implements Entity {
     private boolean isSelected = false;
     private TowerState state = TowerState.DISABLED;
     private Block block;
+    private Ellipse2D rangeIndicator = null;
     
     public Tower(Block block) {
         this.block = block;
@@ -112,6 +121,25 @@ public abstract class Tower implements Entity {
     
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+    
+    public int getRange() {
+        return range;
+    }
+    
+    public void setRange(int range) {
+        this.range = range;
+        updateRange();
+    }
+    
+    public void updateRange() {
+        int x = block.getX() + (Configuration.BLOCK_SIZE / 2);
+        int y = block.getY() + (Configuration.BLOCK_SIZE / 2);
+        this.rangeIndicator = Util.getEllipseFromCenter(x, y, range, range);
+    }
+    
+    public Ellipse2D getRangeIndicator() {
+        return rangeIndicator;
     }
     
     public int getCritChance() {

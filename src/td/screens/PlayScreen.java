@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import td.Configuration;
 import td.GameWindow;
@@ -19,6 +20,7 @@ import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
+import td.towers.BasicTowerDefaults;
 import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
@@ -59,7 +61,12 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(Graphics2D g) {
+        /**
+         * Render map
+         */
         MapManager.getCurrentMap().render(g, this);
+        
+        // Todo: make configurable
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
         /**
@@ -71,7 +78,11 @@ public class PlayScreen implements Screen {
          * TowerPlacer
          */
         if(TowerPlacer.isActive()) {
-            g.drawImage(TowerPlacer.getIcon(), getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
+            int x = getInput().getMouseX();
+            int y = getInput().getMouseY();
+            
+            TowerPlacer.drawRangeIndicator(g, Util.getEllipseFromCenter(x, y, BasicTowerDefaults.RANGE, BasicTowerDefaults.RANGE));
+            g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
         }
         
         /**

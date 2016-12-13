@@ -5,9 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import td.data.Colors;
 import td.data.Fonts;
+import td.towers.BasicTowerDefaults;
 import td.towers.TowerType;
+import td.util.Debug;
 import td.util.Hitbox;
 import td.util.Log;
+import td.util.RenderUtil;
 import td.util.Util;
 
 public class InfoSection implements Section {
@@ -38,12 +41,24 @@ public class InfoSection implements Section {
         
         // Info
         if(mode == BUILD_MODE) {
+            // optimize.
+            int x = 20;
+            int y = getY() + 45;
+            int yInc = 18;
             
+            g.setFont(Fonts.BUILD_MENU_INFOLABELS);
+            
+            if(towerType == TowerType.BASIC_TOWER) {
+                RenderUtil.drawTwoColoredString(x, y, "Damage: ", "" + BasicTowerDefaults.DAMAGE, Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
+                RenderUtil.drawTwoColoredString(x, y + yInc, "Crit Chance: ", BasicTowerDefaults.CRIT_CHANCE + "%", Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
+            }
         }
         
-        // temp
-        g.setColor(Color.red);
-        g.drawRect(getX(), getY(), getWidth(), getHeight());
+        // Debug
+        if(Debug.ENABLED) {
+            g.setColor(Color.red);
+            g.drawRect(getX(), getY(), getWidth(), getHeight());
+        }
     }
 
     @Override

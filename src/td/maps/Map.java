@@ -1,13 +1,19 @@
 package td.maps;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
+import td.data.Colors;
 import td.screens.PlayScreen;
+import td.towers.TowerPlacer;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
@@ -52,12 +58,19 @@ public class Map {
             b.render(g, screen);
         }
         
+        /**
+         * Render the highlighted block.
+         */
         if(screen.getInput().isMouseInWindow()) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
             if(b != null && b.getType() == BlockType.TOWER) {
                 if(Util.isWithinArea(screen.getInput(), b.getTexture().getHitbox())) {
-                    g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
+                    if(b.hasTowerEntity()) {
+                        TowerPlacer.drawRangeIndicator(g, b.getTowerEntity().getRangeIndicator());
+                    } else {
+                        g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
+                    }
                 }
             } 
         }

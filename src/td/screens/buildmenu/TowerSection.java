@@ -1,5 +1,6 @@
 package td.screens.buildmenu;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import td.data.Colors;
 import td.data.Fonts;
 import td.towers.TowerPlacer;
 import td.towers.TowerType;
+import td.util.Debug;
 import td.util.Hitbox;
 import td.util.Log;
 import td.util.Util;
@@ -59,6 +61,12 @@ public class TowerSection implements Section {
         // Tower icons
         TOWER_BASIC.setX(getX() + 20);
         TOWER_BASIC.draw(g);
+        
+        // Debug
+        if(Debug.ENABLED) {
+            g.setColor(Color.RED);
+            g.drawRect(getX(), getY(), getWidth(), getHeight());
+        }
     }
     
     @Override

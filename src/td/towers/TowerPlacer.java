@@ -1,8 +1,13 @@
 package td.towers;
 
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import td.data.Block;
+import td.data.Colors;
 import td.util.Log;
 import td.util.Util;
 
@@ -11,6 +16,7 @@ public class TowerPlacer {
     private static boolean ACTIVE = false;
     private static TowerType SELECTED_TOWER = null;
     private static BufferedImage icon = null;
+    private static BasicStroke towerRangeStroke = new BasicStroke(10f);
     
     public static void setFrame(JFrame frame) {
         TowerPlacer.frame = frame;
@@ -64,5 +70,13 @@ public class TowerPlacer {
     public static void clean() {
         SELECTED_TOWER = null;
         icon = null;
+    }
+    
+    public static void drawRangeIndicator(Graphics2D g, Ellipse2D ellipse) {
+        Stroke oldStroke = g.getStroke();
+        g.setStroke(towerRangeStroke);
+        g.setColor(Colors.TOWER_RANGE_HIGHLIGHT);
+        g.draw(ellipse);
+        g.setStroke(oldStroke);
     }
 }

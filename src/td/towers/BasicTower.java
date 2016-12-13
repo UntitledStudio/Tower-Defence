@@ -11,12 +11,14 @@ public class BasicTower extends Tower {
         maxLevel                = BasicTowerDefaults.MAX_LEVEL;
         currentLevel            = BasicTowerDefaults.START_LEVEL;
         damage                  = BasicTowerDefaults.DAMAGE;
+        range                   = BasicTowerDefaults.RANGE;
         critChance              = BasicTowerDefaults.CRIT_CHANCE;
         critMultiplier          = BasicTowerDefaults.CRIT_MULTIPLIER;
         buyCost                 = BasicTowerDefaults.BUY_COST;
         refundAmount            = BasicTowerDefaults.REFUND_AMOUNT;
         upgradeCostMultiplier   = BasicTowerDefaults.UPGRADE_COST_MULTIPLIER;
         upgradeDamageMultiplier = BasicTowerDefaults.UPGRADE_DAMAGE_MULTIPLIER;
+        updateRange();
     }
     
     @Override

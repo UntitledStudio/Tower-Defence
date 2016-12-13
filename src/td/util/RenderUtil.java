@@ -33,4 +33,12 @@ public class RenderUtil {
         g.setColor(foreground);
         g.drawString(string, x + 5, centerStringY(string, height, g, y));
     }
+    
+    public static void drawTwoColoredString(int x, int y, String s1, String s2, Color clr1, Color clr2, Graphics2D g) {
+        g.setColor(clr1);
+        g.drawString(s1, x, y);
+        g.setColor(clr2);
+        int width = g.getFontMetrics().stringWidth(s1);
+        g.drawString(s2, x + width, y);
+    }
 }

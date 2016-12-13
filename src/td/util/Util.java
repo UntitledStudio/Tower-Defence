@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -261,5 +262,12 @@ public class Util {
             Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(image, new Point(0, 0), "blank cursor");
             window.setCursor(cursor);
         }
+    }
+    
+    public static Ellipse2D getEllipseFromCenter(double x, double y, double width, double height) {
+        double newX = x - width / 2.0;
+        double newY = y - height / 2.0;
+        Ellipse2D ellipse = new Ellipse2D.Double(newX, newY, width, height);
+        return ellipse;
     }
 }
