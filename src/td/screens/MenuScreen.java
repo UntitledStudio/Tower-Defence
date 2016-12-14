@@ -75,6 +75,11 @@ public class MenuScreen implements Screen {
             
         };
     }
+
+    @Override
+    public GameWindow getGameWindow() {
+        return window;
+    }
     
     @Override
     public void dispose() {

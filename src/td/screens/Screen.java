@@ -45,6 +45,12 @@ public interface Screen {
     public MouseWheelListener getMouseWheelListener();
     
     /**
+     * 
+     * @return 
+     */
+    public GameWindow getGameWindow();
+    
+    /**
      * Called when this screen is disposed of.
      * Use this method to get rid of garbage.
      */

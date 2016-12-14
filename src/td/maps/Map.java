@@ -79,7 +79,9 @@ public class Map {
             if(b != null && b.getType() == BlockType.TOWER) {
                 if(Util.isWithinArea(screen.getInput(), b.getTexture().getHitbox())) {
                     if(b.hasTowerEntity()) {
-                        b.setWillHighlightRange(true);
+                        if(!TowerPlacer.isActive()) {
+                            b.setWillHighlightRange(true);
+                        }
                     } else {
                         g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
                     }

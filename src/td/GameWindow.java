@@ -99,6 +99,10 @@ public class GameWindow {
         return panel;
     }
     
+    public JFrame getFrame() {
+        return frame;
+    }
+    
     public void disposeInputHandlers() {
         panel.removeKeyListener(keyAdapter);
         panel.removeMouseListener(mouseAdapter);

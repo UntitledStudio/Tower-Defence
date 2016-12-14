@@ -134,6 +134,16 @@ public class BuildMenu {
                     isOpen = true;
                 }
                 getHitbox().setX(x);
+                
+                // - Background overlay
+                int a = Colors.BMENU_OUTSIDE_OVERLAY.getAlpha();
+                
+                if(a >= 100) {
+                    a = 100;
+                } else {
+                    a += 10;
+                }
+                Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)a/255);
             } else {
                 // Closing
                 int x = (int)(getX() - (25 * dt));
@@ -144,6 +154,16 @@ public class BuildMenu {
                     isOpen = false;
                 }
                 getHitbox().setX(x);
+                
+                // - Background overlay
+                int a = Colors.BMENU_OUTSIDE_OVERLAY.getAlpha();
+                
+                if(a <= 0) {
+                    a = 0;
+                } else {
+                    a -= 10;
+                }
+                Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)a/255);
             }
             getInfoArea().getHitbox().setX(getX() + getWidth());
         } else {
@@ -164,9 +184,36 @@ public class BuildMenu {
 
     public void render(Graphics2D g) {
         /**
-         * Info Area
+         * Build Menu & Info Area
+         * - Draw only the info area if the build menu is completely closed.
          */
-        
+        if(getState() == BuildMenuState.STATIC && !isOpen()) {
+            // Completely closed.
+            drawInfoArea(g);
+        } else {
+            // Opening or fully open.
+             // -- Background overlay (outside menu)
+            g.setColor(Colors.BMENU_OUTSIDE_OVERLAY);
+            g.fillRect(0, 0, playScreen.getGameWindow().getWidth(), playScreen.getGameWindow().getHeight());
+            // -- Menu Background & Info Area
+            drawInfoArea(g);
+            g.drawImage(menuTexture.getImage(), getX(), getY(), null);
+
+            // - Title
+            g.setFont(Fonts.BUILD_MENU_TITLE);
+            g.setColor(Colors.BMENU_TITLE);
+            g.drawString("BUILD MENU", Util.centerStringX("BUILD MENU", getWidth(), g, getX()), 40);
+
+            // - Render Sections
+            tower_section.render(g);
+
+            if(info_section.isDisplayed()) {
+                info_section.render(g);
+            }
+        }
+    }
+    
+    public void drawInfoArea(Graphics2D g) {
         // todo: performance opt. !!
         
         getInfoArea().draw(g);
@@ -179,26 +226,6 @@ public class BuildMenu {
         
         g.drawImage(ImageCache.HEART_ICON, x1, 45, null);
         g.drawString("" + getPlayer().getHealth(), x1 + ImageCache.HEART_ICON.getWidth() + 5, 64);
-
-
-        /**
-         * Build Menu
-         */
-        // - Background
-        if(getState() == BuildMenuState.STATIC && !isOpen()) return;
-        g.drawImage(menuTexture.getImage(), getX(), getY(), null);
-
-        // - Title
-        g.setFont(Fonts.BUILD_MENU_TITLE);
-        g.setColor(Colors.BMENU_TITLE);
-        g.drawString("BUILD MENU", Util.centerStringX("BUILD MENU", getWidth(), g, getX()), 40);
-        
-        // - Render Sections
-        tower_section.render(g);
-        
-        if(info_section.isDisplayed()) {
-            info_section.render(g);
-        }
     }
 
     public void toggle() {
@@ -221,6 +248,8 @@ public class BuildMenu {
             /**
              * Close
              */
+            Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)100/255);
+            
             if(Configuration.ANIMATIONS_ENABLED) {
                 state = BuildMenuState.CLOSING;
             } else {
@@ -232,11 +261,14 @@ public class BuildMenu {
             /**
              * Open
              */
+            Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)0/255);
+            
             if(Configuration.ANIMATIONS_ENABLED) {
                 state = BuildMenuState.OPENING;
             } else {
                 hitbox.setX(0);
                 getInfoArea().getHitbox().setX(hitbox.getWidth());
+                Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)100/255);
                 isOpen = true;
             }
         }

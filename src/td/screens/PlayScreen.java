@@ -1,6 +1,5 @@
 package td.screens;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
@@ -9,13 +8,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.Ellipse2D;
 import java.io.IOException;
 import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
 import td.assets.Texture;
 import td.data.Block;
+import td.data.BlockType;
 import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
@@ -184,6 +183,18 @@ public class PlayScreen implements Screen {
                             Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an invalid location.");
                         }
                     }
+                } else {
+                    if(e.getButton() == MouseEvent.BUTTON1) {
+                        Block b = MapManager.getCurrentMap().getHighlightedBlock(getInput());
+                        
+                        if(b != null && b.getType() == BlockType.TOWER) {
+                            if(!b.hasTowerEntity()) {
+                                if(!bmenu.isOpen()) {
+                                    bmenu.toggle();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         };
@@ -194,6 +205,11 @@ public class PlayScreen implements Screen {
         return (MouseWheelEvent e) -> {
             
         };
+    }
+
+    @Override
+    public GameWindow getGameWindow() {
+        return window;
     }
 
     @Override
