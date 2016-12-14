@@ -81,7 +81,7 @@ public class PlayScreen implements Screen {
             int x = getInput().getMouseX();
             int y = getInput().getMouseY();
             
-            TowerPlacer.drawRangeIndicator(g, Util.getEllipseFromCenter(x, y, BasicTowerDefaults.RANGE, BasicTowerDefaults.RANGE));
+            TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, BasicTowerDefaults.RANGE, BasicTowerDefaults.RANGE));
             g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
         }
         

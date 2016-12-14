@@ -23,6 +23,7 @@ public class Map {
     private final int[][] structure;
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
+    private final List<Block> markedBlocks = new ArrayList<>();
     private Block highlightedBlock = null;
     
     public Map(String name, int[][] structure) {
@@ -58,6 +59,17 @@ public class Map {
             b.render(g, screen);
         }
         
+        if(!markedBlocks.isEmpty()) {
+            for(Block b : markedBlocks) {
+                if(b.willHighlight()) {
+                    TowerPlacer.drawRangeIndicator(screen.getInput(), g, b.getTowerEntity().getRangeIndicator());
+                    b.setWillHighlightRange(false);
+                }
+                g.drawImage(ImageCache.TOWER_BASIC, b.getX(), b.getY(), null);
+            }
+            markedBlocks.clear();
+        }
+        
         /**
          * Render the highlighted block.
          */
@@ -67,13 +79,17 @@ public class Map {
             if(b != null && b.getType() == BlockType.TOWER) {
                 if(Util.isWithinArea(screen.getInput(), b.getTexture().getHitbox())) {
                     if(b.hasTowerEntity()) {
-                        TowerPlacer.drawRangeIndicator(g, b.getTowerEntity().getRangeIndicator());
+                        b.setWillHighlightRange(true);
                     } else {
                         g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
                     }
                 }
             } 
         }
+    }
+    
+    public void processTowerRender(Block block) {
+        markedBlocks.add(block);
     }
     
     /**

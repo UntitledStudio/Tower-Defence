@@ -5,6 +5,7 @@ import java.io.IOException;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
+import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
 import td.util.Log;
@@ -12,9 +13,10 @@ import td.util.Log;
 public class Block {
     private final int x;
     private final int y;
-    private BlockType type;
+    private BlockType type = null;
     private Texture texture = null;
     private Tower towerEntity = null;
+    private boolean willHighlight = false;
     
     public Block(int x, int y, BlockType type) {
         this.x = x;
@@ -64,6 +66,14 @@ public class Block {
         return getTowerEntity() != null;
     }
     
+    public void setWillHighlightRange(boolean highlight) {
+        this.willHighlight = highlight;
+    }
+    
+    public boolean willHighlight() {
+        return willHighlight;
+    }
+    
     /**
      * Automatically attempts to set the texture of this block depending on the block type.
      * @throws java.io.IOException
@@ -83,7 +93,13 @@ public class Block {
         
         // Tower Entities
         if(hasTowerEntity()) {
-            g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
+            if(willHighlight) {
+                // If there's a block marked for range highlighting then process tower rendering differently. (Heavier)
+                // If not, process normally. (Light)
+                MapManager.getCurrentMap().processTowerRender(this);
+            } else {
+                g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
+            }
         }
     }
 }
