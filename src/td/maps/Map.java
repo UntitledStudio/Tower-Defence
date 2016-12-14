@@ -1,17 +1,12 @@
 package td.maps;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
-import td.data.Colors;
 import td.screens.PlayScreen;
 import td.towers.TowerPlacer;
 import td.util.Input;
@@ -24,7 +19,6 @@ public class Map {
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
     private final List<Block> markedBlocks = new ArrayList<>();
-    private Block highlightedBlock = null;
     
     public Map(String name, int[][] structure) {
         this.name = name;
@@ -59,6 +53,9 @@ public class Map {
             b.render(g, screen);
         }
         
+        /**
+         * Used if any block is in the "blocks" index is marked for range indication.
+         */
         if(!markedBlocks.isEmpty()) {
             for(Block b : markedBlocks) {
                 if(b.willHighlight()) {

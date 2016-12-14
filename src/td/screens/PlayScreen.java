@@ -12,6 +12,7 @@ import java.io.IOException;
 import td.Configuration;
 import td.GameWindow;
 import td.assets.Image;
+import td.assets.ImageCache;
 import td.assets.Texture;
 import td.data.Block;
 import td.data.BlockType;
@@ -82,6 +83,14 @@ public class PlayScreen implements Screen {
             
             TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, BasicTowerDefaults.RANGE, BasicTowerDefaults.RANGE));
             g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
+            
+            if(TowerPlacer.drawPlacementDenied) {
+                g.drawImage(ImageCache.PLACEMENT_DENIED, getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
+                TowerPlacer.drawPlacementDenied = false;
+            } else if(TowerPlacer.drawPlacementAllowed) {
+                g.drawImage(ImageCache.PLACEMENT_ALLOWED, getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
+                TowerPlacer.drawPlacementAllowed = false;
+            }
         }
         
         /**
