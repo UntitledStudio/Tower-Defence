@@ -1,8 +1,11 @@
 package td.towers;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import td.Configuration;
+import td.GameWindow;
+import td.assets.ImageCache;
 import td.data.Block;
 import td.entities.Entity;
 import td.entities.EntityType;
@@ -70,9 +73,33 @@ public abstract class Tower implements Entity {
     private TowerState state = TowerState.DISABLED;
     private Block block;
     private Ellipse2D rangeIndicator = null;
+    private double angleRad = 0;
     
     public Tower(Block block) {
         this.block = block;
+    }
+    
+    /**
+     * Instantly rotate the tower so that it points towards target location.
+     * @param x
+     * @param y 
+     */
+    public void lookAt(int x, int y) {
+        double dx = x - block.getX() - (Configuration.BLOCK_SIZE / 2);
+        double dy = y - block.getY() - (Configuration.BLOCK_SIZE / 2);
+        angleRad = Math.atan2(dy, dx);
+    }
+    
+    public void draw(Graphics2D g) {
+        //lookAt(GameWindow.instance.getInput().getMouseX(), GameWindow.instance.getInput().getMouseY());
+        int cx = towerType.getImage().getWidth() / 2;
+        int cy = towerType.getImage().getHeight() / 2;
+        AffineTransform backup = g.getTransform();
+        g.translate(cx + block.getX(), cy + block.getY());
+        g.rotate(angleRad);
+        g.translate(-cx, -cy);
+        g.drawImage(ImageCache.TOWER_BASIC, 0, 0, null);
+        g.setTransform(backup);
     }
     
     public void setBlock(Block block) {

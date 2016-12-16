@@ -25,6 +25,7 @@ public class GameWindow {
     protected KeyAdapter keyAdapter = null;
     protected MouseAdapter mouseAdapter = null;
     protected MouseWheelListener mouseWheelListener = null;
+    public static GameWindow instance = null;
     
     public GameWindow(String title) {
         this.frame = new JFrame(title + " - WIP");
@@ -33,6 +34,7 @@ public class GameWindow {
     }
     
     public void run() {
+        GameWindow.instance = this;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setupPanel();
         frame.add(panel);

@@ -62,7 +62,8 @@ public class Map {
                     TowerPlacer.drawRangeIndicator(screen.getInput(), g, b.getTowerEntity().getRangeIndicator());
                     b.setWillHighlightRange(false);
                 }
-                g.drawImage(ImageCache.TOWER_BASIC, b.getX(), b.getY(), null);
+                //g.drawImage(ImageCache.TOWER_BASIC, b.getX(), b.getY(), null);
+                b.getTowerEntity().draw(g);
             }
             markedBlocks.clear();
         }

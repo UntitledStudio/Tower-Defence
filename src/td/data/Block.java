@@ -98,7 +98,8 @@ public class Block {
                 // If not, process normally. (Light)
                 MapManager.getCurrentMap().processTowerRender(this);
             } else {
-                g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
+                //g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
+                getTowerEntity().draw(g);
             }
         }
     }

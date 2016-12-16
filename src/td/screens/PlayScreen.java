@@ -20,6 +20,7 @@ import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
+import td.towers.BasicTower;
 import td.towers.BasicTowerDefaults;
 import td.towers.TowerPlacer;
 import td.util.Debug;
@@ -137,6 +138,20 @@ public class PlayScreen implements Screen {
                         Log.info("[~] Reset completed.");
                         Log.info("[~] - Removed " + i + " tower entities.");
                         Log.info("[~] - Refreshed player data.");
+                    }
+                } else if(e.getKeyCode() == KeyEvent.VK_INSERT) {
+                    if(e.isAltDown() || e.isControlDown()) {
+                        Log.info("[~] Filling map ..");
+                        int i = 0;
+                        
+                        for(Block b : MapManager.getCurrentMap().getBlocks()) {
+                            if(!b.hasTowerEntity() && b.getType() == BlockType.TOWER) {
+                                b.setTowerEntity(new BasicTower(b));
+                                i++;
+                            }
+                        }
+                        
+                        Log.info("[~] Fill completed. Filled " + i + " available blocks.");
                     }
                 }
             }
