@@ -10,6 +10,7 @@ public class ImageCache {
     public static BufferedImage TOWER_BASIC = null;
     public static BufferedImage CASH_ICON = null;
     public static BufferedImage HEART_ICON = null;
+    public static BufferedImage SWORD_ICON = null;
     public static BufferedImage PLACEMENT_DENIED = null;
     public static BufferedImage PLACEMENT_ALLOWED = null;
     
@@ -22,6 +23,7 @@ public class ImageCache {
             HEART_ICON          = Image.HEART_ICON.getBufferedImage();
             PLACEMENT_DENIED    = Image.PLACEMENT_DENIED.getBufferedImage();
             PLACEMENT_ALLOWED   = Image.PLACEMENT_ALLOWED.getBufferedImage();
+            SWORD_ICON          = Image.SWORD_ICON.getBufferedImage();
         } catch (IOException ex) {
             Log.error("[ImageCache] Failed to load!");
             ex.printStackTrace();

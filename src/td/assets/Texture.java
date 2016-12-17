@@ -29,6 +29,22 @@ public class Texture {
         return hitbox;
     }
     
+    public int getX() {
+        return getHitbox().getX();
+    }
+    
+    public int getY() {
+        return getHitbox().getY();
+    }
+    
+    public int getWidth() {
+        return getHitbox().getWidth();
+    }
+    
+    public int getHeight() {
+        return getHitbox().getHeight();
+    }
+    
     public void draw(Graphics2D g) {
         g.drawImage(image, hitbox.getX(), hitbox.getY(), null);
     }

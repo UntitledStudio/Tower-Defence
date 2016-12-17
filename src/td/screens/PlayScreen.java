@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import td.Configuration;
 import td.GameWindow;
@@ -31,6 +32,7 @@ import td.util.Util;
 public class PlayScreen implements Screen {
     private GameWindow window;
     private Texture infoAreaTexture = null;
+    private Texture waveInfoAreaTexture = null;
     private Player player = null;
     private BuildMenu bmenu = null;
     
@@ -47,6 +49,10 @@ public class PlayScreen implements Screen {
         try {
             this.infoAreaTexture = new Texture(Image.INFO_AREA);
             infoAreaTexture.createHitbox(0, 0);
+            
+            BufferedImage waveInfoArea = Image.WAVE_INFO_AREA.getBufferedImage();
+            this.waveInfoAreaTexture = new Texture(waveInfoArea);
+            waveInfoAreaTexture.createHitbox(window.getPanel().getWidth() - waveInfoArea.getWidth(), window.getPanel().getHeight() - waveInfoArea.getHeight());
         } catch (IOException ex) {
             Log.error("[PlayScreen] Failed to load textures");
             ex.printStackTrace();
@@ -166,6 +172,10 @@ public class PlayScreen implements Screen {
                 int x = e.getX();
                 int y = e.getY();
                 
+                if(Util.isWithinArea(x, y, waveInfoAreaTexture)) {
+                    return;
+                }
+                
                 if(!Util.isWithinArea(x, y, bmenu.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
                     if(bmenu.isOpen() || bmenu.getState() == BuildMenuState.OPENING) {
                         bmenu.toggle();
@@ -251,6 +261,10 @@ public class PlayScreen implements Screen {
     
     public Texture getInfoArea() {
         return infoAreaTexture;
+    }
+    
+    public Texture getWaveInfoArea() {
+        return waveInfoAreaTexture;
     }
     
     public Player getPlayer() {

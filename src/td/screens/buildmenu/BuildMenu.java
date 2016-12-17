@@ -166,6 +166,7 @@ public class BuildMenu {
                 Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)a/255);
             }
             getInfoArea().getHitbox().setX(getX() + getWidth());
+            //getWaveInfoArea().getHitbox().setX(getX() + getWidth());
         } else {
             if(!isOpen()) {
                 return;
@@ -226,6 +227,28 @@ public class BuildMenu {
         
         g.drawImage(ImageCache.HEART_ICON, x1, 45, null);
         g.drawString("" + getPlayer().getHealth(), x1 + ImageCache.HEART_ICON.getWidth() + 5, 64);
+        
+        if(Debug.ENABLED) {
+            g.setColor(Color.RED);
+            g.drawRect(getInfoArea().getX(), getInfoArea().getY(), getInfoArea().getWidth(), getInfoArea().getHeight());
+        }
+        
+        // Wave info area
+        drawWaveInfoArea(g);
+    }
+    
+    public void drawWaveInfoArea(Graphics2D g) {
+        getWaveInfoArea().draw(g);
+        g.setColor(Colors.INFO_AREA_TEXT);
+        //g.setFont(Fonts.WAVE_INFO_AREA);
+        g.drawImage(ImageCache.SWORD_ICON, getWaveInfoArea().getX() + 30, getWaveInfoArea().getY() + 10, null);
+        String s = "0/~";
+        g.drawString(s, getWaveInfoArea().getX() + 64, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
+        
+        if(Debug.ENABLED) {
+            g.setColor(Color.RED);
+            g.drawRect(getWaveInfoArea().getX(), getWaveInfoArea().getY(), getWaveInfoArea().getWidth(), getWaveInfoArea().getHeight());
+        }
     }
 
     public void toggle() {
@@ -288,6 +311,10 @@ public class BuildMenu {
     
     public Texture getInfoArea() {
         return playScreen.getInfoArea();
+    }
+    
+    public Texture getWaveInfoArea() {
+        return playScreen.getWaveInfoArea();
     }
     
     public Player getPlayer() {

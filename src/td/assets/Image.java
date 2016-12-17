@@ -18,9 +18,11 @@ public enum Image {
     TOWER_SECTION("assets/tower_section.png"),
     CASH_ICON("assets/cash_icon.png"),
     HEART_ICON("assets/heart_icon.png"),
+    SWORD_ICON("assets/sword_icon.png"),
     UNKNOWN("assets/unknown.png"),
     PLACEMENT_DENIED("assets/placement_denied.png"),
-    PLACEMENT_ALLOWED("assets/placement_allowed.png");
+    PLACEMENT_ALLOWED("assets/placement_allowed.png"),
+    WAVE_INFO_AREA("assets/wave_info_area.png");
     
     private final String path;
     
