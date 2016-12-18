@@ -1,6 +1,5 @@
 package td.towers;
 
-import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -8,7 +7,6 @@ import javax.swing.JFrame;
 import td.data.Block;
 import td.data.BlockType;
 import td.data.Colors;
-import td.maps.Map;
 import td.maps.MapManager;
 import td.util.Input;
 import td.util.Log;

@@ -8,6 +8,7 @@ import td.GameWindow;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.entities.Entity;
+import td.entities.EntityManager;
 import td.entities.EntityType;
 import td.util.Util;
 
@@ -225,14 +226,7 @@ public abstract class Tower implements Entity {
 
     @Override
     public void create() {
-    }
-
-    @Override
-    public void update(double dt) {
-    }
-
-    @Override
-    public void render(Graphics2D g) {
+        EntityManager.getAllEntities().add(this);
     }
 
     @Override
@@ -243,5 +237,6 @@ public abstract class Tower implements Entity {
     @Override
     public void remove() {
         block.setTowerEntity(null);
+        EntityManager.getAllEntities().remove(this);
     }
 } 

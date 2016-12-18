@@ -7,6 +7,8 @@ import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
+import td.entities.Entity;
+import td.entities.EntityManager;
 import td.screens.PlayScreen;
 import td.towers.TowerPlacer;
 import td.util.Input;
@@ -42,7 +44,10 @@ public class Map {
     }
     
     public void update(double dt) {
-        
+        /**
+         * Tick all living entities on the map.
+         */
+        EntityManager.tickLivingEntities();
     }
     
     public void render(Graphics2D g, PlayScreen screen) {
@@ -52,6 +57,11 @@ public class Map {
         for(Block b : blocks) {
             b.render(g, screen);
         }
+        
+        /**
+         * Render all entities on the map.
+         */
+        EntityManager.renderLivingEntities(g);
         
         /**
          * Used if any block is in the "blocks" index is marked for range indication.

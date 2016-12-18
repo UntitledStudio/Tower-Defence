@@ -25,4 +25,9 @@ public class Configuration {
      * Whether to render animations or not.
      */
     public static final boolean ANIMATIONS_ENABLED = true;
+    
+    /**
+     * The interval(ms) between two entity tick cycles.
+     */
+    public static final long ENTITY_TICK_INTERVAL = 33;
 }
