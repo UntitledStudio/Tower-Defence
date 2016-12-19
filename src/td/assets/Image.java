@@ -22,7 +22,8 @@ public enum Image {
     UNKNOWN("assets/unknown.png"),
     PLACEMENT_DENIED("assets/placement_denied.png"),
     PLACEMENT_ALLOWED("assets/placement_allowed.png"),
-    WAVE_INFO_AREA("assets/wave_info_area.png");
+    WAVE_INFO_AREA("assets/wave_info_area.png"),
+    ENEMY_BASIC("assets/enemy_basic.png");
     
     private final String path;
     

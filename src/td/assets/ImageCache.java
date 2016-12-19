@@ -13,6 +13,7 @@ public class ImageCache {
     public static BufferedImage SWORD_ICON = null;
     public static BufferedImage PLACEMENT_DENIED = null;
     public static BufferedImage PLACEMENT_ALLOWED = null;
+    public static BufferedImage ENEMY_BASIC = null;
     
     public static void load() {
         try {
@@ -24,6 +25,7 @@ public class ImageCache {
             PLACEMENT_DENIED    = Image.PLACEMENT_DENIED.getBufferedImage();
             PLACEMENT_ALLOWED   = Image.PLACEMENT_ALLOWED.getBufferedImage();
             SWORD_ICON          = Image.SWORD_ICON.getBufferedImage();
+            ENEMY_BASIC         = Image.ENEMY_BASIC.getBufferedImage();
         } catch (IOException ex) {
             Log.error("[ImageCache] Failed to load!");
             ex.printStackTrace();
