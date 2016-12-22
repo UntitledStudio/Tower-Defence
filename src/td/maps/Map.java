@@ -7,24 +7,27 @@ import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
-import td.entities.Entity;
-import td.entities.EntityManager;
 import td.screens.PlayScreen;
 import td.towers.TowerPlacer;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public class Map {
     private final String name;
     private final int[][] structure;
+    private final LocationData locationData;
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
     private final List<Block> markedBlocks = new ArrayList<>();
+    private Block spawnBlock = null;
+    private Block destinationBlock = null;
     
-    public Map(String name, int[][] structure) {
+    public Map(String name, int[][] structure, LocationData locationData) {
         this.name = name;
         this.structure = structure;
+        this.locationData = locationData;
     }
     
     public void buildMap() {
@@ -45,9 +48,9 @@ public class Map {
     
     public void update(double dt) {
         /**
-         * Tick all living entities on the map.
+         * Tick the live wave.
          */
-        EntityManager.tickLivingEntities();
+        WaveManager.tickLiveWave();
     }
     
     public void render(Graphics2D g, PlayScreen screen) {
@@ -61,7 +64,8 @@ public class Map {
         /**
          * Render all entities on the map.
          */
-        EntityManager.renderLivingEntities(g);
+        WaveManager.renderLiveWave(g);
+        //EntityManager.renderLivingEntities(g);
         
         /**
          * Used if any block is in the "blocks" index is marked for range indication.
@@ -162,5 +166,25 @@ public class Map {
     
     public int[][] getStructure() {
         return structure;
+    }
+    
+    public LocationData getLocationData() {
+        return locationData;
+    }
+    
+    public Block getSpawnBlock() {
+        if(spawnBlock != null) {
+            return spawnBlock;
+        }
+        spawnBlock = getBlockAt(MapManager.COLUMNS[locationData.getSpawnColumn()], MapManager.ROWS[locationData.getSpawnRow()]);
+        return spawnBlock;
+    }
+    
+    public Block getDestinationBlock() {
+        if(destinationBlock != null) {
+            return destinationBlock;
+        }
+        destinationBlock = getBlockAt(MapManager.COLUMNS[locationData.getDestinationColumn()], MapManager.ROWS[locationData.getDestinationRow()]);
+        return destinationBlock;
     }
 }

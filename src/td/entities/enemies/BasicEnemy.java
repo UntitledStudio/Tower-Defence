@@ -1,44 +1,60 @@
-package td.entities.monsters;
+package td.entities.enemies;
 
 import java.awt.Graphics2D;
+import td.Configuration;
 import td.assets.ImageCache;
 import td.assets.Texture;
-import td.entities.EntityManager;
+import td.data.Block;
 import td.entities.EntityType;
-import td.entities.LivingEntity;
+import td.maps.MapManager;
 import td.util.Hitbox;
+import td.util.Log;
+import td.util.Util;
+import td.waves.Wave;
 
-public class BasicEnemy implements LivingEntity {
+public class BasicEnemy implements EnemyEntity {
     private final Texture texture;
+    private final EnemyType type;
+    private final Wave associatedWave;
     private int health = 1;
     private int maxHealth = 1;
-    /**
-     * Pixels per tick.
-     */
+    // Pixels per tick
     private int moveSpeed = 5;
+    private boolean isSpawned = false;
     
-    public BasicEnemy(int maxHealth, int moveSpeed) {
+    public BasicEnemy(Wave wave, int maxHealth, int moveSpeed) {
         this.texture = new Texture(ImageCache.ENEMY_BASIC);
-        texture.createHitbox(0, 0);
+        texture.createHitbox(-100, -100);
+        this.type = EnemyType.BASIC;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         this.moveSpeed = moveSpeed;
+        this.associatedWave = wave;
     }
     
     @Override
     public void tick() {
-        
+        if(isSpawned) {
+            setX(getX() + 5);
+        }
     }
 
     @Override
     public void render(Graphics2D g) {
-        
+        if(isSpawned) {
+            texture.draw(g);
+        }
+    }
+
+    @Override
+    public Wave getAssociatedWave() {
+        return associatedWave;
     }
 
     @Override
     public void create() {
-        EntityManager.getAllEntities().add(this);
-        EntityManager.getLivingEntities().add(this);
+        //EntityManager.getAllEntities().add(this);
+        //EntityManager.getLivingEntities().add(this);
     }
 
     @Override
@@ -48,8 +64,21 @@ public class BasicEnemy implements LivingEntity {
 
     @Override
     public void remove() {
-        EntityManager.getAllEntities().remove(this);
-        EntityManager.getLivingEntities().remove(this);
+        
+    }
+    
+    @Override
+    public void spawn() {
+        Block spawn = MapManager.getCurrentMap().getSpawnBlock();
+        //Block destination = MapManager.getCurrentMap().getDestinationBlock();
+        
+        if(spawn.getX() <= 0) {
+            setX(-100);
+            setY(spawn.getY() + Util.centerValue(texture.getHeight(), Configuration.BLOCK_SIZE));
+        } else {
+            System.out.println("todo");
+        }
+        isSpawned = true;
     }
 
     @Override
@@ -126,11 +155,18 @@ public class BasicEnemy implements LivingEntity {
         }
     }
     
+    @Override
     public int getMoveSpeed() {
         return moveSpeed;
     }
     
+    @Override
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+    
+    @Override
+    public EnemyType getEnemyType() {
+        return type;
     }
 }

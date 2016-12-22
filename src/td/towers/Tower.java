@@ -225,9 +225,7 @@ public abstract class Tower implements Entity {
     public abstract String getName();
 
     @Override
-    public void create() {
-        EntityManager.getAllEntities().add(this);
-    }
+    public void create() {}
 
     @Override
     public EntityType getType() {
@@ -237,6 +235,5 @@ public abstract class Tower implements Entity {
     @Override
     public void remove() {
         block.setTowerEntity(null);
-        EntityManager.getAllEntities().remove(this);
     }
 } 

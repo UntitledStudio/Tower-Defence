@@ -17,6 +17,8 @@ public class Block {
     private Texture texture = null;
     private Tower towerEntity = null;
     private boolean willHighlight = false;
+    /*private boolean isSpawnBlock = false;
+    private boolean isDestinationBlock = false;*/
     
     public Block(int x, int y, BlockType type) {
         this.x = x;
@@ -28,7 +30,7 @@ public class Block {
         } catch (IOException ex) {
             Log.error("[Block] Error loading texture. (" + type.name() + ")");
         }
-    }    
+    }
     
     public int getX() {
         return x;
@@ -73,6 +75,22 @@ public class Block {
     public boolean willHighlight() {
         return willHighlight;
     }
+    
+    /*public void setSpawnBlock(boolean spawnBlock) {
+        this.isSpawnBlock = spawnBlock;
+    }
+    
+    public boolean isSpawnBlock() {
+        return isSpawnBlock;
+    }
+    
+    public void setDestionationBlock(boolean destinationBlock) {
+        this.isDestinationBlock = destinationBlock;
+    }
+    
+    public boolean isDestionationBlock() {
+        return isDestinationBlock;
+    }*/
     
     /**
      * Automatically attempts to set the texture of this block depending on the block type.

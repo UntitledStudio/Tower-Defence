@@ -1,13 +1,17 @@
-package td.entities;
+package td.entities.enemies;
 
 import java.awt.Graphics2D;
 import td.assets.Texture;
+import td.entities.Entity;
 import td.util.Hitbox;
+import td.waves.Wave;
 
-public interface LivingEntity extends Entity {
+public interface EnemyEntity extends Entity {
     public void tick();
     public void render(Graphics2D g);
+    public Wave getAssociatedWave();
     public void kill();
+    public void spawn();
     public int getHealth();
     public void setHealth(int health);
     public int getMaxHealth();
@@ -20,4 +24,7 @@ public interface LivingEntity extends Entity {
     public void setY(int y);
     public Texture getTexture();
     public Hitbox getHitbox();
+    public void setMoveSpeed(int speed);
+    public int getMoveSpeed();
+    public EnemyType getEnemyType();
 }

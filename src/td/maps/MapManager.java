@@ -9,7 +9,7 @@ public class MapManager {
     /**
      * Index of all maps.
      */
-    protected final static List<Map> maps = new ArrayList<>();
+    protected final static List<Map> MAPS = new ArrayList<>();
     
     /**
      * 
@@ -64,21 +64,22 @@ public class MapManager {
           {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
           {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
-        maps.add(new Map("default", structure1));
+        LocationData locationData = new LocationData(6, 1, 3, 16);
+        MAPS.add(new Map("default", structure1, locationData));
         
-        Log.info("[MapManager] Finished loading " + maps.size() + " default map(s)! (" + (System.currentTimeMillis()-start) + "ms)");
+        Log.info("[MapManager] Finished loading " + MAPS.size() + " default map(s)! (" + (System.currentTimeMillis()-start) + "ms)");
     }
     
     public static void addMap(Map map) {
-        maps.add(map);
+        MAPS.add(map);
     }
     
     public static Map getDefaultMap() {
-        return maps.get(0);
+        return MAPS.get(0);
     }
     
     public static List<Map> getMaps() {
-        return maps;
+        return MAPS;
     }
     
     public static void loadRowsAndColumns() {

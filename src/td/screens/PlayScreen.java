@@ -28,6 +28,7 @@ import td.util.Debug;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public class PlayScreen implements Screen {
     private GameWindow window;
@@ -58,6 +59,7 @@ public class PlayScreen implements Screen {
             ex.printStackTrace();
         }
         this.bmenu = new BuildMenu(this);
+        WaveManager.generateNext();
     }
 
     @Override
@@ -159,6 +161,8 @@ public class PlayScreen implements Screen {
                         
                         Log.info("[~] Fill completed. Filled " + i + " available blocks.");
                     }
+                } else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    WaveManager.launchNext();
                 }
             }
         };

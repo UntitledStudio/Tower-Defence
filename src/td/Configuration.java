@@ -29,5 +29,5 @@ public class Configuration {
     /**
      * The interval(ms) between two entity tick cycles.
      */
-    public static final long ENTITY_TICK_INTERVAL = 33;
+    public static final long ENTITY_TICK_INTERVAL = 22;
 }
