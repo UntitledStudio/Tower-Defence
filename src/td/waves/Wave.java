@@ -10,6 +10,7 @@ import td.util.Log;
 
 public class Wave {
     private final int id;
+    private boolean isActive = false;
     private final boolean bossWave;
     private boolean paused = true;
     private final List<EnemyEntity> ENEMY_INDEX;
@@ -35,7 +36,7 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BasicEnemy basicEnemy = new BasicEnemy(this, id, 3);
+            BasicEnemy basicEnemy = new BasicEnemy(this, id, 1);
             BASIC_ENEMIES.add(basicEnemy);
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
@@ -46,11 +47,24 @@ public class Wave {
      * Launch the wave.
      */
     public void launch() {
+        setPaused(false);
+        isActive = true;
+        
         // temp, todo: spawn each entity with delay inbetween
         for(EnemyEntity e : ENEMY_INDEX) {
             e.spawn();
         }
-        setPaused(false);
+    }
+    
+    /**
+     * End this wave.
+     * @param reason
+     */
+    public void end(EndReason reason) {
+        isActive = false;
+        ENEMY_INDEX.clear();
+        BASIC_ENEMIES.clear();
+        Log.info("[Wave] Wave '" + id + "' ended! Reason: " + reason.name());
     }
     
     /**
@@ -105,5 +119,29 @@ public class Wave {
      */
     public boolean isPaused() {
         return paused;
+    }
+    
+    /**
+     * Returns the enemy index.
+     * @return 
+     */
+    public List<EnemyEntity> getEnemyIndex() {
+        return ENEMY_INDEX;
+    }
+    
+    /**
+     * If this wave is currently being played.
+     * @return 
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+    
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+    
+    public static enum EndReason {
+        COMPLETED, FAILED, UNKNOWN;
     }
 }

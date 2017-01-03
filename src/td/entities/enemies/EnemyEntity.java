@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import td.assets.Texture;
 import td.data.Block;
 import td.entities.Entity;
+import td.towers.Tower;
 import td.util.Direction;
 import td.util.Hitbox;
 import td.waves.Wave;
@@ -24,10 +25,13 @@ public interface EnemyEntity extends Entity {
     public void setX(int x);
     public int getY();
     public void setY(int y);
+    public int getWidth();
+    public int getHeight();
     public Texture getTexture();
     public Hitbox getHitbox();
     public void setMoveSpeed(int speed);
     public int getMoveSpeed();
     public EnemyType getEnemyType();
     public AIHelper getAI();
+    public boolean isWithinTowerRange(Tower tower);
 }

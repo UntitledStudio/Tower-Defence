@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import td.assets.ImageCache;
 import td.assets.Texture;
 import td.entities.EntityType;
+import td.towers.Tower;
 import td.util.Hitbox;
 import td.waves.Wave;
 
@@ -29,6 +30,8 @@ public class BasicEnemy implements EnemyEntity {
     @Override
     public void tick() {
         ai.move();
+        
+        //for(Tower t : )
     }
 
     @Override
@@ -90,6 +93,16 @@ public class BasicEnemy implements EnemyEntity {
         getHitbox().setY(y);
     }
 
+    @Override
+    public int getWidth() {
+        return getTexture().getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return getTexture().getHeight();
+    }
+    
     @Override
     public Texture getTexture() {
         return texture;
@@ -156,5 +169,10 @@ public class BasicEnemy implements EnemyEntity {
     @Override
     public AIHelper getAI() {
         return ai;
+    }
+
+    @Override
+    public boolean isWithinTowerRange(Tower tower) {
+        return tower.getRangeIndicator().contains(getX(), getY());
     }
 }

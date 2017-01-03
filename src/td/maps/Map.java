@@ -23,8 +23,6 @@ public class Map {
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
     private final List<Block> markedBlocks = new ArrayList<>();
-    
-    // test
     private PathData pathData = null;
     
     public Map(String name, int[][] structure) {

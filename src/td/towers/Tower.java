@@ -4,11 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import td.Configuration;
-import td.GameWindow;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.entities.Entity;
-import td.entities.EntityManager;
 import td.entities.EntityType;
 import td.util.Util;
 
@@ -92,7 +90,8 @@ public abstract class Tower implements Entity {
     }
     
     public void draw(Graphics2D g) {
-        //lookAt(GameWindow.instance.getInput().getMouseX(), GameWindow.instance.getInput().getMouseY());
+        //if()
+        
         int cx = towerType.getImage().getWidth() / 2;
         int cy = towerType.getImage().getHeight() / 2;
         AffineTransform backup = g.getTransform();

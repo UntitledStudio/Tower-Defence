@@ -7,6 +7,7 @@ import td.Configuration;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
+import td.entities.enemies.EnemyEntity;
 import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
@@ -14,6 +15,7 @@ import td.util.Debug;
 import td.util.Log;
 import td.util.RenderUtil;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public class Block {
     private final int x;
@@ -120,6 +122,16 @@ public class Block {
             } else {
                 //g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
                 getTowerEntity().draw(g);
+            }
+            
+            if(WaveManager.isWaveActive()) {
+                for(EnemyEntity unit : WaveManager.getWave().getEnemyIndex()) {
+                    if(unit.isWithinTowerRange(towerEntity)) {
+                        int x = unit.getX() + (unit.getWidth()/2);
+                        int y = unit.getY() + (unit.getHeight()/2);
+                        towerEntity.lookAt(x, y);
+                    }
+                }
             }
         }
         
