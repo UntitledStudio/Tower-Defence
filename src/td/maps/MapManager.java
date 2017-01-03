@@ -64,8 +64,7 @@ public class MapManager {
           {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
           {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
-        LocationData locationData = new LocationData(6, 1, 3, 16);
-        MAPS.add(new Map("default", structure1, locationData));
+        MAPS.add(new Map("default", structure1));
         
         Log.info("[MapManager] Finished loading " + MAPS.size() + " default map(s)! (" + (System.currentTimeMillis()-start) + "ms)");
     }

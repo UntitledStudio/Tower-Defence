@@ -1,26 +1,19 @@
 package td.entities.enemies;
 
 import java.awt.Graphics2D;
-import td.Configuration;
 import td.assets.ImageCache;
 import td.assets.Texture;
-import td.data.Block;
 import td.entities.EntityType;
-import td.maps.MapManager;
 import td.util.Hitbox;
-import td.util.Log;
-import td.util.Util;
 import td.waves.Wave;
 
 public class BasicEnemy implements EnemyEntity {
     private final Texture texture;
     private final EnemyType type;
     private final Wave associatedWave;
+    private final AIHelper ai;
     private int health = 1;
     private int maxHealth = 1;
-    // Pixels per tick
-    private int moveSpeed = 5;
-    private boolean isSpawned = false;
     
     public BasicEnemy(Wave wave, int maxHealth, int moveSpeed) {
         this.texture = new Texture(ImageCache.ENEMY_BASIC);
@@ -28,20 +21,19 @@ public class BasicEnemy implements EnemyEntity {
         this.type = EnemyType.BASIC;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.moveSpeed = moveSpeed;
         this.associatedWave = wave;
+        this.ai = new AIHelper(this);
+        ai.setMoveSpeed(moveSpeed);
     }
     
     @Override
     public void tick() {
-        if(isSpawned) {
-            setX(getX() + 5);
-        }
+        ai.move();
     }
 
     @Override
     public void render(Graphics2D g) {
-        if(isSpawned) {
+        if(ai.isSpawned()) {
             texture.draw(g);
         }
     }
@@ -69,16 +61,7 @@ public class BasicEnemy implements EnemyEntity {
     
     @Override
     public void spawn() {
-        Block spawn = MapManager.getCurrentMap().getSpawnBlock();
-        //Block destination = MapManager.getCurrentMap().getDestinationBlock();
-        
-        if(spawn.getX() <= 0) {
-            setX(-100);
-            setY(spawn.getY() + Util.centerValue(texture.getHeight(), Configuration.BLOCK_SIZE));
-        } else {
-            System.out.println("todo");
-        }
-        isSpawned = true;
+        ai.spawn();
     }
 
     @Override
@@ -157,16 +140,21 @@ public class BasicEnemy implements EnemyEntity {
     
     @Override
     public int getMoveSpeed() {
-        return moveSpeed;
+        return ai.getMoveSpeed();
     }
     
     @Override
     public void setMoveSpeed(int moveSpeed) {
-        this.moveSpeed = moveSpeed;
+        ai.setMoveSpeed(moveSpeed);
     }
     
     @Override
     public EnemyType getEnemyType() {
         return type;
+    }
+
+    @Override
+    public AIHelper getAI() {
+        return ai;
     }
 }

@@ -35,7 +35,7 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BasicEnemy basicEnemy = new BasicEnemy(this, id, 5);
+            BasicEnemy basicEnemy = new BasicEnemy(this, id, 3);
             BASIC_ENEMIES.add(basicEnemy);
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
@@ -73,6 +73,7 @@ public class Wave {
     
     /**
      * Render the entities in this wave.
+     * @param g
      */
     public void render(Graphics2D g) {
         for(EnemyEntity e : ENEMY_INDEX) {

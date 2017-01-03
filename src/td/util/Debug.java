@@ -3,14 +3,17 @@ package td.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import td.GameWindow;
+import td.data.Block;
+import td.data.BlockType;
 import td.data.Fonts;
+import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.screens.ScreenManager;
 import td.screens.buildmenu.BuildMenu;
 
 public class Debug {
     public static boolean ENABLED = false;
-    protected static Color bgClr = new Color(0f, 0f, 0f, 0.4f);
+    public static Color bgClr = new Color(0f, 0f, 0f, 0.4f);
     protected static final int baseY = 8;
     private static BuildMenu buildMenu = null;
     
@@ -33,6 +36,14 @@ public class Debug {
                 RenderUtil.drawString("BuildMenu: " + buildMenu.getState().name() + ", " + (buildMenu.isOpen() ? "open" : "closed"), 8, baseY * 13, Color.WHITE, bgClr, g);
             } else {
                 RenderUtil.drawString("BuildMenu: INSTANCE IS NULL", 8, baseY * 13, Color.WHITE, bgClr, g);
+            }
+            
+            for(Block b : MapManager.getCurrentMap().getBlocks()) {
+                if(b.getType() == BlockType.PATH) {
+                    g.setColor(Color.BLACK);
+                    g.drawLine(b.getX(), b.getY(), b.getTexture().getHitbox().getRightX(), b.getTexture().getHitbox().getBottomY());
+                    g.drawLine(b.getTexture().getHitbox().getRightX(), b.getY(), b.getX(), b.getTexture().getHitbox().getBottomY());
+                }
             }
         }
     }

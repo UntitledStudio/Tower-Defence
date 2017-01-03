@@ -1,14 +1,19 @@
 package td.data;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import td.Configuration;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
 import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
+import td.util.Debug;
 import td.util.Log;
+import td.util.RenderUtil;
+import td.util.Util;
 
 public class Block {
     private final int x;
@@ -17,8 +22,8 @@ public class Block {
     private Texture texture = null;
     private Tower towerEntity = null;
     private boolean willHighlight = false;
-    /*private boolean isSpawnBlock = false;
-    private boolean isDestinationBlock = false;*/
+    private Block nextPathBlock = null;
+    private int pathID = -1;
     
     public Block(int x, int y, BlockType type) {
         this.x = x;
@@ -76,21 +81,18 @@ public class Block {
         return willHighlight;
     }
     
-    /*public void setSpawnBlock(boolean spawnBlock) {
-        this.isSpawnBlock = spawnBlock;
+    public void injectPathData(int pathID, Block nextPath) {
+        this.pathID = pathID;
+        this.nextPathBlock = nextPath;
     }
     
-    public boolean isSpawnBlock() {
-        return isSpawnBlock;
+    public int getPathID() {
+        return pathID;
     }
     
-    public void setDestionationBlock(boolean destinationBlock) {
-        this.isDestinationBlock = destinationBlock;
+    public Block getNextPath() {
+        return nextPathBlock;
     }
-    
-    public boolean isDestionationBlock() {
-        return isDestinationBlock;
-    }*/
     
     /**
      * Automatically attempts to set the texture of this block depending on the block type.
@@ -118,6 +120,13 @@ public class Block {
             } else {
                 //g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
                 getTowerEntity().draw(g);
+            }
+        }
+        
+        if(Debug.ENABLED) {
+            if(type == BlockType.PATH) {
+                String s = "ID: " + pathID;
+                RenderUtil.drawString(s, Util.centerStringX(s, Configuration.BLOCK_SIZE, g, x), Util.centerStringY(s, Configuration.BLOCK_SIZE, g, y), Color.WHITE, Debug.bgClr, g);
             }
         }
     }

@@ -2,7 +2,9 @@ package td.entities.enemies;
 
 import java.awt.Graphics2D;
 import td.assets.Texture;
+import td.data.Block;
 import td.entities.Entity;
+import td.util.Direction;
 import td.util.Hitbox;
 import td.waves.Wave;
 
@@ -27,4 +29,5 @@ public interface EnemyEntity extends Entity {
     public void setMoveSpeed(int speed);
     public int getMoveSpeed();
     public EnemyType getEnemyType();
+    public AIHelper getAI();
 }

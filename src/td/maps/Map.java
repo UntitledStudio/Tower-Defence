@@ -1,5 +1,6 @@
 package td.maps;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,25 +10,26 @@ import td.data.Block;
 import td.data.BlockType;
 import td.screens.PlayScreen;
 import td.towers.TowerPlacer;
+import td.util.Debug;
 import td.util.Input;
 import td.util.Log;
+import td.util.RenderUtil;
 import td.util.Util;
 import td.waves.WaveManager;
 
 public class Map {
     private final String name;
     private final int[][] structure;
-    private final LocationData locationData;
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
     private final List<Block> markedBlocks = new ArrayList<>();
-    private Block spawnBlock = null;
-    private Block destinationBlock = null;
     
-    public Map(String name, int[][] structure, LocationData locationData) {
+    // test
+    private PathData pathData = null;
+    
+    public Map(String name, int[][] structure) {
         this.name = name;
         this.structure = structure;
-        this.locationData = locationData;
     }
     
     public void buildMap() {
@@ -43,6 +45,10 @@ public class Map {
                 blocks.add(new Block(x, y, type));
             }
         }
+        pathData = new PathData(this);
+        pathData.loadFile();
+        pathData.injectIntoBlockList();
+        
         Log.info("[Map: " + getName() + "] Built! (" + (System.currentTimeMillis()-start) + "ms)");
     }
     
@@ -98,7 +104,11 @@ public class Map {
                         g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
                     }
                 }
-            } 
+            }
+            
+            if(Debug.ENABLED) {
+                RenderUtil.drawString("B xy: " + b.getX() + "," + b.getY(), screen.getInput().getMouseX() - 35, screen.getInput().getMouseY() - 15, Color.WHITE, Debug.bgClr, g);
+            }
         }
     }
     
@@ -117,11 +127,11 @@ public class Map {
             int minX = b.getX();
             int maxX = minX + Configuration.BLOCK_SIZE;
 
-            if(x == minX || (x > minX && x <= maxX)) {
+            if(x >= minX && x < maxX) {
                 int minY = b.getY();
                 int maxY = minY + Configuration.BLOCK_SIZE;
 
-                if(y == minY || (y > minY && y <= maxY)) {
+                if(y >= minY && y < maxY) {
                     return b;
                 }
             }
@@ -168,23 +178,7 @@ public class Map {
         return structure;
     }
     
-    public LocationData getLocationData() {
-        return locationData;
-    }
-    
-    public Block getSpawnBlock() {
-        if(spawnBlock != null) {
-            return spawnBlock;
-        }
-        spawnBlock = getBlockAt(MapManager.COLUMNS[locationData.getSpawnColumn()], MapManager.ROWS[locationData.getSpawnRow()]);
-        return spawnBlock;
-    }
-    
-    public Block getDestinationBlock() {
-        if(destinationBlock != null) {
-            return destinationBlock;
-        }
-        destinationBlock = getBlockAt(MapManager.COLUMNS[locationData.getDestinationColumn()], MapManager.ROWS[locationData.getDestinationRow()]);
-        return destinationBlock;
+    public PathData getPathData() {
+        return pathData;
     }
 }
