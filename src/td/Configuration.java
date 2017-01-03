@@ -32,11 +32,6 @@ public class Configuration {
     public static final long ENTITY_TICK_INTERVAL = 22;
     
     /**
-     * The amount of pixels the enemy will move per tick.
-     */
-    public static final int ENEMY_PIXELS_PER_TICK = 3;
-    
-    /**
      * How many pixels behind the spawn path block the enemy will be spawned at.
      */
     public static final int ENEMY_SPAWN_OFFSET = 100;

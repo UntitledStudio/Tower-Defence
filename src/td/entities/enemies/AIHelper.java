@@ -56,7 +56,7 @@ public class AIHelper {
             switch(direction) {
                 case EAST: {
                     // Increasing X
-                    x += Configuration.ENEMY_PIXELS_PER_TICK;
+                    x += moveSpeed;
                     
                     if(x >= destination) {
                         x = destination;
@@ -67,7 +67,7 @@ public class AIHelper {
                 }
                 case WEST: {
                     // Decreasing X
-                    x -= Configuration.ENEMY_PIXELS_PER_TICK;
+                    x -= moveSpeed;
                     
                     if(x <= destination) {
                         x = destination;
@@ -78,7 +78,7 @@ public class AIHelper {
                 }
                 case NORTH: {
                     // Increasing Y
-                    y += Configuration.ENEMY_PIXELS_PER_TICK;
+                    y += moveSpeed;
                     
                     if(y >= destination) {
                         y = destination;
@@ -89,7 +89,7 @@ public class AIHelper {
                 }
                 case SOUTH: {
                     // Decreasing Y
-                    y -= Configuration.ENEMY_PIXELS_PER_TICK;
+                    y -= moveSpeed;
                     
                     if(y <= destination) {
                         y = destination;
