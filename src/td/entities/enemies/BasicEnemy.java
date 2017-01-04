@@ -1,6 +1,7 @@
 package td.entities.enemies;
 
 import java.awt.Graphics2D;
+import td.Configuration;
 import td.assets.ImageCache;
 import td.assets.Texture;
 import td.entities.EntityType;
@@ -173,6 +174,9 @@ public class BasicEnemy implements EnemyEntity {
 
     @Override
     public boolean isWithinTowerRange(Tower tower) {
+        if(getX() < -getWidth() || getX() > Configuration.GAME_WIDTH || getY() < -getHeight() || getY() > Configuration.GAME_HEIGHT) {
+            return false;
+        }
         return tower.getRangeIndicator().intersects(getX(), getY(), getWidth(), getHeight());
     }
 }

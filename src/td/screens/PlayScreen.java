@@ -28,6 +28,7 @@ import td.util.Debug;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
+import td.waves.Wave;
 import td.waves.WaveManager;
 
 public class PlayScreen implements Screen {
@@ -140,7 +141,7 @@ public class PlayScreen implements Screen {
                                 i++;
                             }
                         }
-                        
+                        WaveManager.reset();
                         player.setCash(player.getStartingCash());
                         player.setHealth(player.getMaxHealth());
                         Log.info("[~] Reset completed.");

@@ -21,6 +21,16 @@ public class WaveManager {
         return wave != null && wave.isActive();
     }
     
+    public static void reset() {
+        Log.info("[WaveManager] Performing reset ..");
+        if(isWaveActive()) {
+            wave.end(Wave.EndReason.UNKNOWN);
+        }
+        wave = null;
+        generateNext();
+        Log.info("[WaveManager] Reset complete.");
+    }
+    
     public static void generateNext() {
         if(isWaveActive()) {
             Log.error("[WaveManager] Could not generate new wave as there already exists an active wave.");
