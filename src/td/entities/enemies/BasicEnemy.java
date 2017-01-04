@@ -173,6 +173,6 @@ public class BasicEnemy implements EnemyEntity {
 
     @Override
     public boolean isWithinTowerRange(Tower tower) {
-        return tower.getRangeIndicator().contains(getX(), getY());
+        return tower.getRangeIndicator().intersects(getX(), getY(), getWidth(), getHeight());
     }
 }
