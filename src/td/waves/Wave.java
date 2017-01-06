@@ -36,7 +36,7 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BasicEnemy basicEnemy = new BasicEnemy(this, id, 1);
+            BasicEnemy basicEnemy = new BasicEnemy(this, 100, 2);
             BASIC_ENEMIES.add(basicEnemy);
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);

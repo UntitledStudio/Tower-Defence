@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import td.data.Colors;
 import td.data.Fonts;
-import td.towers.BasicTowerDefaults;
 import td.towers.TowerType;
 import td.util.Debug;
 import td.util.Hitbox;
@@ -49,8 +48,8 @@ public class InfoSection implements Section {
             g.setFont(Fonts.BUILD_MENU_INFOLABELS);
             
             if(towerType == TowerType.BASIC_TOWER) {
-                RenderUtil.drawTwoColoredString(x, y, "Damage: ", "" + BasicTowerDefaults.DAMAGE, Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
-                RenderUtil.drawTwoColoredString(x, y + yInc, "Crit Chance: ", BasicTowerDefaults.CRIT_CHANCE + "%", Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
+                RenderUtil.drawTwoColoredString(x, y, "Damage: ", "" + towerType.getDefaults().DAMAGE, Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
+                RenderUtil.drawTwoColoredString(x, y + yInc, "Crit Chance: ", towerType.getDefaults().CRIT_CHANCE + "%", Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
             }
         }
         

@@ -14,8 +14,8 @@ public class BasicEnemy implements EnemyEntity {
     private final EnemyType type;
     private final Wave associatedWave;
     private final AIHelper ai;
-    private int health = 1;
-    private int maxHealth = 1;
+    private int health = 100;
+    private int maxHealth = 100;
     
     public BasicEnemy(Wave wave, int maxHealth, int moveSpeed) {
         this.texture = new Texture(ImageCache.ENEMY_BASIC);
@@ -31,14 +31,16 @@ public class BasicEnemy implements EnemyEntity {
     @Override
     public void tick() {
         ai.move();
-        
-        //for(Tower t : )
     }
 
     @Override
     public void render(Graphics2D g) {
         if(ai.isSpawned()) {
+            // Enemy
             texture.draw(g);
+            
+            // Health bar
+            EnemyUtil.paintHealthBar(g, this);
         }
     }
 
@@ -48,10 +50,7 @@ public class BasicEnemy implements EnemyEntity {
     }
 
     @Override
-    public void create() {
-        //EntityManager.getAllEntities().add(this);
-        //EntityManager.getLivingEntities().add(this);
-    }
+    public void create() {}
 
     @Override
     public EntityType getType() {

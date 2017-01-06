@@ -22,4 +22,8 @@ public enum TowerType {
     public String getName() {
         return name;
     }
+    
+    public Defaults getDefaults() {
+        return Defaults.getDefaults(this);
+    }
 }

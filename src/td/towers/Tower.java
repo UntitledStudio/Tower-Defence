@@ -27,6 +27,11 @@ public abstract class Tower implements Entity {
     int damage = 1;
     
     /**
+     * 
+     */
+    int shotsPerSecond = 10;
+    
+    /**
      * Tower range in radius.
      */
     int range = 160;

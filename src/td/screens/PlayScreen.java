@@ -22,13 +22,11 @@ import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
 import td.towers.BasicTower;
-import td.towers.BasicTowerDefaults;
 import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
-import td.waves.Wave;
 import td.waves.WaveManager;
 
 public class PlayScreen implements Screen {
@@ -91,7 +89,7 @@ public class PlayScreen implements Screen {
             int x = getInput().getMouseX();
             int y = getInput().getMouseY();
             
-            TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, BasicTowerDefaults.RANGE, BasicTowerDefaults.RANGE));
+            TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, TowerPlacer.getSelectedTower().getDefaults().RANGE, TowerPlacer.getSelectedTower().getDefaults().RANGE));
             g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
             
             if(TowerPlacer.drawPlacementDenied) {
@@ -215,7 +213,7 @@ public class PlayScreen implements Screen {
                                 // alert player in some way
                                 Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an occupied location.");
                             } else {
-                                TowerPlacer.place(b);
+                                TowerPlacer.place(b, player);
                             }
                         } else {
                             // alert player in some way

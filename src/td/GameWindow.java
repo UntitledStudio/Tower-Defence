@@ -13,6 +13,7 @@ import td.data.Colors;
 import td.maps.MapManager;
 import td.screens.MenuScreen;
 import td.screens.ScreenManager;
+import td.towers.Defaults;
 import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
@@ -42,6 +43,7 @@ public class GameWindow {
         frame.pack();
         frame.setLocationRelativeTo(null);
         ImageCache.load();
+        Defaults.cacheDefaults();
         handleMaps();
         ScreenManager.setGameWindow(this);
         ScreenManager.setScreen(new MenuScreen());

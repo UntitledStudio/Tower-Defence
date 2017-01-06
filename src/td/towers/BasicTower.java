@@ -7,17 +7,18 @@ public class BasicTower extends Tower {
     
     public BasicTower(Block block) {
         super(block);
-        towerType               = BasicTowerDefaults.TOWER_TYPE;
-        maxLevel                = BasicTowerDefaults.MAX_LEVEL;
-        currentLevel            = BasicTowerDefaults.START_LEVEL;
-        damage                  = BasicTowerDefaults.DAMAGE;
-        range                   = BasicTowerDefaults.RANGE;
-        critChance              = BasicTowerDefaults.CRIT_CHANCE;
-        critMultiplier          = BasicTowerDefaults.CRIT_MULTIPLIER;
-        buyCost                 = BasicTowerDefaults.BUY_COST;
-        refundAmount            = BasicTowerDefaults.REFUND_AMOUNT;
-        upgradeCostMultiplier   = BasicTowerDefaults.UPGRADE_COST_MULTIPLIER;
-        upgradeDamageMultiplier = BasicTowerDefaults.UPGRADE_DAMAGE_MULTIPLIER;
+        towerType               = Defaults.getDefaults(TowerType.BASIC_TOWER).TOWER_TYPE;
+        maxLevel                = Defaults.getDefaults(TowerType.BASIC_TOWER).MAX_LEVEL;
+        currentLevel            = Defaults.getDefaults(TowerType.BASIC_TOWER).START_LEVEL;
+        damage                  = Defaults.getDefaults(TowerType.BASIC_TOWER).DAMAGE;
+        shotsPerSecond          = Defaults.getDefaults(TowerType.BASIC_TOWER).SHOTS_PER_SECOND;
+        range                   = Defaults.getDefaults(TowerType.BASIC_TOWER).RANGE;
+        critChance              = Defaults.getDefaults(TowerType.BASIC_TOWER).CRIT_CHANCE;
+        critMultiplier          = Defaults.getDefaults(TowerType.BASIC_TOWER).CRIT_MULTIPLIER;
+        buyCost                 = Defaults.getDefaults(TowerType.BASIC_TOWER).BUY_COST;
+        refundAmount            = Defaults.getDefaults(TowerType.BASIC_TOWER).REFUND_AMOUNT;
+        upgradeCostMultiplier   = Defaults.getDefaults(TowerType.BASIC_TOWER).UPGRADE_COST_MULTIPLIER;
+        upgradeDamageMultiplier = Defaults.getDefaults(TowerType.BASIC_TOWER).UPGRADE_DAMAGE_MULTIPLIER;
         updateRange();
     }
     

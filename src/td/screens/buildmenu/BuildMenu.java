@@ -17,6 +17,7 @@ import td.util.Hitbox;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public class BuildMenu {
     /**
@@ -242,7 +243,7 @@ public class BuildMenu {
         g.setColor(Colors.INFO_AREA_TEXT);
         //g.setFont(Fonts.WAVE_INFO_AREA);
         g.drawImage(ImageCache.SWORD_ICON, getWaveInfoArea().getX() + 30, getWaveInfoArea().getY() + 10, null);
-        String s = "0/~";
+        String s = WaveManager.getWaveCount() + "/~";
         g.drawString(s, getWaveInfoArea().getX() + 64, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
         
         if(Debug.ENABLED) {

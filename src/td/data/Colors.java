@@ -15,6 +15,7 @@ public class Colors {
     public static final Color BMENU_SECTION_ICON_BG = new Color(40, 40, 40);
     public static final Color BMENU_SECTION_ICON_BG_HIGHLIGHTED = new Color(50, 50, 50);
     public static Color BMENU_OUTSIDE_OVERLAY = new Color(0f, 0f, 0f, (float)100/255);
+    public static final Color BMENU_PRICETAG = new Color(0, 255, 33);
     
     public static final Color INFO_AREA_TEXT = new Color(230, 230, 230);
 }

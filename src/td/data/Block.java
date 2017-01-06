@@ -127,9 +127,9 @@ public class Block {
             if(WaveManager.isWaveActive()) {
                 for(EnemyEntity unit : WaveManager.getWave().getEnemyIndex()) {
                     if(unit.isWithinTowerRange(towerEntity)) {
-                        int x = unit.getX() + (unit.getWidth()/2);
-                        int y = unit.getY() + (unit.getHeight()/2);
-                        towerEntity.lookAt(x, y);
+                        int xx = unit.getX() + (unit.getWidth()/2);
+                        int yy = unit.getY() + (unit.getHeight()/2);
+                        towerEntity.lookAt(xx, yy);
                     }
                 }
             }

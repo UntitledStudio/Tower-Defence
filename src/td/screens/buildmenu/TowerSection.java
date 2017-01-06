@@ -8,6 +8,7 @@ import td.assets.Image;
 import td.assets.Texture;
 import td.data.Colors;
 import td.data.Fonts;
+import td.towers.Tower;
 import td.towers.TowerPlacer;
 import td.towers.TowerType;
 import td.util.Debug;
@@ -153,6 +154,7 @@ public class TowerSection implements Section {
         }
         
         public void draw(Graphics2D g) {
+            // Icon highlight
             if(Util.isWithinArea(menu.getInput(), texture.getHitbox())) {
                 g.setColor(Colors.BMENU_SECTION_ICON_BG_HIGHLIGHTED);
                 menu.getInfoSection().setDisplayed(true, type);
@@ -161,7 +163,14 @@ public class TowerSection implements Section {
                 menu.getInfoSection().setDisplayed(false);
             }
             g.fillRect(getX(), getY(), getWidth(), getHeight());
+            
+            // Icon image
             getTexture().draw(g);
+            
+            // Price tag
+            g.setFont(Fonts.BUILD_MENU_PRICETAG);
+            g.setColor(Colors.BMENU_PRICETAG);
+            g.drawString("$" + type.getDefaults().BUY_COST, getX() + 5, getTexture().getHitbox().getBottomY() - 5);
         }
     }
 }

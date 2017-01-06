@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import td.data.Block;
 import td.data.BlockType;
 import td.data.Colors;
+import td.data.Player;
 import td.maps.MapManager;
 import td.util.Input;
 import td.util.Log;
@@ -30,8 +31,14 @@ public class TowerPlacer {
         icon = SELECTED_TOWER.getImage(); // !wip!
     }
     
-    public static void place(Block block) {
+    public static void place(Block block, Player player) {
         Log.info("[TowerPlacer] Placing a " + SELECTED_TOWER.name() + " at " + block.getX() + "," + block.getY() + " ..");
+        int price = SELECTED_TOWER.getDefaults().BUY_COST;
+        
+        if(player.getCash() < price) {
+            Log.error("[TowerPlacer] Player does not have enough cash for this tower! (" + SELECTED_TOWER.name() + ")");
+            return;
+        }
         
         switch(SELECTED_TOWER) {
             case BASIC_TOWER: {
@@ -42,8 +49,11 @@ public class TowerPlacer {
             default: {
                 Log.error("[TowerPlacer] Attempted to place an invalid tower! "  + SELECTED_TOWER.name());
                 // alert player somehow
+                setActive(false);
+                return;
             }
         }
+        player.takeCash(Defaults.getDefaults(SELECTED_TOWER).BUY_COST);
         setActive(false);
         Log.info("[TowerPlacer] Tower placed!");
     }
