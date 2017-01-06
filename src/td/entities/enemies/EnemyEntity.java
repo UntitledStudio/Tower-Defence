@@ -2,10 +2,8 @@ package td.entities.enemies;
 
 import java.awt.Graphics2D;
 import td.assets.Texture;
-import td.data.Block;
 import td.entities.Entity;
 import td.towers.Tower;
-import td.util.Direction;
 import td.util.Hitbox;
 import td.waves.Wave;
 

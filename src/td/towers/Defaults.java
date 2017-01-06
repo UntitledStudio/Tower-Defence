@@ -38,7 +38,7 @@ public class Defaults {
     }
     
     /**
-     * Cache default configurations to optimize defaults lookups.
+     * Cache default configurations to optimize lookups.
      */
     public static void cacheDefaults() {
         DEFAULTS_BASIC = new Defaults(TowerType.BASIC_TOWER);

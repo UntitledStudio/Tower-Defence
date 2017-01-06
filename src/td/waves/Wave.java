@@ -3,10 +3,12 @@ package td.waves;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import td.Configuration;
 import td.entities.enemies.BasicEnemy;
 import td.entities.enemies.EnemyEntity;
 import td.util.Log;
+import td.util.Loop;
 
 public class Wave {
     private final int id;
@@ -36,8 +38,13 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BasicEnemy basicEnemy = new BasicEnemy(this, 100, 2);
-            BASIC_ENEMIES.add(basicEnemy);
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
         }
@@ -49,11 +56,17 @@ public class Wave {
     public void launch() {
         setPaused(false);
         isActive = true;
+        List<EnemyEntity> toSpawn = new ArrayList<>(ENEMY_INDEX);
         
-        // temp, todo: spawn each entity with delay inbetween
-        for(EnemyEntity e : ENEMY_INDEX) {
-            e.spawn();
-        }
+        Loop l = new Loop(() -> {
+            toSpawn.get(0).spawn();
+            toSpawn.remove(0);
+            
+            if(toSpawn.isEmpty()) {
+                Loop.scheduleStop("waveLaunch");
+            }
+        }, 0, 1250, "waveLaunch");
+        l.start();
     }
     
     /**

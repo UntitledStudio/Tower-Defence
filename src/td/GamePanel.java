@@ -2,6 +2,8 @@ package td;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -49,7 +51,7 @@ public class GamePanel extends JPanel {
 
             // Render.
             repaint();
-
+            
             try {
                 long l = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
                 
