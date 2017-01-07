@@ -65,11 +65,6 @@ public class AIHelper {
             switch(direction) {
                 case EAST: {
                     // Increasing X
-                    if(slow > 0) {
-                        if(System.currentTimeMillis()-lastMoveUpdate < slow) {
-                            return;
-                        }
-                    }
                     x += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
                     
@@ -151,6 +146,14 @@ public class AIHelper {
     
     public int getMoveSpeed() {
         return moveSpeed;
+    }
+    
+    public void setSlow(int slow) {
+        this.slow = slow;
+    }
+    
+    public int getSlow() {
+        return slow;
     }
     
     public Direction getDirection() {
