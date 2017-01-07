@@ -1,5 +1,6 @@
 package td.entities.enemies;
 
+import java.util.Random;
 import td.Configuration;
 import td.data.Block;
 import td.maps.MapManager;
@@ -11,6 +12,8 @@ public class AIHelper {
     private final EnemyEntity unit;
     private boolean isSpawned = false;
     private int moveSpeed = 3;
+    private int slow = 0;
+    private long lastMoveUpdate = 0;
     private Direction direction;
     private int destination;
     private Block targetPath = null;
@@ -44,19 +47,31 @@ public class AIHelper {
             unit.setX(spawnBlock.getX() + Util.centerValue(unit.getTexture().getWidth(), Configuration.BLOCK_SIZE));
         }
         targetPath = spawnBlock;
+        lastMoveUpdate = System.currentTimeMillis();
         isSpawned = true;
         Log.info("[AIHelper] Enemy spawned at " + unit.getX() + "," + unit.getY() + " heading " + direction.name() + " to " + destination);
     }
     
     public void move() {
         if(isSpawned) {
+            if(slow > 0) {
+                if(System.currentTimeMillis()-lastMoveUpdate < slow) {
+                    return;
+                }
+            }
             int x = unit.getX();
             int y = unit.getY();
             
             switch(direction) {
                 case EAST: {
                     // Increasing X
+                    if(slow > 0) {
+                        if(System.currentTimeMillis()-lastMoveUpdate < slow) {
+                            return;
+                        }
+                    }
                     x += moveSpeed;
+                    lastMoveUpdate = System.currentTimeMillis();
                     
                     if(x >= destination) {
                         x = destination;
@@ -68,6 +83,7 @@ public class AIHelper {
                 case WEST: {
                     // Decreasing X
                     x -= moveSpeed;
+                    lastMoveUpdate = System.currentTimeMillis();
                     
                     if(x <= destination) {
                         x = destination;
@@ -79,6 +95,7 @@ public class AIHelper {
                 case NORTH: {
                     // Increasing Y
                     y += moveSpeed;
+                    lastMoveUpdate = System.currentTimeMillis();
                     
                     if(y >= destination) {
                         y = destination;
@@ -90,6 +107,7 @@ public class AIHelper {
                 case SOUTH: {
                     // Decreasing Y
                     y -= moveSpeed;
+                    lastMoveUpdate = System.currentTimeMillis();
                     
                     if(y <= destination) {
                         y = destination;
