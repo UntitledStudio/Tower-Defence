@@ -21,7 +21,7 @@ import td.data.Player;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
-import td.towers.BasicTower;
+import td.towers.MachineGunTower;
 import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
@@ -153,7 +153,7 @@ public class PlayScreen implements Screen {
                         
                         for(Block b : MapManager.getCurrentMap().getBlocks()) {
                             if(!b.hasTowerEntity() && b.getType() == BlockType.TOWER) {
-                                b.setTowerEntity(new BasicTower(b));
+                                b.setTowerEntity(new MachineGunTower(b));
                                 i++;
                             }
                         }

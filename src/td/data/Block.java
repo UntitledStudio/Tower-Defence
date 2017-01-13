@@ -7,7 +7,6 @@ import td.Configuration;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
-import td.entities.enemies.EnemyEntity;
 import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
@@ -16,6 +15,7 @@ import td.util.Log;
 import td.util.RenderUtil;
 import td.util.Util;
 import td.waves.WaveManager;
+import td.entities.enemies.EnemyUnit;
 
 public class Block {
     private final int x;
@@ -124,13 +124,17 @@ public class Block {
                 getTowerEntity().draw(g);
             }
             
+            // Check to see if there is an active wave.
             if(WaveManager.isWaveActive()) {
-                for(EnemyEntity unit : WaveManager.getWave().getEnemyIndex()) {
-                    if(unit.isWithinTowerRange(towerEntity)) {
-                        int xx = unit.getX() + (unit.getWidth()/2);
-                        int yy = unit.getY() + (unit.getHeight()/2);
-                        towerEntity.lookAt(xx, yy);
+                // If the tower has a target, check if that target is still within range.
+                if(towerEntity.hasTarget()) {
+                    if(towerEntity.getTarget().isWithinTowerRange(towerEntity)) {
+                        towerEntity.lookAt(towerEntity.getTarget());
+                    } else {
+                        towerEntity.findTarget();
                     }
+                } else {
+                    towerEntity.findTarget();
                 }
             }
         }

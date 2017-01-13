@@ -41,8 +41,8 @@ public class TowerPlacer {
         }
         
         switch(SELECTED_TOWER) {
-            case BASIC_TOWER: {
-                BasicTower te = new BasicTower(block);
+            case MACHINE_GUN: {
+                MachineGunTower te = new MachineGunTower(block);
                 block.setTowerEntity(te);
                 break;
             }

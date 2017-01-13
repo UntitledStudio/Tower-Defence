@@ -20,8 +20,8 @@ public class Defaults {
     
     public Defaults(TowerType tower) {
         switch(tower) {
-            case BASIC_TOWER: {
-                TOWER_TYPE                  = TowerType.BASIC_TOWER;
+            case MACHINE_GUN: {
+                TOWER_TYPE                  = TowerType.MACHINE_GUN;
                 MAX_LEVEL                   = 1;
                 START_LEVEL                 = 1;
                 DAMAGE                      = 5;
@@ -41,7 +41,7 @@ public class Defaults {
      * Cache default configurations to optimize lookups.
      */
     public static void cacheDefaults() {
-        DEFAULTS_BASIC = new Defaults(TowerType.BASIC_TOWER);
+        DEFAULTS_BASIC = new Defaults(TowerType.MACHINE_GUN);
         Log.info("[Defaults] Tower defaults cached.");
     }
     
@@ -52,7 +52,7 @@ public class Defaults {
      */
     public static Defaults getDefaults(TowerType type) {
         switch(type) {
-            case BASIC_TOWER: return DEFAULTS_BASIC;
+            case MACHINE_GUN: return DEFAULTS_BASIC;
             default: return new Defaults(TowerType.UNKNOWN);
         }
     }

@@ -9,7 +9,7 @@ import td.util.Log;
 import td.util.Util;
 
 public class AIHelper {
-    private final EnemyEntity unit;
+    private final EnemyUnit unit;
     private boolean isSpawned = false;
     private int moveSpeed = 3;
     private int slow = 0;
@@ -18,7 +18,7 @@ public class AIHelper {
     private int destination;
     private Block targetPath = null;
     
-    public AIHelper(EnemyEntity unit) {
+    public AIHelper(EnemyUnit unit) {
         this.unit = unit;
     }
     

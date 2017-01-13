@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Timer;
 import td.Configuration;
 import td.entities.enemies.BasicEnemy;
-import td.entities.enemies.EnemyEntity;
 import td.util.Log;
 import td.util.Loop;
+import td.entities.enemies.EnemyUnit;
 
 public class Wave {
     private final int id;
     private boolean isActive = false;
     private final boolean bossWave;
     private boolean paused = true;
-    private final List<EnemyEntity> ENEMY_INDEX;
+    private final List<EnemyUnit> ENEMY_INDEX;
     private final List<BasicEnemy> BASIC_ENEMIES;
     private long lastTick = 0;
     
@@ -56,7 +56,7 @@ public class Wave {
     public void launch() {
         setPaused(false);
         isActive = true;
-        List<EnemyEntity> toSpawn = new ArrayList<>(ENEMY_INDEX);
+        List<EnemyUnit> toSpawn = new ArrayList<>(ENEMY_INDEX);
         
         Loop l = new Loop(() -> {
             toSpawn.get(0).spawn();
@@ -89,7 +89,7 @@ public class Wave {
                 // wave finished
             } else {
                 if(System.currentTimeMillis()-lastTick >= Configuration.ENTITY_TICK_INTERVAL) {
-                    for(EnemyEntity e : ENEMY_INDEX) {
+                    for(EnemyUnit e : ENEMY_INDEX) {
                         e.tick();
                     }
                     lastTick = System.currentTimeMillis();
@@ -103,7 +103,7 @@ public class Wave {
      * @param g
      */
     public void render(Graphics2D g) {
-        for(EnemyEntity e : ENEMY_INDEX) {
+        for(EnemyUnit e : ENEMY_INDEX) {
             e.render(g);
         }
     }
@@ -138,7 +138,7 @@ public class Wave {
      * Returns the enemy index.
      * @return 
      */
-    public List<EnemyEntity> getEnemyIndex() {
+    public List<EnemyUnit> getEnemyIndex() {
         return ENEMY_INDEX;
     }
     

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class EnemyUtil {
-    public static void paintHealthBar(Graphics2D g, EnemyEntity unit) {
+    public static void paintHealthBar(Graphics2D g, EnemyUnit unit) {
         int x = unit.getX();
         int y = unit.getY() - 8;
         int height = 5;

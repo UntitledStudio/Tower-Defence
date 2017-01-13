@@ -8,7 +8,12 @@ import td.assets.ImageCache;
 import td.data.Block;
 import td.entities.Entity;
 import td.entities.EntityType;
+import td.entities.enemies.EnemyUnit;
+import td.towers.strategies.FirstUnitStrategy;
+import td.towers.strategies.TargetStrategy;
+import td.util.Log;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public abstract class Tower implements Entity {
     /**
@@ -78,9 +83,12 @@ public abstract class Tower implements Entity {
     private Block block;
     private Ellipse2D rangeIndicator = null;
     private double angleRad = 0;
+    private EnemyUnit target = null;
+    private TargetStrategy strategy;
     
     public Tower(Block block) {
         this.block = block;
+        this.strategy = new FirstUnitStrategy();
     }
     
     /**
@@ -94,16 +102,49 @@ public abstract class Tower implements Entity {
         angleRad = Math.atan2(dy, dx);
     }
     
-    public void draw(Graphics2D g) {
-        //if()
+    public void lookAt(EnemyUnit unit) {
+        int x = unit.getX() + (unit.getWidth()/2);
+        int y = unit.getY() + (unit.getHeight()/2);
+        lookAt(x, y);
+    }
+    
+    public boolean hasTarget() {
+        return target != null && target.isAlive();
+    }
+    
+    public void setTarget(EnemyUnit unit) {
+        target = unit;
         
+        if(unit != null) {
+            lookAt(unit);
+        }
+    }
+    
+    public void findTarget() {
+        setTarget(strategy.findTarget(this));
+    }
+    
+    public EnemyUnit getTarget() {
+        return target;
+    }
+    
+    public void setStrategy(TargetStrategy strategy) {
+        Log.info("[Tower - " + getBlock().getX() + "," + getBlock().getY() + "] Strategy has been changed from " + this.strategy.getName() + " to " + strategy.getName());
+        this.strategy = strategy;
+    }
+    
+    public TargetStrategy getStrategy() {
+        return strategy;
+    }
+    
+    public void draw(Graphics2D g) {
         int cx = towerType.getImage().getWidth() / 2;
         int cy = towerType.getImage().getHeight() / 2;
         AffineTransform backup = g.getTransform();
         g.translate(cx + block.getX(), cy + block.getY());
         g.rotate(angleRad);
         g.translate(-cx, -cy);
-        g.drawImage(ImageCache.TOWER_BASIC, 0, 0, null);
+        g.drawImage(ImageCache.TOWER_MACHINE_GUN, 0, 0, null);
         g.setTransform(backup);
     }
     

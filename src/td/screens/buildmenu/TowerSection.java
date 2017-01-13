@@ -30,7 +30,7 @@ public class TowerSection implements Section {
         TowerIcon basicTower = null;
         try {
             // Load tower icons
-            basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_BASIC.getBufferedImage(), iconSize, iconSize)), TowerType.BASIC_TOWER);
+            basicTower = new TowerIcon(new Texture(Util.resizeImageHQ(Image.TOWER_MACHINE_GUN.getBufferedImage(), iconSize, iconSize)), TowerType.MACHINE_GUN);
             basicTower.setY(y + 30);
         } catch (IOException ex) {
             Log.error("[BuildMenu: TowerSection] Failed to load tower icon(s)");
@@ -81,7 +81,7 @@ public class TowerSection implements Section {
                 
                 menu.toggle();
                 TowerPlacer.setActive(true);
-                TowerPlacer.setSelectedTower(TowerType.BASIC_TOWER);
+                TowerPlacer.setSelectedTower(TowerType.MACHINE_GUN);
             }
         }
     }

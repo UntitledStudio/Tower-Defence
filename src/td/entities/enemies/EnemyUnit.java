@@ -7,7 +7,7 @@ import td.towers.Tower;
 import td.util.Hitbox;
 import td.waves.Wave;
 
-public interface EnemyEntity extends Entity {
+public interface EnemyUnit extends Entity {
     public void tick();
     public void render(Graphics2D g);
     public Wave getAssociatedWave();
@@ -32,4 +32,5 @@ public interface EnemyEntity extends Entity {
     public EnemyType getEnemyType();
     public AIHelper getAI();
     public boolean isWithinTowerRange(Tower tower);
+    public boolean isAlive();
 }

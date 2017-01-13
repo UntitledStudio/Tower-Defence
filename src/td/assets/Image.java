@@ -11,7 +11,7 @@ public enum Image {
     BLOCK_PATH("assets/block_path_2.png"),
     BLOCK_TOWER("assets/block_tower_4.jpg"),
     BLOCK_HIGHLIGHT("assets/block_highlight.png"),
-    TOWER_BASIC("assets/tower_basic.png"),
+    TOWER_MACHINE_GUN("assets/tower_machine_gun.png"),
     BUTTON_PLAY("assets/button_play.png"),
     INFO_AREA("assets/info_area.png"),
     BUILD_MENU("assets/build_menu.png"),

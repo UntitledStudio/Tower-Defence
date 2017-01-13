@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import td.assets.ImageCache;
 
 public enum TowerType {
-    BASIC_TOWER(ImageCache.TOWER_BASIC, "Basic Tower"),
+    MACHINE_GUN(ImageCache.TOWER_MACHINE_GUN, "Machine Gun"),
     UNKNOWN(ImageCache.UNKNOWN, "Unknown");
     
     private final BufferedImage bi;

@@ -47,7 +47,7 @@ public class InfoSection implements Section {
             
             g.setFont(Fonts.BUILD_MENU_INFOLABELS);
             
-            if(towerType == TowerType.BASIC_TOWER) {
+            if(towerType == TowerType.MACHINE_GUN) {
                 RenderUtil.drawTwoColoredString(x, y, "Damage: ", "" + towerType.getDefaults().DAMAGE, Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
                 RenderUtil.drawTwoColoredString(x, y + yInc, "Crit Chance: ", towerType.getDefaults().CRIT_CHANCE + "%", Colors.BMENU_SECTION_TITLES, Color.GREEN, g);
             }

@@ -9,7 +9,7 @@ import td.towers.Tower;
 import td.util.Hitbox;
 import td.waves.Wave;
 
-public class BasicEnemy implements EnemyEntity {
+public class BasicEnemy implements EnemyUnit {
     private final Texture texture;
     private final EnemyType type;
     private final Wave associatedWave;
@@ -177,5 +177,10 @@ public class BasicEnemy implements EnemyEntity {
             return false;
         }
         return tower.getRangeIndicator().intersects(getX(), getY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public boolean isAlive() {
+        return health > 0;
     }
 }
