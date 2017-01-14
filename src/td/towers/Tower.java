@@ -3,6 +3,8 @@ package td.towers;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
+import java.util.List;
 import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
@@ -10,6 +12,7 @@ import td.entities.Entity;
 import td.entities.EntityType;
 import td.entities.enemies.EnemyUnit;
 import td.towers.strategies.FirstUnitStrategy;
+import td.towers.strategies.LastUnitStrategy;
 import td.towers.strategies.TargetStrategy;
 import td.util.Log;
 import td.util.Util;
@@ -85,10 +88,12 @@ public abstract class Tower implements Entity {
     private double angleRad = 0;
     private EnemyUnit target = null;
     private TargetStrategy strategy;
+    private List<EnemyUnit> targetIndex = null;
     
     public Tower(Block block) {
         this.block = block;
         this.strategy = new FirstUnitStrategy();
+        this.targetIndex = new ArrayList<>();
     }
     
     /**
@@ -135,6 +140,47 @@ public abstract class Tower implements Entity {
     
     public TargetStrategy getStrategy() {
         return strategy;
+    }
+    
+    public void processTargetting() {
+        if(hasTarget()) {
+            lookAt(getTarget());
+        }
+    }
+    
+    /**
+     * Returns a list of enemies within this tower's target range.
+     * @return 
+     */
+    public List<EnemyUnit> getEnemiesWithinRange() {
+        return targetIndex;
+    }
+    
+    /**
+     * Adds the enemy unit to the index of targetable enemies.
+     * @param unit 
+     */
+    public void registerTarget(EnemyUnit unit) {
+        targetIndex.add(unit);
+        findTarget();
+    }
+    
+    /**
+     * Removes the enemy unit to the index of targetable enemies.
+     * @param unit 
+     */
+    public void unregisterTarget(EnemyUnit unit) {
+        targetIndex.remove(unit);
+        findTarget();
+    }
+    
+    /**
+     * Returns true if the index of targetable enemies contains this unit.
+     * @param unit
+     * @return 
+     */
+    public boolean isTargetRegistered(EnemyUnit unit) {
+        return targetIndex.contains(unit);
     }
     
     public void draw(Graphics2D g) {

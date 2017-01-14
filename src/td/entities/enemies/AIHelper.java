@@ -4,6 +4,7 @@ import java.util.Random;
 import td.Configuration;
 import td.data.Block;
 import td.maps.MapManager;
+import td.towers.Tower;
 import td.util.Direction;
 import td.util.Log;
 import td.util.Util;
@@ -110,6 +111,19 @@ public class AIHelper {
                     }
                     unit.setY(y);
                     break;
+                }
+            }
+            
+            // Targetting
+            for(Tower t : MapManager.getCurrentMap().getTowers()) {
+                if(t.isTargetRegistered(unit)) {
+                    if(!unit.isWithinTowerRange(t)) {
+                        t.unregisterTarget(unit);
+                    }
+                } else {
+                    if(unit.isWithinTowerRange(t)) {
+                        t.registerTarget(unit);
+                    }
                 }
             }
         }

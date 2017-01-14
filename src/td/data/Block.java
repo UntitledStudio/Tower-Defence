@@ -65,6 +65,7 @@ public class Block {
     
     public void setTowerEntity(Tower te) {
         this.towerEntity = te;
+        MapManager.getCurrentMap().getTowers().add(te);
     }
     
     public Tower getTowerEntity() {
@@ -124,18 +125,9 @@ public class Block {
                 getTowerEntity().draw(g);
             }
             
-            // Check to see if there is an active wave.
+            // Check to see if there is an active wave. Process targetting if there is.
             if(WaveManager.isWaveActive()) {
-                // If the tower has a target, check if that target is still within range.
-                if(towerEntity.hasTarget()) {
-                    if(towerEntity.getTarget().isWithinTowerRange(towerEntity)) {
-                        towerEntity.lookAt(towerEntity.getTarget());
-                    } else {
-                        towerEntity.findTarget();
-                    }
-                } else {
-                    towerEntity.findTarget();
-                }
+                towerEntity.processTargetting();
             }
         }
         

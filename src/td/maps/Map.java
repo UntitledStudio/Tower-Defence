@@ -9,6 +9,7 @@ import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
 import td.screens.PlayScreen;
+import td.towers.Tower;
 import td.towers.TowerPlacer;
 import td.util.Debug;
 import td.util.Input;
@@ -23,6 +24,7 @@ public class Map {
     private boolean userMade = false;
     private final List<Block> blocks = new ArrayList<>();
     private final List<Block> markedBlocks = new ArrayList<>();
+    private final List<Tower> towers = new ArrayList<>();
     private PathData pathData = null;
     
     public Map(String name, int[][] structure) {
@@ -178,5 +180,9 @@ public class Map {
     
     public PathData getPathData() {
         return pathData;
+    }
+    
+    public List<Tower> getTowers() {
+        return towers;
     }
 }
