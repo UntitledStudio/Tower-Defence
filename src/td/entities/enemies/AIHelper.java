@@ -114,7 +114,7 @@ public class AIHelper {
                 }
             }
             
-            // Targetting
+            // Target registering and unregistering.
             for(Tower t : MapManager.getCurrentMap().getTowers()) {
                 if(t.isTargetRegistered(unit)) {
                     if(!unit.isWithinTowerRange(t)) {
