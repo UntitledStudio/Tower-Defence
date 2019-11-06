@@ -9,14 +9,13 @@ import td.Configuration;
 import td.assets.ImageCache;
 import td.data.Block;
 import td.entities.Entity;
+import td.entities.EntityRemoveReason;
 import td.entities.EntityType;
 import td.entities.enemies.EnemyUnit;
 import td.towers.strategies.FirstUnitStrategy;
-import td.towers.strategies.LastUnitStrategy;
 import td.towers.strategies.TargetStrategy;
 import td.util.Log;
 import td.util.Util;
-import td.waves.WaveManager;
 
 public abstract class Tower implements Entity {
     /**
@@ -77,6 +76,11 @@ public abstract class Tower implements Entity {
     double upgradeDamageMultiplier = 2;
     
     /**
+     * Interval in milliseconds between shots.
+     */
+    long fireInterval = 1000;
+    
+    /**
      * What type of tower is this?
      */
     TowerType towerType = TowerType.UNKNOWN;
@@ -89,6 +93,7 @@ public abstract class Tower implements Entity {
     private EnemyUnit target = null;
     private TargetStrategy strategy;
     private List<EnemyUnit> targetIndex = null;
+    private long lastFireTime = System.currentTimeMillis();
     
     public Tower(Block block) {
         this.block = block;
@@ -194,6 +199,26 @@ public abstract class Tower implements Entity {
         g.setTransform(backup);
     }
     
+    public void setFireInterval(long interval) {
+        this.fireInterval = interval;
+    }
+    
+    public long getFireInterval() {
+        return fireInterval;
+    }
+    
+    public boolean canFire() {
+        return System.currentTimeMillis()-lastFireTime >= fireInterval;
+    }
+    
+    public void fireAtTarget() {
+        if(canFire()) {
+            
+            
+            lastFireTime = System.currentTimeMillis();
+        }
+    }
+
     public void setBlock(Block block) {
         this.block = block;
     }
@@ -324,7 +349,7 @@ public abstract class Tower implements Entity {
     }
     
     @Override
-    public void remove() {
-        block.setTowerEntity(null);
+    public void remove(EntityRemoveReason reason) {;
+        block.removeTowerEntity(this, reason);
     }
 } 

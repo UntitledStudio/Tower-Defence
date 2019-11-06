@@ -182,6 +182,10 @@ public class PathData {
         return getPath(1);
     }
     
+    /**
+     * Gets the block of the last path ID.
+     * @return 
+     */
     public Block getDestinationPath() {
         int i = 0;
         

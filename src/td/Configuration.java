@@ -9,12 +9,12 @@ public class Configuration {
     /**
      * Width of the game world in pixels.
      */
-    public static final int GAME_WIDTH = 1280;
+    public static final int GAME_WIDTH = 1280; // 1280
     
     /**
      * Height of the game world in pixels.
      */
-    public static final int GAME_HEIGHT = 720;
+    public static final int GAME_HEIGHT = 720; // 720
     
     /**
      * Size of each block in the world in pixels.

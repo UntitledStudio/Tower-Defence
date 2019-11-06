@@ -68,7 +68,7 @@ public class TowerPlacer {
     
     public static void setActive(boolean active) {
         ACTIVE = active;
-        Util.setCursorVisible(!active, frame);
+        //Util.setCursorVisible(!active, frame);
         
         if(!active) {
             clean();

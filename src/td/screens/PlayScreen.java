@@ -1,5 +1,6 @@
 package td.screens;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
@@ -17,7 +18,10 @@ import td.assets.ImageCache;
 import td.assets.Texture;
 import td.data.Block;
 import td.data.BlockType;
+import td.data.Colors;
+import td.data.Fonts;
 import td.data.Player;
+import td.entities.EntityRemoveReason;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
@@ -35,10 +39,12 @@ public class PlayScreen implements Screen {
     private Texture waveInfoAreaTexture = null;
     private Player player = null;
     private BuildMenu bmenu = null;
+    public static PlayScreen instance;
     
     @Override
     public void create(GameWindow window) {
         this.window = window;
+        instance = this;
         
         if(MapManager.getCurrentMap() == null) {
             Log.info("[PlayScreen] No map has been set. Loading default map ..");
@@ -64,7 +70,7 @@ public class PlayScreen implements Screen {
     @Override
     public void update(double dt) {
         MapManager.getCurrentMap().update(dt);
-        bmenu.update(dt);
+        getBuildMenu().update(dt);
     }
 
     @Override
@@ -80,7 +86,12 @@ public class PlayScreen implements Screen {
         /**
          * Build Menu
          */
-        bmenu.render(g);
+        getBuildMenu().render(g);
+        
+        /**
+         * Wave Info
+         */
+        drawWaveInfoArea(g);
         
         /**
          * TowerPlacer
@@ -89,15 +100,27 @@ public class PlayScreen implements Screen {
             int x = getInput().getMouseX();
             int y = getInput().getMouseY();
             
-            TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, TowerPlacer.getSelectedTower().getDefaults().RANGE, TowerPlacer.getSelectedTower().getDefaults().RANGE));
-            g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
-            
-            if(TowerPlacer.drawPlacementDenied) {
-                g.drawImage(ImageCache.PLACEMENT_DENIED, getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
-                TowerPlacer.drawPlacementDenied = false;
-            } else if(TowerPlacer.drawPlacementAllowed) {
-                g.drawImage(ImageCache.PLACEMENT_ALLOWED, getInput().getMouseX() - Configuration.BLOCK_SIZE / 2, getInput().getMouseY() - Configuration.BLOCK_SIZE / 2, null);
-                TowerPlacer.drawPlacementAllowed = false;
+            // No need to do logic or render anything if the position of mouse is not a valid location for placement.
+            if(getInput().isMouseInWindow() && !Util.isWithinArea(getInput(), infoAreaTexture.getHitbox())) {
+                
+                // Snapping into correct location. This allows the player to correctly see the range reach of the tower.
+                if(MapManager.getDefaultMap().getHighlightedBlock(getInput()) != null) {
+                    try {
+                        x = MapManager.getCurrentMap().getHighlightedBlock(getInput()).getX() + Configuration.BLOCK_SIZE / 2;
+                        y = MapManager.getCurrentMap().getHighlightedBlock(getInput()).getY() + Configuration.BLOCK_SIZE / 2;
+                    } catch(NullPointerException npe) {} // Ignore the occassional NPE thrown by this. Nothing wrong.
+                }
+                
+                TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, TowerPlacer.getSelectedTower().getDefaults().RANGE, TowerPlacer.getSelectedTower().getDefaults().RANGE));
+                g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
+
+                if(TowerPlacer.drawPlacementDenied) {
+                    g.drawImage(ImageCache.PLACEMENT_DENIED, x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
+                    TowerPlacer.drawPlacementDenied = false;
+                } else if(TowerPlacer.drawPlacementAllowed) {
+                    g.drawImage(ImageCache.PLACEMENT_ALLOWED, x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
+                    TowerPlacer.drawPlacementAllowed = false;
+                }
             }
         }
         
@@ -115,18 +138,18 @@ public class PlayScreen implements Screen {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    if(!bmenu.isOpen() || bmenu.getState() != BuildMenuState.STATIC) {
-                        bmenu.toggle();
+                    if(!getBuildMenu().isOpen() || getBuildMenu().getState() != BuildMenuState.STATIC) {
+                        getBuildMenu().toggle();
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    if(bmenu.isOpen() || bmenu.getState() != BuildMenuState.STATIC) {
-                        bmenu.toggle();
+                    if(getBuildMenu().isOpen() || getBuildMenu().getState() != BuildMenuState.STATIC) {
+                        getBuildMenu().toggle();
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     if(TowerPlacer.isActive()) {
                         TowerPlacer.setActive(false);
                     } else {
-                        // pause menu
+                        // todo: pause menu
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
                     if(e.isAltDown() || e.isControlDown()) {
@@ -135,7 +158,7 @@ public class PlayScreen implements Screen {
                         
                         for(Block b : MapManager.getCurrentMap().getBlocks()) {
                             if(b.hasTowerEntity()) {
-                                b.getTowerEntity().remove();
+                                b.getTowerEntity().remove(EntityRemoveReason.RESET);
                                 i++;
                             }
                         }
@@ -179,24 +202,25 @@ public class PlayScreen implements Screen {
                     return;
                 }
                 
-                if(!Util.isWithinArea(x, y, bmenu.getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(bmenu.isOpen() || bmenu.getState() == BuildMenuState.OPENING) {
-                        bmenu.toggle();
+                // If the click is within the BuildMenu hitbox and the BuildMenu is opening/open, close it.
+                if(!Util.isWithinArea(x, y, getBuildMenu().getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
+                    if(getBuildMenu().isOpen() || getBuildMenu().getState() == BuildMenuState.OPENING) {
+                        getBuildMenu().toggle();
                         return;
                     }
                 }
                 
-                if(bmenu.isOpen() && bmenu.getState() == BuildMenuState.STATIC) {
-                    if(Util.isWithinArea(x, y, bmenu.getTowerSection().getHitbox())) {
+                if(getBuildMenu().isOpen() && getBuildMenu().getState() == BuildMenuState.STATIC) {
+                    if(Util.isWithinArea(x, y, getBuildMenu().getTowerSection().getHitbox())) {
                         Log.info("[PlayScreen] Registered mousePress at section: TOWER_SECTION");
-                        bmenu.getTowerSection().mousePressed(e);
+                        getBuildMenu().getTowerSection().mousePressed(e);
                         return;
                     }
                 }
                 
                 if(Util.isWithinArea(x, y, infoAreaTexture)) {
-                    if(!bmenu.isOpen() || bmenu.getState() == BuildMenuState.CLOSING) {
-                        bmenu.toggle();
+                    if(!getBuildMenu().isOpen() || getBuildMenu().getState() == BuildMenuState.CLOSING) {
+                        getBuildMenu().toggle();
                         return;
                     }
                 }
@@ -204,7 +228,7 @@ public class PlayScreen implements Screen {
                 if(TowerPlacer.isActive()) {
                     if(e.getButton() == MouseEvent.BUTTON3) {
                         TowerPlacer.setActive(false);
-                        bmenu.toggle();
+                        getBuildMenu().toggle();
                     } else {
                         Block b = MapManager.getCurrentMap().getHighlightedBlock(getInput());
                         
@@ -226,8 +250,8 @@ public class PlayScreen implements Screen {
                         
                         if(b != null && b.getType() == BlockType.TOWER) {
                             if(!b.hasTowerEntity()) {
-                                if(!bmenu.isOpen()) {
-                                    bmenu.toggle();
+                                if(!getBuildMenu().isOpen()) {
+                                    getBuildMenu().toggle();
                                 }
                             }
                         }
@@ -258,6 +282,20 @@ public class PlayScreen implements Screen {
         return "PlayScreen";
     }
     
+    public void drawWaveInfoArea(Graphics2D g) {
+        getWaveInfoArea().draw(g);
+        g.setColor(Colors.INFO_AREA_TEXT);
+        g.setFont(Fonts.INFO_AREA);
+        g.drawImage(ImageCache.SWORD_ICON, getWaveInfoArea().getX() + 30, getWaveInfoArea().getY() + 10, null);
+        String s = WaveManager.isWaveActive() ? WaveManager.getCurrentWaveID()+"" : WaveManager.getCurrentWaveID() + " -> " + WaveManager.getWaveCount();
+        g.drawString(s, getWaveInfoArea().getX() + 68, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
+        
+        if(Debug.ENABLED) {
+            g.setColor(Color.RED);
+            g.drawRect(getWaveInfoArea().getX(), getWaveInfoArea().getY(), getWaveInfoArea().getWidth(), getWaveInfoArea().getHeight());
+        }
+    }
+    
     public Input getInput() {
         return window.getInput();
     }
@@ -272,5 +310,9 @@ public class PlayScreen implements Screen {
     
     public Player getPlayer() {
         return player;
+    }
+    
+    public BuildMenu getBuildMenu() {
+        return bmenu;
     }
 }

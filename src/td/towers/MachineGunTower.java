@@ -19,6 +19,7 @@ public class MachineGunTower extends Tower {
         refundAmount            = TowerType.MACHINE_GUN.getDefaults().REFUND_AMOUNT;
         upgradeCostMultiplier   = TowerType.MACHINE_GUN.getDefaults().UPGRADE_COST_MULTIPLIER;
         upgradeDamageMultiplier = TowerType.MACHINE_GUN.getDefaults().UPGRADE_DAMAGE_MULTIPLIER;
+        fireInterval            = TowerType.MACHINE_GUN.getDefaults().FIRE_DELAY;
         updateRange();
     }
     

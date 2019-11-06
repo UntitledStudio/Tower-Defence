@@ -12,6 +12,7 @@ public interface EnemyUnit extends Entity {
     public void render(Graphics2D g);
     public Wave getAssociatedWave();
     public void kill();
+    public void despawn();
     public void spawn();
     public int getHealth();
     public void setHealth(int health);

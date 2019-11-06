@@ -17,6 +17,10 @@ public class WaveManager {
         return 0;
     }
     
+    public static int getCurrentWaveID() {
+        return wave == null ? 0 : (wave.isActive() ? wave.getId() : wave.getId()-1);
+    }
+    
     public static boolean isWaveActive() {
         return wave != null && wave.isActive();
     }
@@ -24,7 +28,7 @@ public class WaveManager {
     public static void reset() {
         Log.info("[WaveManager] Performing reset ..");
         if(isWaveActive()) {
-            wave.end(Wave.EndReason.UNKNOWN);
+            wave.end();
         }
         wave = null;
         generateNext();

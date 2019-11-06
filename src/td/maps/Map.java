@@ -90,8 +90,9 @@ public class Map {
         
         /**
          * Render the highlighted block.
+         * Dont highlight blocks if the BuildMenu is open.
          */
-        if(screen.getInput().isMouseInWindow()) {
+        if(screen.getInput().isMouseInWindow() && !screen.getBuildMenu().isOpen()) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
             if(b != null && b.getType() == BlockType.TOWER) {
@@ -101,7 +102,9 @@ public class Map {
                             b.setWillHighlightRange(true);
                         }
                     } else {
-                        g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
+                        if(!Util.isWithinArea(b.getX()+1, b.getY()+1, screen.getInfoArea())) { // Prevent highlighting of the visible tower block inside the InfoArea hitbox.
+                            g.drawImage(ImageCache.BLOCK_HIGHLIGHT, b.getX(), b.getY(), null);
+                        }
                     }
                 }
             }

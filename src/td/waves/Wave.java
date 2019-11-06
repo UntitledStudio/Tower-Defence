@@ -4,18 +4,21 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.CopyOnWriteArrayList;
 import td.Configuration;
+import td.entities.EntityRemoveReason;
 import td.entities.enemies.BasicEnemy;
 import td.util.Log;
 import td.util.Loop;
 import td.entities.enemies.EnemyUnit;
+import td.screens.PlayScreen;
 
 public class Wave {
     private final int id;
     private boolean isActive = false;
     private final boolean bossWave;
     private boolean paused = true;
-    private final List<EnemyUnit> ENEMY_INDEX;
+    private final CopyOnWriteArrayList<EnemyUnit> ENEMY_INDEX;
     private final List<BasicEnemy> BASIC_ENEMIES;
     private long lastTick = 0;
     
@@ -23,7 +26,7 @@ public class Wave {
         this.id = id;
         this.bossWave = id % 10 == 0;
         this.BASIC_ENEMIES = new ArrayList<>();
-        this.ENEMY_INDEX = new ArrayList<>();
+        this.ENEMY_INDEX = new CopyOnWriteArrayList<>();
     }
     
     /**
@@ -39,12 +42,12 @@ public class Wave {
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
             BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            /*BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));*/
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
         }
@@ -71,13 +74,26 @@ public class Wave {
     
     /**
      * End this wave.
-     * @param reason
      */
-    public void end(EndReason reason) {
+    public void end() {
         isActive = false;
         ENEMY_INDEX.clear();
         BASIC_ENEMIES.clear();
-        Log.info("[Wave] Wave '" + id + "' ended! Reason: " + reason.name());
+        Log.info("[Wave] Wave '" + id + "' ended!");
+        WaveManager.generateNext();
+    }
+    
+    /**
+     * Fired whenever an enemy is marked for removal.
+     * @param unit 
+     * @param reason 
+     */
+    public void onEnemyRemoval(EnemyUnit unit, EntityRemoveReason reason) {
+        getEnemyIndex().remove(unit);
+        
+        if(getEnemyIndex().isEmpty()) {
+            end();
+        }
     }
     
     /**
@@ -152,9 +168,5 @@ public class Wave {
     
     public void setActive(boolean active) {
         this.isActive = active;
-    }
-    
-    public static enum EndReason {
-        COMPLETED, FAILED, UNKNOWN;
     }
 }

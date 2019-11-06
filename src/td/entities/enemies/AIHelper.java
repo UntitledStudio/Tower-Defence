@@ -1,9 +1,9 @@
 package td.entities.enemies;
 
-import java.util.Random;
 import td.Configuration;
 import td.data.Block;
 import td.maps.MapManager;
+import td.screens.PlayScreen;
 import td.towers.Tower;
 import td.util.Direction;
 import td.util.Log;
@@ -18,6 +18,8 @@ public class AIHelper {
     private Direction direction;
     private int destination;
     private Block targetPath = null;
+    private boolean canDamagePlayer = false;
+    private boolean lastPathCalculated = false;
     
     public AIHelper(EnemyUnit unit) {
         this.unit = unit;
@@ -28,20 +30,20 @@ public class AIHelper {
         
         if(spawnBlock.getX() != spawnBlock.getNextPath().getX()) {
             if(spawnBlock.getX() <= 0) {
-                direction = Direction.EAST;
+                direction = Direction.RIGHT;
                 unit.setX(-Configuration.ENEMY_SPAWN_OFFSET);
             } else {
-                direction = Direction.WEST;
+                direction = Direction.LEFT;
                 unit.setX(spawnBlock.getTexture().getHitbox().getRightX() + Configuration.ENEMY_SPAWN_OFFSET);
             }
             destination = spawnBlock.getX() + ((Configuration.BLOCK_SIZE / 2) - unit.getHitbox().getWidth() / 2);
             unit.setY(spawnBlock.getY() + Util.centerValue(unit.getTexture().getHeight(), Configuration.BLOCK_SIZE));
         } else {
             if(spawnBlock.getY() <= 0) {
-                direction = Direction.SOUTH;
+                direction = Direction.UP;
                 unit.setY(-Configuration.ENEMY_SPAWN_OFFSET);
             } else {
-                direction = Direction.NORTH;
+                direction = Direction.DOWN;
                 unit.setY(spawnBlock.getTexture().getHitbox().getBottomY() + Configuration.ENEMY_SPAWN_OFFSET);
             }
             destination = spawnBlock.getY() + ((Configuration.BLOCK_SIZE / 2) - unit.getHitbox().getHeight() / 2);
@@ -64,7 +66,7 @@ public class AIHelper {
             int y = unit.getY();
             
             switch(direction) {
-                case EAST: {
+                case RIGHT: {
                     // Increasing X
                     x += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
@@ -76,7 +78,7 @@ public class AIHelper {
                     unit.setX(x);
                     break;
                 }
-                case WEST: {
+                case LEFT: {
                     // Decreasing X
                     x -= moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
@@ -88,7 +90,7 @@ public class AIHelper {
                     unit.setX(x);
                     break;
                 }
-                case NORTH: {
+                case DOWN: {
                     // Increasing Y
                     y += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
@@ -100,7 +102,7 @@ public class AIHelper {
                     unit.setY(y);
                     break;
                 }
-                case SOUTH: {
+                case UP: {
                     // Decreasing Y
                     y -= moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
@@ -111,6 +113,18 @@ public class AIHelper {
                     }
                     unit.setY(y);
                     break;
+                }
+            }
+            
+            // Once the enemy unit has reached it's spawn block, we can begin to check if the unit is outside the map. Because if it is, then we need to damage the player.
+            if(!canDamagePlayer && Util.isWithinArea(unit.getX(), unit.getY(), MapManager.getCurrentMap().getPathData().getSpawnPath().getTexture())) {
+                canDamagePlayer = true;
+            }
+            
+            if(canDamagePlayer && !Util.isWithinArea(unit.getX(), unit.getY(), 0, 0, Configuration.GAME_WIDTH, Configuration.GAME_HEIGHT)) {
+                if(PlayScreen.instance != null) {
+                    unit.despawn();
+                    PlayScreen.instance.getPlayer().damage(1);
                 }
             }
             
@@ -130,24 +144,40 @@ public class AIHelper {
     }
     
     public void calcDestAndDir() {
+       if(lastPathCalculated) {
+           switch(direction) {
+               case UP: destination = -Configuration.BLOCK_SIZE; break;
+               case DOWN: destination = PlayScreen.instance.getGameWindow().getHeight() + Configuration.BLOCK_SIZE; break;
+               case LEFT: destination = -Configuration.BLOCK_SIZE; break;
+               case RIGHT: destination = PlayScreen.instance.getGameWindow().getWidth() + Configuration.BLOCK_SIZE; break;
+           }
+           return;
+       }
        Block currentPath = targetPath;
        targetPath = targetPath.getNextPath();
-
+       
        if(targetPath.getX() != currentPath.getX()) {
            if(targetPath.getX() > currentPath.getX()) {
-               direction = Direction.EAST;
+               direction = Direction.RIGHT;
            } else {
-               direction = Direction.WEST;
+               direction = Direction.LEFT;
            }
            destination = targetPath.getX() + ((Configuration.BLOCK_SIZE / 2) - unit.getHitbox().getWidth() / 2);
        } else {
            if(targetPath.getY() > currentPath.getY()) {
-               direction = Direction.NORTH;
+               direction = Direction.DOWN;
            } else {
-               direction = Direction.SOUTH;
+               direction = Direction.UP;
            }
            destination = targetPath.getY() + ((Configuration.BLOCK_SIZE / 2) - unit.getHitbox().getHeight() / 2);
        }
+       
+       // Check to see if the next path after the freshly calculated path is the last path ID. Flag it if it is.
+       if(targetPath.getPathID() >= MapManager.getCurrentMap().getPathData().getDestinationPath().getPathID()) {
+           lastPathCalculated = true;
+           Log.info("[AIHelper] Last path calculated!");
+       }
+       //Log.info("[AIHelper] New destination: " + destination + ", direction: " + direction.name());
     }
     
     public boolean isSpawned() {

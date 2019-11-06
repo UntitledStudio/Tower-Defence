@@ -270,4 +270,18 @@ public class Util {
         Ellipse2D ellipse = new Ellipse2D.Double(newX, newY, width, height);
         return ellipse;
     }
+    
+    public static double getDistanceBetween(int fromX, int fromY, int toX, int toY) {
+        return Math.sqrt(Math.pow((fromX-toX), 2) + Math.pow((fromY-toY), 2));
+    }
+    
+    public static Point getPointBetween(int x1, int y1, int x2, int y2) {
+        return getPointBetween(x1, y1, x2, y2, 2);
+    }
+    
+    public static Point getPointBetween(int x1, int y1, int x2, int y2, double divisor) {
+        double midX = (x1 + x2) / divisor;
+        double midY = (y1 + y2) / divisor;
+        return new Point((int)midX, (int)midY);
+    }
 }

@@ -7,6 +7,7 @@ import td.Configuration;
 import td.assets.Image;
 import td.assets.ImageCache;
 import td.assets.Texture;
+import td.entities.EntityRemoveReason;
 import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
@@ -66,6 +67,11 @@ public class Block {
     public void setTowerEntity(Tower te) {
         this.towerEntity = te;
         MapManager.getCurrentMap().getTowers().add(te);
+    }
+    
+    public void removeTowerEntity(Tower te, EntityRemoveReason reason) {
+        setTowerEntity(null);
+        Log.info("[Block] Tower entity removed. Reason: " + reason.name());
     }
     
     public Tower getTowerEntity() {
@@ -128,6 +134,15 @@ public class Block {
             // Check to see if there is an active wave. Process targetting if there is.
             if(WaveManager.isWaveActive()) {
                 towerEntity.processTargetting();
+                
+                // If the tower finds a target, attempt to fire at said target.
+                if(towerEntity.hasTarget()) {
+                    EnemyUnit unit = towerEntity.getTarget();
+                    
+                    if(unit != null) {
+                        // todo: logic
+                    }
+                }
             }
         }
         

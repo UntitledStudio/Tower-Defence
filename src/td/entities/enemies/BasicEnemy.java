@@ -4,9 +4,11 @@ import java.awt.Graphics2D;
 import td.Configuration;
 import td.assets.ImageCache;
 import td.assets.Texture;
+import td.entities.EntityRemoveReason;
 import td.entities.EntityType;
 import td.towers.Tower;
 import td.util.Hitbox;
+import td.util.Log;
 import td.waves.Wave;
 
 public class BasicEnemy implements EnemyUnit {
@@ -58,8 +60,8 @@ public class BasicEnemy implements EnemyUnit {
     }
 
     @Override
-    public void remove() {
-        
+    public void remove(EntityRemoveReason reason) {
+        getAssociatedWave().onEnemyRemoval(this, reason);
     }
     
     @Override
@@ -70,7 +72,14 @@ public class BasicEnemy implements EnemyUnit {
     @Override
     public void kill() {
         // do some animation or some shiz
-        remove();
+        Log.info("[BasicEnemy] " + getEnemyType().name() + " enemy killed. (Health: " + getHealth() + ", MaxHealth: " + getMaxHealth() + ", WaveID: " + getAssociatedWave().getId() + ")");
+        remove(EntityRemoveReason.KILLED);
+    }
+
+    @Override
+    public void despawn() {
+        Log.info("[BasicEnemy] " + getEnemyType().name() + " enemy despawned. (Health: " + getHealth() + ", MaxHealth: " + getMaxHealth() + ", WaveID: " + getAssociatedWave().getId() + ")");
+        remove(EntityRemoveReason.ESCAPED);
     }
 
     @Override

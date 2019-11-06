@@ -3,18 +3,19 @@ package td.towers;
 import td.util.Log;
 
 public class Defaults {
-    public TowerType   TOWER_TYPE                  = TowerType.UNKNOWN;
-    public int         MAX_LEVEL                   = -1;
-    public int         START_LEVEL                 = -1;
-    public int         DAMAGE                      = -1;
-    public int         SHOTS_PER_SECOND            = -1;
-    public int         RANGE                       = -1;
-    public int         CRIT_CHANCE                 = -1;
-    public double      CRIT_MULTIPLIER             = -1;
-    public int         BUY_COST                    = -1;
-    public int         REFUND_AMOUNT               = -1;
-    public double      UPGRADE_COST_MULTIPLIER     = -1;
-    public double      UPGRADE_DAMAGE_MULTIPLIER   = -1;
+    public TowerType    TOWER_TYPE                  = TowerType.UNKNOWN;
+    public int          MAX_LEVEL                   = -1;
+    public int          START_LEVEL                 = -1;
+    public int          DAMAGE                      = -1;
+    public int          SHOTS_PER_SECOND            = -1;
+    public int          RANGE                       = -1;
+    public int          CRIT_CHANCE                 = -1;
+    public double       CRIT_MULTIPLIER             = -1;
+    public int          BUY_COST                    = -1;
+    public int          REFUND_AMOUNT               = -1;
+    public double       UPGRADE_COST_MULTIPLIER     = -1;
+    public double       UPGRADE_DAMAGE_MULTIPLIER   = -1;
+    public long         FIRE_DELAY                  = -1;                   
     
     private static Defaults DEFAULTS_BASIC = null;
     
@@ -33,6 +34,7 @@ public class Defaults {
                 REFUND_AMOUNT               = 300;
                 UPGRADE_COST_MULTIPLIER     = 1.7;
                 UPGRADE_DAMAGE_MULTIPLIER   = 2.0;
+                FIRE_DELAY                  = 200; // 5 shots per second. adjust?
             }
         }
     }

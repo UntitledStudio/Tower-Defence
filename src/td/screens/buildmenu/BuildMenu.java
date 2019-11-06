@@ -219,7 +219,17 @@ public class BuildMenu {
         // todo: performance opt. !!
         
         getInfoArea().draw(g);
-        g.setColor(Colors.INFO_AREA_TEXT);
+        
+        // Just a little highlighting if the menu is closed and the mouse if hovering the info area.
+        if(!isOpen() && getState() == BuildMenuState.STATIC) {
+            if(Util.isWithinArea(getInput(), getInfoArea().getHitbox())) {
+                g.setColor(Colors.INFO_AREA_TEXT.brighter().brighter());
+            } else {
+                g.setColor(Colors.INFO_AREA_TEXT);
+            }
+        } else {
+            g.setColor(Colors.INFO_AREA_TEXT);
+        }
         g.setFont(Fonts.INFO_AREA);
         int x1 = getX() + getWidth() + 15;
         
@@ -235,26 +245,13 @@ public class BuildMenu {
         }
         
         // Wave info area
-        drawWaveInfoArea(g);
-    }
-    
-    public void drawWaveInfoArea(Graphics2D g) {
-        getWaveInfoArea().draw(g);
-        g.setColor(Colors.INFO_AREA_TEXT);
-        //g.setFont(Fonts.WAVE_INFO_AREA);
-        g.drawImage(ImageCache.SWORD_ICON, getWaveInfoArea().getX() + 30, getWaveInfoArea().getY() + 10, null);
-        String s = WaveManager.getWaveCount() + "/~";
-        g.drawString(s, getWaveInfoArea().getX() + 64, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
-        
-        if(Debug.ENABLED) {
-            g.setColor(Color.RED);
-            g.drawRect(getWaveInfoArea().getX(), getWaveInfoArea().getY(), getWaveInfoArea().getWidth(), getWaveInfoArea().getHeight());
-        }
+        //drawWaveInfoArea(g);
     }
 
     public void toggle() {
         Hitbox hitbox = menuTexture.getHitbox();
         
+        // Whenever we toggle the open/close state of the BuildMenu, we always have to cancel the placing of a tower.
         TowerPlacer.setActive(false);
         
         if(state != BuildMenuState.STATIC) {
