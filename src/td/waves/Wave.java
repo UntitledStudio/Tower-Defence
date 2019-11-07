@@ -3,7 +3,6 @@ package td.waves;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import td.Configuration;
 import td.entities.EntityRemoveReason;
@@ -11,11 +10,14 @@ import td.entities.enemies.BasicEnemy;
 import td.util.Log;
 import td.util.Loop;
 import td.entities.enemies.EnemyUnit;
+import td.entities.projectile.ProjectileManager;
+import td.entities.projectile.TowerProjectile;
 import td.screens.PlayScreen;
 
 public class Wave {
     private final int id;
     private boolean isActive = false;
+    private boolean launched = false;
     private final boolean bossWave;
     private boolean paused = true;
     private final CopyOnWriteArrayList<EnemyUnit> ENEMY_INDEX;
@@ -41,13 +43,13 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            /*BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 100, 2));*/
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 4));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
         }
@@ -57,6 +59,7 @@ public class Wave {
      * Launch the wave.
      */
     public void launch() {
+        launched = true;
         setPaused(false);
         isActive = true;
         List<EnemyUnit> toSpawn = new ArrayList<>(ENEMY_INDEX);
@@ -77,6 +80,7 @@ public class Wave {
      */
     public void end() {
         isActive = false;
+        Loop.scheduleStop("waveLaunch");
         ENEMY_INDEX.clear();
         BASIC_ENEMIES.clear();
         Log.info("[Wave] Wave '" + id + "' ended!");
@@ -91,6 +95,16 @@ public class Wave {
     public void onEnemyRemoval(EnemyUnit unit, EntityRemoveReason reason) {
         getEnemyIndex().remove(unit);
         
+        ProjectileManager pm = PlayScreen.instance.getProjectileManager();
+        for(Object o : pm.getProjectiles()) {
+            TowerProjectile proj = (TowerProjectile)o;
+            
+            if(proj.getTarget() == unit) {
+                // todo: instead of removing, make the projectiles keep traveling in the same direction until they out of bounds.
+                proj.remove();
+            }
+        }
+        
         if(getEnemyIndex().isEmpty()) {
             end();
         }
@@ -100,7 +114,7 @@ public class Wave {
      * Handles the ticking of this wave.
      */
     public void tick() {
-        if(!paused) {
+        if(!paused && isActive) {
             if(ENEMY_INDEX.isEmpty()) {
                 // wave finished
             } else {
@@ -168,5 +182,9 @@ public class Wave {
     
     public void setActive(boolean active) {
         this.isActive = active;
+    }
+    
+    public boolean isLaunched() {
+        return launched;
     }
 }

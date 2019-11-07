@@ -12,6 +12,8 @@ import td.entities.Entity;
 import td.entities.EntityRemoveReason;
 import td.entities.EntityType;
 import td.entities.enemies.EnemyUnit;
+import td.entities.projectile.MachineGunProjectile;
+import td.screens.PlayScreen;
 import td.towers.strategies.FirstUnitStrategy;
 import td.towers.strategies.TargetStrategy;
 import td.util.Log;
@@ -32,11 +34,6 @@ public abstract class Tower implements Entity {
      * Tower damage to monsters.
      */
     int damage = 1;
-    
-    /**
-     * 
-     */
-    int shotsPerSecond = 10;
     
     /**
      * Tower range in radius.
@@ -85,6 +82,11 @@ public abstract class Tower implements Entity {
      */
     TowerType towerType = TowerType.UNKNOWN;
     
+    /**
+     * The speed in which the fired projectile travels at.
+     */
+    double fireSpeed = 5.0;
+    
     private boolean isSelected = false;
     private TowerState state = TowerState.DISABLED;
     private Block block;
@@ -102,7 +104,7 @@ public abstract class Tower implements Entity {
     }
     
     /**
-     * Instantly rotate the tower so that it points towards target location.
+     * Calculates the angle/direction for tower rotation.
      * @param x
      * @param y 
      */
@@ -189,6 +191,9 @@ public abstract class Tower implements Entity {
     }
     
     public void draw(Graphics2D g) {
+        /**
+         * Tower rotation.
+         */
         int cx = towerType.getImage().getWidth() / 2;
         int cy = towerType.getImage().getHeight() / 2;
         AffineTransform backup = g.getTransform();
@@ -211,10 +216,22 @@ public abstract class Tower implements Entity {
         return System.currentTimeMillis()-lastFireTime >= fireInterval;
     }
     
-    public void fireAtTarget() {
+    public double getFireSpeed() {
+        return fireSpeed;
+    }
+    
+    public void setFireSpeed(double speed) {
+        this.fireSpeed = speed;
+    }
+    
+    /**
+     * Update the towere every game tick. Move fired projectiles.
+     * todo: Implement ability for multiple projectiles.
+     */
+    public void fire() {
         if(canFire()) {
-            
-            
+            MachineGunProjectile proj = new MachineGunProjectile(this, target, fireSpeed);
+            PlayScreen.instance.getProjectileManager().getProjectiles().add(proj);
             lastFireTime = System.currentTimeMillis();
         }
     }

@@ -7,7 +7,6 @@ public class Defaults {
     public int          MAX_LEVEL                   = -1;
     public int          START_LEVEL                 = -1;
     public int          DAMAGE                      = -1;
-    public int          SHOTS_PER_SECOND            = -1;
     public int          RANGE                       = -1;
     public int          CRIT_CHANCE                 = -1;
     public double       CRIT_MULTIPLIER             = -1;
@@ -15,7 +14,8 @@ public class Defaults {
     public int          REFUND_AMOUNT               = -1;
     public double       UPGRADE_COST_MULTIPLIER     = -1;
     public double       UPGRADE_DAMAGE_MULTIPLIER   = -1;
-    public long         FIRE_DELAY                  = -1;                   
+    public long         FIRE_DELAY                  = -1;
+    public double       SPEED                       = -1;
     
     private static Defaults DEFAULTS_BASIC = null;
     
@@ -25,8 +25,7 @@ public class Defaults {
                 TOWER_TYPE                  = TowerType.MACHINE_GUN;
                 MAX_LEVEL                   = 1;
                 START_LEVEL                 = 1;
-                DAMAGE                      = 5;
-                SHOTS_PER_SECOND            = 10;
+                DAMAGE                      = 3;
                 RANGE                       = 350;
                 CRIT_CHANCE                 = 0;
                 CRIT_MULTIPLIER             = 0.0;
@@ -34,7 +33,8 @@ public class Defaults {
                 REFUND_AMOUNT               = 300;
                 UPGRADE_COST_MULTIPLIER     = 1.7;
                 UPGRADE_DAMAGE_MULTIPLIER   = 2.0;
-                FIRE_DELAY                  = 200; // 5 shots per second. adjust?
+                FIRE_DELAY                  = 100; // adjust
+                SPEED                       = 10.0; // adjust
             }
         }
     }

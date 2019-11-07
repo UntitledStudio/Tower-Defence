@@ -11,7 +11,6 @@ public class MachineGunTower extends Tower {
         maxLevel                = TowerType.MACHINE_GUN.getDefaults().MAX_LEVEL;
         currentLevel            = TowerType.MACHINE_GUN.getDefaults().START_LEVEL;
         damage                  = TowerType.MACHINE_GUN.getDefaults().DAMAGE;
-        shotsPerSecond          = TowerType.MACHINE_GUN.getDefaults().SHOTS_PER_SECOND;
         range                   = TowerType.MACHINE_GUN.getDefaults().RANGE;
         critChance              = TowerType.MACHINE_GUN.getDefaults().CRIT_CHANCE;
         critMultiplier          = TowerType.MACHINE_GUN.getDefaults().CRIT_MULTIPLIER;
@@ -20,6 +19,7 @@ public class MachineGunTower extends Tower {
         upgradeCostMultiplier   = TowerType.MACHINE_GUN.getDefaults().UPGRADE_COST_MULTIPLIER;
         upgradeDamageMultiplier = TowerType.MACHINE_GUN.getDefaults().UPGRADE_DAMAGE_MULTIPLIER;
         fireInterval            = TowerType.MACHINE_GUN.getDefaults().FIRE_DELAY;
+        fireSpeed               = TowerType.MACHINE_GUN.getDefaults().SPEED;
         updateRange();
     }
     

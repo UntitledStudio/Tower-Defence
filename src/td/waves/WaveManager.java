@@ -48,13 +48,17 @@ public class WaveManager {
     public static void launchNext() {
         if(wave != null) {
             if(wave.isActive()) {
-                Log.error("[WaveManager] Attempted to launch an already active wave!");
+                Log.info("[WaveManager] Attempted to launch an already active wave!");
             } else {
-                wave.launch();
-                Log.info("[WaveManager] Launched wave! (" + wave.getId() + ")");
+                if(wave.isLaunched()) {
+                    Log.error("[WaveManager] Attempted to launch and already launched wave! (Bug)");
+                } else {
+                    wave.launch();
+                    Log.info("[WaveManager] Launched wave! (" + wave.getId() + ")");
+                }
             }
         } else {
-            Log.error("[WaveManager] Failed to launch wave. Could not detect generated wave. (null)");
+            Log.error("[WaveManager] Failed to launch wave. Could not detect generated wave. (null / Bug)");
         }
     }
     

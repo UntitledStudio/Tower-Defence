@@ -140,7 +140,7 @@ public class Block {
                     EnemyUnit unit = towerEntity.getTarget();
                     
                     if(unit != null) {
-                        // todo: logic
+                        towerEntity.fire();
                     }
                 }
             }

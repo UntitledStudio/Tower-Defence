@@ -48,6 +48,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import td.assets.Texture;
+import td.entities.projectile.TowerProjectile;
 
 public class Util {
     public static void applyDesign() {

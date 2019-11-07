@@ -22,6 +22,7 @@ import td.data.Colors;
 import td.data.Fonts;
 import td.data.Player;
 import td.entities.EntityRemoveReason;
+import td.entities.projectile.ProjectileManager;
 import td.maps.MapManager;
 import td.screens.buildmenu.BuildMenu;
 import td.screens.buildmenu.BuildMenuState;
@@ -39,6 +40,7 @@ public class PlayScreen implements Screen {
     private Texture waveInfoAreaTexture = null;
     private Player player = null;
     private BuildMenu bmenu = null;
+    private ProjectileManager projectileManager = null;
     public static PlayScreen instance;
     
     @Override
@@ -51,6 +53,7 @@ public class PlayScreen implements Screen {
             MapManager.setMap(MapManager.getMaps().get(0), true);
         }
         this.player = new Player(100, 1000);
+        this.projectileManager = new ProjectileManager();
         
         try {
             this.infoAreaTexture = new Texture(Image.INFO_AREA);
@@ -125,6 +128,11 @@ public class PlayScreen implements Screen {
         }
         
         /**
+         * Tick and render all projectiles.
+         */
+        PlayScreen.instance.getProjectileManager().processAll(g);
+        
+        /**
          * Handle debug.
          */
         if(Debug.ENABLED) {
@@ -156,6 +164,7 @@ public class PlayScreen implements Screen {
                         Log.info("[~] Performing reset ..");
                         int i = 0;
                         
+                        getProjectileManager().removeAll();
                         for(Block b : MapManager.getCurrentMap().getBlocks()) {
                             if(b.hasTowerEntity()) {
                                 b.getTowerEntity().remove(EntityRemoveReason.RESET);
@@ -314,5 +323,9 @@ public class PlayScreen implements Screen {
     
     public BuildMenu getBuildMenu() {
         return bmenu;
+    }
+    
+    public ProjectileManager getProjectileManager() {
+        return projectileManager;
     }
 }

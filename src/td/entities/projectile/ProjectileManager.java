@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import td.util.Log;
 
 public class ProjectileManager {
-    private CopyOnWriteArrayList<TowerProjectile> projectiles = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<TowerProjectile> projectiles = new CopyOnWriteArrayList<>();
     
     public void processAll(Graphics2D g) {
         for(TowerProjectile projectile : projectiles) {
