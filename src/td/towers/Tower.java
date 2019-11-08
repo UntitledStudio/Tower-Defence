@@ -13,11 +13,13 @@ import td.entities.EntityRemoveReason;
 import td.entities.EntityType;
 import td.entities.enemies.EnemyUnit;
 import td.entities.projectile.MachineGunProjectile;
+import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.strategies.FirstUnitStrategy;
 import td.towers.strategies.TargetStrategy;
 import td.util.Log;
 import td.util.Util;
+import td.waves.WaveManager;
 
 public abstract class Tower implements Entity {
     /**
@@ -121,7 +123,7 @@ public abstract class Tower implements Entity {
     }
     
     public boolean hasTarget() {
-        return target != null && target.isAlive();
+        return target != null/*&& target.isAlive()*/;
     }
     
     public void setTarget(EnemyUnit unit) {
@@ -149,17 +151,20 @@ public abstract class Tower implements Entity {
         return strategy;
     }
     
-    public void processTargetting() {
+    /**
+     * Update the visual targetting of the tower. (Rotate the tower towards its target if there is any) 
+     */
+    public void updateVisualTargetting() {
         if(hasTarget()) {
             lookAt(getTarget());
         }
     }
     
     /**
-     * Returns a list of enemies within this tower's target range.
+     * Returns a list of enemies registered within this tower's target range.
      * @return 
      */
-    public List<EnemyUnit> getEnemiesWithinRange() {
+    public List<EnemyUnit> getTargetIndex() {
         return targetIndex;
     }
     
@@ -177,6 +182,7 @@ public abstract class Tower implements Entity {
      * @param unit 
      */
     public void unregisterTarget(EnemyUnit unit) {
+        Log.info("unregistered");
         targetIndex.remove(unit);
         findTarget();
     }
@@ -226,7 +232,6 @@ public abstract class Tower implements Entity {
     
     /**
      * Update the towere every game tick. Move fired projectiles.
-     * todo: Implement ability for multiple projectiles.
      */
     public void fire() {
         if(canFire()) {

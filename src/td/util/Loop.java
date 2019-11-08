@@ -66,6 +66,8 @@ public class Loop {
                 }
             }
         }, delay, interval);
+        
+        Log.info("[Loop] A loop has startet. Identifier: " + (task_name == null ? "NULL" : task_name));
     }
     
     public void stop() {
@@ -79,6 +81,8 @@ public class Loop {
             end_runnable.run();
         }
         stop_schedule.remove(task_name);
+        
+        Log.info("[Loop] A loop has stopped. Identifier: " + (task_name == null ? "NULL" : task_name));
     }
     
     /**

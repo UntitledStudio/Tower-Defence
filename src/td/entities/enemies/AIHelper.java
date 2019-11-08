@@ -127,19 +127,6 @@ public class AIHelper {
                     PlayScreen.instance.getPlayer().damage(1);
                 }
             }
-            
-            // Target registering and unregistering.
-            for(Tower t : MapManager.getCurrentMap().getTowers()) {
-                if(t.isTargetRegistered(unit)) {
-                    if(!unit.isWithinTowerRange(t)) {
-                        t.unregisterTarget(unit);
-                    }
-                } else {
-                    if(unit.isWithinTowerRange(t)) {
-                        t.registerTarget(unit);
-                    }
-                }
-            }
         }
     }
     
@@ -177,7 +164,6 @@ public class AIHelper {
            lastPathCalculated = true;
            Log.info("[AIHelper] Last path calculated!");
        }
-       //Log.info("[AIHelper] New destination: " + destination + ", direction: " + direction.name());
     }
     
     public boolean isSpawned() {

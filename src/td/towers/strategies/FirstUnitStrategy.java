@@ -10,6 +10,11 @@ public class FirstUnitStrategy extends TargetStrategy {
     public EnemyUnit findTarget(Tower tower) {
         List<EnemyUnit> index = WaveManager.getWave().getEnemyIndex();
         
+        /**
+         * This logic is flawed. 
+         * We need to look for the enemy that has traveled the furthest, not the spawn queue position.
+         */
+        
         for(int i = 0; i < index.size(); i++) {
             EnemyUnit unit = index.get(i);
             

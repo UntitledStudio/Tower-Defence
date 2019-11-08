@@ -3,6 +3,7 @@ package td.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import td.Configuration;
 import td.GameWindow;
 import td.data.Block;
 import td.data.BlockType;
@@ -13,6 +14,7 @@ import td.screens.PlayScreen;
 import td.screens.ScreenManager;
 import td.screens.buildmenu.BuildMenu;
 import td.towers.Tower;
+import td.waves.Wave;
 import td.waves.WaveManager;
 
 public class Debug {
@@ -41,6 +43,15 @@ public class Debug {
             } else {
                 RenderUtil.drawString("BuildMenu: INSTANCE IS NULL", 8, baseY * 13, Color.WHITE, bgClr, g);
             }
+            Wave wave = WaveManager.getWave();
+            String waveInfo = "";
+            
+            if(wave != null) {
+                waveInfo = "W: " + (wave.isActive() ? "Active" : "Not active") + ", pause: " + wave.isPaused() + ", launched: " + wave.isLaunched() + ", id: " + wave.getId() + ", enemies: " + wave.getEnemyIndex().size();
+            } else {
+                waveInfo = "Wave: null";
+            }
+            RenderUtil.drawString(waveInfo, 0, window.getPanel().getHeight()-22, Color.white, bgClr, g);
             
             for(Block b : MapManager.getCurrentMap().getBlocks()) {
                 if(b.getType() == BlockType.PATH) {
@@ -58,6 +69,7 @@ public class Debug {
                                 EnemyUnit unit = t.getTarget();
                                 
                                 if(unit != null) {
+                                    // Laser line
                                     g.setColor(Color.cyan);
                                     int tx = b.getX() + b.getTexture().getWidth()/2;
                                     int ty = b.getY() + b.getTexture().getHeight()/2;
@@ -65,14 +77,20 @@ public class Debug {
                                     int uy = unit.getY() + unit.getHeight()/2;
                                     g.drawLine(tx, ty, ux, uy);
                                     
+                                    // Blue dot in the middle.
                                     g.setColor(Color.blue);
                                     Point center = Util.getPointBetween(tx, ty, ux, uy);
                                     g.fillOval(center.x - 3, center.y - 3, 6, 6);
                                     
+                                    // Debug text
                                     g.setFont(Fonts.DEFAULT_11);
                                     RenderUtil.drawString("T.dis: " + Util.cleanDouble(Util.getDistanceBetween(tx, ty, ux, uy), 1), b.getX(), b.getY(), Color.cyan, Color.black, g);
                                 }
                             }
+                            
+                            g.setFont(Fonts.DEFAULT_11);
+                            // Target index debug text
+                            RenderUtil.drawString("TI: " + t.getTargetIndex().size(), b.getX(), b.getY()+19, Color.cyan, Color.black, g);
                         }
                     }
                 }

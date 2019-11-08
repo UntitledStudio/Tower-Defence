@@ -10,9 +10,10 @@ import td.entities.enemies.BasicEnemy;
 import td.util.Log;
 import td.util.Loop;
 import td.entities.enemies.EnemyUnit;
-import td.entities.projectile.ProjectileManager;
 import td.entities.projectile.TowerProjectile;
+import td.maps.MapManager;
 import td.screens.PlayScreen;
+import td.towers.Tower;
 
 public class Wave {
     private final int id;
@@ -50,6 +51,9 @@ public class Wave {
             BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
             BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
         }
@@ -73,6 +77,34 @@ public class Wave {
             }
         }, 0, 1250, "waveLaunch");
         l.start();
+        
+        /**
+         * Responsible for searching for targets(enemies) and registering them.
+         */
+        Loop towerTargetSearcher = new Loop(() -> {
+            if(isActive() && !isPaused()) {
+                for(EnemyUnit unit : getEnemyIndex()) {
+                    for(Tower t : MapManager.getCurrentMap().getTowers()) {
+                        /*for(EnemyUnit target : t.getTargetIndex()) {
+                            if(!target.isAlive()) {
+                                t.unregisterTarget(target);
+                                return;
+                            }
+                        }*/
+                        if(unit.isWithinTowerRange(t)) {
+                            if(!t.isTargetRegistered(unit)) {
+                                t.registerTarget(unit);
+                            }
+                        } else {
+                            if(t.isTargetRegistered(unit)) {
+                                t.unregisterTarget(unit);
+                            }
+                        }
+                    }
+                }
+            }
+        }, 100, 100, "towerTargetSearcher");
+        towerTargetSearcher.start();
     }
     
     /**
@@ -80,9 +112,11 @@ public class Wave {
      */
     public void end() {
         isActive = false;
-        Loop.scheduleStop("waveLaunch");
         ENEMY_INDEX.clear();
         BASIC_ENEMIES.clear();
+        Loop.scheduleStop("waveLaunch");
+        Loop.scheduleStop("towerTargetSearcher");
+        
         Log.info("[Wave] Wave '" + id + "' ended!");
         WaveManager.generateNext();
     }
@@ -93,20 +127,23 @@ public class Wave {
      * @param reason 
      */
     public void onEnemyRemoval(EnemyUnit unit, EntityRemoveReason reason) {
+        Log.info("[Wave] Removing enemy entity ..");
         getEnemyIndex().remove(unit);
         
-        ProjectileManager pm = PlayScreen.instance.getProjectileManager();
-        for(Object o : pm.getProjectiles()) {
+        // Remove this unit from towers that have registered it as a target.
+        for(Tower t : MapManager.getCurrentMap().getTowers()) {
+            if(t.hasTarget() && t.getTargetIndex().contains(unit)) {
+                t.unregisterTarget(unit);
+            }
+        }
+        
+        for(Object o : PlayScreen.instance.getProjectileManager().getProjectiles()) {
             TowerProjectile proj = (TowerProjectile)o;
             
             if(proj.getTarget() == unit) {
                 // todo: instead of removing, make the projectiles keep traveling in the same direction until they out of bounds.
                 proj.remove();
             }
-        }
-        
-        if(getEnemyIndex().isEmpty()) {
-            end();
         }
     }
     
@@ -116,7 +153,7 @@ public class Wave {
     public void tick() {
         if(!paused && isActive) {
             if(ENEMY_INDEX.isEmpty()) {
-                // wave finished
+                end();
             } else {
                 if(System.currentTimeMillis()-lastTick >= Configuration.ENTITY_TICK_INTERVAL) {
                     for(EnemyUnit e : ENEMY_INDEX) {
@@ -133,9 +170,9 @@ public class Wave {
      * @param g
      */
     public void render(Graphics2D g) {
-        for(EnemyUnit e : ENEMY_INDEX) {
+        ENEMY_INDEX.forEach((e) -> {
             e.render(g);
-        }
+        });
     }
     
     /**

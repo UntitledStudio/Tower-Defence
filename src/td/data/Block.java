@@ -127,13 +127,12 @@ public class Block {
                 // If not, process normally. (Light)
                 MapManager.getCurrentMap().processTowerRender(this);
             } else {
-                //g.drawImage(ImageCache.TOWER_BASIC, x, y, null);
                 getTowerEntity().draw(g);
             }
             
             // Check to see if there is an active wave. Process targetting if there is.
             if(WaveManager.isWaveActive()) {
-                towerEntity.processTargetting();
+                towerEntity.updateVisualTargetting();
                 
                 // If the tower finds a target, attempt to fire at said target.
                 if(towerEntity.hasTarget()) {
