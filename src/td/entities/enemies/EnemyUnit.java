@@ -26,6 +26,7 @@ public interface EnemyUnit extends Entity {
     public void setY(int y);
     public int getWidth();
     public int getHeight();
+    public int getWorth();
     public Texture getTexture();
     public Hitbox getHitbox();
     public void setMoveSpeed(int speed);

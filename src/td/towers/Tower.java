@@ -13,13 +13,11 @@ import td.entities.EntityRemoveReason;
 import td.entities.EntityType;
 import td.entities.enemies.EnemyUnit;
 import td.entities.projectile.MachineGunProjectile;
-import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.strategies.FirstUnitStrategy;
 import td.towers.strategies.TargetStrategy;
 import td.util.Log;
 import td.util.Util;
-import td.waves.WaveManager;
 
 public abstract class Tower implements Entity {
     /**
@@ -182,7 +180,6 @@ public abstract class Tower implements Entity {
      * @param unit 
      */
     public void unregisterTarget(EnemyUnit unit) {
-        Log.info("unregistered");
         targetIndex.remove(unit);
         findTarget();
     }

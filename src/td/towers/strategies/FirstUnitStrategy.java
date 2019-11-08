@@ -9,20 +9,20 @@ public class FirstUnitStrategy extends TargetStrategy {
     @Override
     public EnemyUnit findTarget(Tower tower) {
         List<EnemyUnit> index = WaveManager.getWave().getEnemyIndex();
+        EnemyUnit target = null;
         
-        /**
-         * This logic is flawed. 
-         * We need to look for the enemy that has traveled the furthest, not the spawn queue position.
-         */
-        
-        for(int i = 0; i < index.size(); i++) {
-            EnemyUnit unit = index.get(i);
-            
+        for(EnemyUnit unit : index) {
             if(unit.isWithinTowerRange(tower)) {
-                return unit;
+                target = unit;
+                
+                for(EnemyUnit potential : tower.getTargetIndex()) {
+                    if(potential.getAI().getDistanceTravelled() > target.getAI().getDistanceTravelled()) {
+                        target = potential;
+                    }
+                }
             }
         }
-        return null;
+        return target;
     }
     
     @Override

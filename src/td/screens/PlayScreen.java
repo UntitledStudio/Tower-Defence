@@ -89,12 +89,12 @@ public class PlayScreen implements Screen {
         /**
          * Build Menu
          */
-        getBuildMenu().render(g);
+        //getBuildMenu().render(g);
         
         /**
          * Wave Info
          */
-        drawWaveInfoArea(g);
+        //drawWaveInfoArea(g);
         
         /**
          * TowerPlacer
@@ -104,7 +104,7 @@ public class PlayScreen implements Screen {
             int y = getInput().getMouseY();
             
             // No need to do logic or render anything if the position of mouse is not a valid location for placement.
-            if(getInput().isMouseInWindow() && !Util.isWithinArea(getInput(), infoAreaTexture.getHitbox())) {
+            if(getInput().isMouseInWindow() && !Util.isWithinArea(getInput(), infoAreaTexture.getHitbox()) && !Util.isWithinArea(getInput(), waveInfoAreaTexture.getHitbox())) {
                 
                 // Snapping into correct location. This allows the player to correctly see the range reach of the tower.
                 if(MapManager.getDefaultMap().getHighlightedBlock(getInput()) != null) {
@@ -126,6 +126,16 @@ public class PlayScreen implements Screen {
                 }
             }
         }
+        
+        /**
+         * Build Menu
+         */
+        getBuildMenu().render(g);
+        
+        /**
+         * Wave Info
+         */
+        drawWaveInfoArea(g);
         
         /**
          * Tick and render all projectiles.
@@ -162,16 +172,16 @@ public class PlayScreen implements Screen {
                 } else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
                     if(e.isAltDown() || e.isControlDown()) {
                         Log.info("[~] Performing reset ..");
-                        int i = 0;
-                        
                         getProjectileManager().removeAll();
+                        WaveManager.reset();
+                        
+                        int i = 0;
                         for(Block b : MapManager.getCurrentMap().getBlocks()) {
                             if(b.hasTowerEntity()) {
                                 b.getTowerEntity().remove(EntityRemoveReason.RESET);
                                 i++;
                             }
                         }
-                        WaveManager.reset();
                         player.setCash(player.getStartingCash());
                         player.setHealth(player.getMaxHealth());
                         Log.info("[~] Reset completed.");
@@ -194,6 +204,8 @@ public class PlayScreen implements Screen {
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
                     WaveManager.launchNext();
+                } else if(e.getKeyCode() == KeyEvent.VK_B) {
+                    getBuildMenu().toggle();
                 }
             }
         };
@@ -208,6 +220,7 @@ public class PlayScreen implements Screen {
                 int y = e.getY();
                 
                 if(Util.isWithinArea(x, y, waveInfoAreaTexture)) {
+                    WaveManager.launchNext();
                     return;
                 }
                 
@@ -250,7 +263,7 @@ public class PlayScreen implements Screen {
                             }
                         } else {
                             // alert player in some way
-                            Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an invalid location.");
+                            Log.info("[PlayScreen: TowerPlacer] Player attempted to place at an invalid location. (b=null)");
                         }
                     }
                 } else {

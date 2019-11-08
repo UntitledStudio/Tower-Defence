@@ -17,7 +17,6 @@ import td.util.Hitbox;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
-import td.waves.WaveManager;
 
 public class BuildMenu {
     /**

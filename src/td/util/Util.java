@@ -1,6 +1,5 @@
 package td.util;
 
-import java.awt.AWTException;
 import java.awt.AlphaComposite;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -11,7 +10,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -48,15 +46,14 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import td.assets.Texture;
-import td.entities.projectile.TowerProjectile;
 
 public class Util {
+    public static Random rand = new Random();
+    
     public static void applyDesign() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {}
     }
     
     public static void setMainIcon(JFrame frame) {

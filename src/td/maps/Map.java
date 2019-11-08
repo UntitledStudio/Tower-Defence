@@ -90,9 +90,9 @@ public class Map {
         
         /**
          * Render the highlighted block.
-         * Dont highlight blocks if the BuildMenu is open.
+         * Dont highlight blocks if the BuildMenu is open or if the mouse if hovering the wave info area.
          */
-        if(screen.getInput().isMouseInWindow() && !screen.getBuildMenu().isOpen()) {
+        if(screen.getInput().isMouseInWindow() && !screen.getBuildMenu().isOpen() && !Util.isWithinArea(screen.getInput(), screen.getWaveInfoArea().getHitbox())) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
             if(b != null && b.getType() == BlockType.TOWER) {

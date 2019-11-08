@@ -14,6 +14,7 @@ import td.entities.projectile.TowerProjectile;
 import td.maps.MapManager;
 import td.screens.PlayScreen;
 import td.towers.Tower;
+import td.util.Util;
 
 public class Wave {
     private final int id;
@@ -44,16 +45,9 @@ public class Wave {
             
         } else {
             Log.info("[Wave, ID: " + id + "] Generating regular wave ..");
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 4));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
-            BASIC_ENEMIES.add(new BasicEnemy(this, 50, 2));
+            for(int i = 0; i < 10; i++) {
+                ENEMY_INDEX.add(new BasicEnemy(this, 50, Util.rand.ints(2, 5).findAny().getAsInt()));
+            }
             
             ENEMY_INDEX.addAll(BASIC_ENEMIES);
         }
@@ -85,12 +79,6 @@ public class Wave {
             if(isActive() && !isPaused()) {
                 for(EnemyUnit unit : getEnemyIndex()) {
                     for(Tower t : MapManager.getCurrentMap().getTowers()) {
-                        /*for(EnemyUnit target : t.getTargetIndex()) {
-                            if(!target.isAlive()) {
-                                t.unregisterTarget(target);
-                                return;
-                            }
-                        }*/
                         if(unit.isWithinTowerRange(t)) {
                             if(!t.isTargetRegistered(unit)) {
                                 t.registerTarget(unit);
@@ -144,6 +132,10 @@ public class Wave {
                 // todo: instead of removing, make the projectiles keep traveling in the same direction until they out of bounds.
                 proj.remove();
             }
+        }
+        
+        if(reason == EntityRemoveReason.KILLED) {
+            PlayScreen.instance.getPlayer().addCash(unit.getWorth());
         }
     }
     
@@ -223,5 +215,9 @@ public class Wave {
     
     public boolean isLaunched() {
         return launched;
+    }
+    
+    public boolean isBossWave() {
+        return bossWave;
     }
 }

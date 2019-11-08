@@ -18,6 +18,7 @@ public class BasicEnemy implements EnemyUnit {
     private final AIHelper ai;
     private int health = 100;
     private int maxHealth = 100;
+    private int worth = 100;
     
     public BasicEnemy(Wave wave, int maxHealth, int moveSpeed) {
         this.texture = new Texture(ImageCache.ENEMY_BASIC);
@@ -110,6 +111,11 @@ public class BasicEnemy implements EnemyUnit {
     @Override
     public int getHeight() {
         return getTexture().getHeight();
+    }
+
+    @Override
+    public int getWorth() {
+        return worth;
     }
     
     @Override

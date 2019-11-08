@@ -20,6 +20,7 @@ public class AIHelper {
     private Block targetPath = null;
     private boolean canDamagePlayer = false;
     private boolean lastPathCalculated = false;
+    private int distanceTravelled = 0;
     
     public AIHelper(EnemyUnit unit) {
         this.unit = unit;
@@ -68,7 +69,7 @@ public class AIHelper {
             switch(direction) {
                 case RIGHT: {
                     // Increasing X
-                    x += moveSpeed;
+                    x += moveSpeed; distanceTravelled += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
                     
                     if(x >= destination) {
@@ -80,7 +81,7 @@ public class AIHelper {
                 }
                 case LEFT: {
                     // Decreasing X
-                    x -= moveSpeed;
+                    x -= moveSpeed; distanceTravelled += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
                     
                     if(x <= destination) {
@@ -92,7 +93,7 @@ public class AIHelper {
                 }
                 case DOWN: {
                     // Increasing Y
-                    y += moveSpeed;
+                    y += moveSpeed; distanceTravelled += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
                     
                     if(y >= destination) {
@@ -104,7 +105,7 @@ public class AIHelper {
                 }
                 case UP: {
                     // Decreasing Y
-                    y -= moveSpeed;
+                    y -= moveSpeed; distanceTravelled += moveSpeed;
                     lastMoveUpdate = System.currentTimeMillis();
                     
                     if(y <= destination) {
@@ -196,5 +197,9 @@ public class AIHelper {
     
     public Block getTargetPath() {
         return targetPath;
+    }
+    
+    public int getDistanceTravelled() {
+        return distanceTravelled;
     }
 }

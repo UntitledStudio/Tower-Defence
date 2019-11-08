@@ -7,7 +7,6 @@ import td.entities.enemies.EnemyUnit;
 import td.screens.PlayScreen;
 import td.towers.Tower;
 import td.util.Hitbox;
-import td.util.Log;
 import td.util.Util;
 
 public class MachineGunProjectile implements TowerProjectile {
