@@ -43,6 +43,8 @@ public class PlayScreen implements Screen {
     private ProjectileManager projectileManager = null;
     public static PlayScreen instance;
     
+    public static long lastShotfiredSoundTime = System.currentTimeMillis(); // test, temp
+    
     @Override
     public void create(GameWindow window) {
         this.window = window;
@@ -87,16 +89,6 @@ public class PlayScreen implements Screen {
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
         /**
-         * Build Menu
-         */
-        //getBuildMenu().render(g);
-        
-        /**
-         * Wave Info
-         */
-        //drawWaveInfoArea(g);
-        
-        /**
          * TowerPlacer
          */
         if(TowerPlacer.isActive()) {
@@ -116,8 +108,10 @@ public class PlayScreen implements Screen {
                 
                 TowerPlacer.drawRangeIndicator(getInput(), g, Util.getEllipseFromCenter(x, y, TowerPlacer.getSelectedTower().getDefaults().RANGE, TowerPlacer.getSelectedTower().getDefaults().RANGE));
                 g.drawImage(TowerPlacer.getIcon(), x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
-
-                if(TowerPlacer.drawPlacementDenied) {
+                
+                if(getPlayer().getCash() < TowerPlacer.getSelectedTower().getDefaults().BUY_COST) {
+                    g.drawImage(ImageCache.NOT_ENOUGH_CASH, x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
+                } else if(TowerPlacer.drawPlacementDenied) {
                     g.drawImage(ImageCache.PLACEMENT_DENIED, x - Configuration.BLOCK_SIZE / 2, y - Configuration.BLOCK_SIZE / 2, null);
                     TowerPlacer.drawPlacementDenied = false;
                 } else if(TowerPlacer.drawPlacementAllowed) {
@@ -157,11 +151,11 @@ public class PlayScreen implements Screen {
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     if(!getBuildMenu().isOpen() || getBuildMenu().getState() != BuildMenuState.STATIC) {
-                        getBuildMenu().toggle();
+                        getBuildMenu().toggle(false);
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
                     if(getBuildMenu().isOpen() || getBuildMenu().getState() != BuildMenuState.STATIC) {
-                        getBuildMenu().toggle();
+                        getBuildMenu().toggle(false);
                     }
                 } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     if(TowerPlacer.isActive()) {
@@ -205,7 +199,7 @@ public class PlayScreen implements Screen {
                 } else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
                     WaveManager.launchNext();
                 } else if(e.getKeyCode() == KeyEvent.VK_B) {
-                    getBuildMenu().toggle();
+                    getBuildMenu().toggle(false);
                 }
             }
         };
@@ -227,7 +221,7 @@ public class PlayScreen implements Screen {
                 // If the click is within the BuildMenu hitbox and the BuildMenu is opening/open, close it.
                 if(!Util.isWithinArea(x, y, getBuildMenu().getHitbox()) && !Util.isWithinArea(x, y, infoAreaTexture)) {
                     if(getBuildMenu().isOpen() || getBuildMenu().getState() == BuildMenuState.OPENING) {
-                        getBuildMenu().toggle();
+                        getBuildMenu().toggle(false);
                         return;
                     }
                 }
@@ -242,7 +236,7 @@ public class PlayScreen implements Screen {
                 
                 if(Util.isWithinArea(x, y, infoAreaTexture)) {
                     if(!getBuildMenu().isOpen() || getBuildMenu().getState() == BuildMenuState.CLOSING) {
-                        getBuildMenu().toggle();
+                        getBuildMenu().toggle(false);
                         return;
                     }
                 }
@@ -250,7 +244,7 @@ public class PlayScreen implements Screen {
                 if(TowerPlacer.isActive()) {
                     if(e.getButton() == MouseEvent.BUTTON3) {
                         TowerPlacer.setActive(false);
-                        getBuildMenu().toggle();
+                        getBuildMenu().toggle(false);
                     } else {
                         Block b = MapManager.getCurrentMap().getHighlightedBlock(getInput());
                         
@@ -273,7 +267,7 @@ public class PlayScreen implements Screen {
                         if(b != null && b.getType() == BlockType.TOWER) {
                             if(!b.hasTowerEntity()) {
                                 if(!getBuildMenu().isOpen()) {
-                                    getBuildMenu().toggle();
+                                    getBuildMenu().toggle(true);
                                 }
                             }
                         }
@@ -304,13 +298,27 @@ public class PlayScreen implements Screen {
         return "PlayScreen";
     }
     
+    /**
+     * Draw the wave information box down the in right corner.
+     * @param g 
+     */
     public void drawWaveInfoArea(Graphics2D g) {
         getWaveInfoArea().draw(g);
-        g.setColor(Colors.INFO_AREA_TEXT);
-        g.setFont(Fonts.INFO_AREA);
         g.drawImage(ImageCache.SWORD_ICON, getWaveInfoArea().getX() + 30, getWaveInfoArea().getY() + 10, null);
-        String s = WaveManager.isWaveActive() ? WaveManager.getCurrentWaveID()+"" : WaveManager.getCurrentWaveID() + " -> " + WaveManager.getWaveCount();
-        g.drawString(s, getWaveInfoArea().getX() + 68, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
+        
+        if(getInput().isMouseInWindow() && Util.isWithinArea(getInput(), waveInfoAreaTexture.getHitbox()) && !WaveManager.isWaveActive()) {
+            g.setColor(Colors.WAVE_INFO_AREA_TEXT_LAUNCH);
+            g.setFont(Fonts.WAVE_INFO_AREA_LAUNCH);
+            
+            String s = "Launch Wave!";
+            g.drawString("Launch Wave!", getWaveInfoArea().getX() + 60, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
+        } else {
+            g.setColor(Colors.WAVE_INFO_AREA_TEXT);
+            g.setFont(Fonts.WAVE_INFO_AREA);
+            
+            String s = WaveManager.isWaveActive() ? WaveManager.getCurrentWaveID()+"" : WaveManager.getCurrentWaveID() + " -> " + WaveManager.getWaveCount();
+            g.drawString(s, getWaveInfoArea().getX() + 68, Util.centerStringY(s, getWaveInfoArea().getHeight(), g, getWaveInfoArea().getY() + 2));
+        }
         
         if(Debug.ENABLED) {
             g.setColor(Color.RED);

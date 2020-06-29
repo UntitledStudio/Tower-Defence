@@ -9,22 +9,19 @@ import td.data.BlockType;
 import td.data.Colors;
 import td.data.Player;
 import td.maps.MapManager;
+import td.screens.PlayScreen;
 import td.util.Input;
 import td.util.Log;
 import td.util.Util;
 
 public class TowerPlacer {
-    private static JFrame frame = null;
     private static boolean ACTIVE = false;
     private static TowerType SELECTED_TOWER = null;
     private static BufferedImage icon = null;
     public static boolean drawPlacementDenied = false;
     public static boolean drawPlacementAllowed = false;
-    
-    public static void setFrame(JFrame frame) {
-        TowerPlacer.frame = frame;
-    }
-    
+    //public static boolean drawNotEnoughCash = false;
+
     public static void setSelectedTower(TowerType type) {
         Log.info("[TowerPlacer] Selecting new tower for placement: " + type.name() + " ..");
         SELECTED_TOWER = type;
@@ -89,7 +86,9 @@ public class TowerPlacer {
             Block b = MapManager.getCurrentMap().getHighlightedBlock(input);
             
             if(b != null) {
-                if(b.hasTowerEntity() || b.getType() != BlockType.TOWER) {
+                if(PlayScreen.instance.getPlayer().getCash() < getSelectedTower().getDefaults().BUY_COST) {
+                    g.setColor(Colors.TOWER_RANGE_HIGHLIGHT_NOTOK);
+                } else if(b.hasTowerEntity() || b.getType() != BlockType.TOWER) {
                     g.setColor(Colors.TOWER_RANGE_HIGHLIGHT_NOTOK);
                     drawPlacementDenied = true;
                 } else {

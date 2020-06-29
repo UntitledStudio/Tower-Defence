@@ -15,6 +15,7 @@ public class ImageCache {
     public static BufferedImage PLACEMENT_ALLOWED = null;
     public static BufferedImage ENEMY_BASIC = null;
     public static BufferedImage MACHINE_GUN_PROJECTILE = null;
+    public static BufferedImage NOT_ENOUGH_CASH = null;
     
     public static void load() {
         try {
@@ -28,6 +29,7 @@ public class ImageCache {
             SWORD_ICON              = Image.SWORD_ICON.getBufferedImage();
             ENEMY_BASIC             = Image.ENEMY_BASIC.getBufferedImage();
             MACHINE_GUN_PROJECTILE  = Image.MACHINE_GUN_PROJECTILE.getBufferedImage();
+            NOT_ENOUGH_CASH         = Image.NOT_ENOUGH_CASH.getBufferedImage();
         } catch (IOException ex) {
             Log.error("[ImageCache] Failed to load!");
             ex.printStackTrace();

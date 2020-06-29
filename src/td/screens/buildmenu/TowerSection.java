@@ -1,9 +1,13 @@
 package td.screens.buildmenu;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import td.assets.Image;
 import td.assets.Texture;
 import td.data.Colors;
@@ -79,9 +83,13 @@ public class TowerSection implements Section {
             if(Util.isWithinArea(x, y, TOWER_BASIC.getTexture())) {
                 Log.info("[TowerSection] Registered mousePress at icon: TOWER_BASIC");
                 
-                menu.toggle();
+                menu.toggle(false);
                 TowerPlacer.setActive(true);
                 TowerPlacer.setSelectedTower(TowerType.MACHINE_GUN);
+                
+                if(menu.rememberMousePos()) {
+                    menu.moveMouse();
+                }
             }
         }
     }

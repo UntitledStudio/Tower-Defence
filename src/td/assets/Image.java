@@ -24,7 +24,8 @@ public enum Image {
     PLACEMENT_ALLOWED("assets/placement_allowed.png"),
     WAVE_INFO_AREA("assets/wave_info_area.png"),
     ENEMY_BASIC("assets/enemy_basic.png"),
-    MACHINE_GUN_PROJECTILE("assets/machine_gun_projectile.png");
+    MACHINE_GUN_PROJECTILE("assets/machine_gun_projectile.png"),
+    NOT_ENOUGH_CASH("assets/not_enough_cash.png");
     
     private final String path;
     

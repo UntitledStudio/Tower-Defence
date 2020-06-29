@@ -8,6 +8,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
+import kuusisto.tinysound.TinySound;
 import td.assets.ImageCache;
 import td.data.Colors;
 import td.maps.MapManager;
@@ -35,6 +36,7 @@ public class GameWindow {
     }
     
     public void run() {
+        TinySound.init();
         GameWindow.instance = this;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setupPanel();
@@ -49,12 +51,12 @@ public class GameWindow {
         ScreenManager.setScreen(new MenuScreen());
         panel.startGameLoop();
         loadGlobalInputHandlers();
-        TowerPlacer.setFrame(frame);
         frame.setVisible(true);
         
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                TinySound.shutdown();
                 Log.info("Game exiting ..");
             }
         });

@@ -1,7 +1,11 @@
 package td.screens.buildmenu;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
 import java.io.IOException;
 import td.Configuration;
 import td.assets.Image;
@@ -58,6 +62,14 @@ public class BuildMenu {
      * The info section of the menu.
      */
     private InfoSection info_section = null;
+    
+    /**
+     * The remembered position of the mouse.
+     * Used if "rememberMousePos" is true when calling the "toggle" function, such as when toggling the build menu by clicking an empty tower block.
+     */
+    private Point mousePos = new Point(0, 0);
+    private Point windowPos = new Point(0, 0);
+    private boolean rememberMousePos = false;
 
     public BuildMenu(PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -215,7 +227,7 @@ public class BuildMenu {
     }
     
     public void drawInfoArea(Graphics2D g) {
-        // todo: performance opt. !!
+        // todo: performance opt.
         
         getInfoArea().draw(g);
         
@@ -242,12 +254,9 @@ public class BuildMenu {
             g.setColor(Color.RED);
             g.drawRect(getInfoArea().getX(), getInfoArea().getY(), getInfoArea().getWidth(), getInfoArea().getHeight());
         }
-        
-        // Wave info area
-        //drawWaveInfoArea(g);
     }
 
-    public void toggle() {
+    public void toggle(boolean rememberMousePos) {
         Hitbox hitbox = menuTexture.getHitbox();
         
         // Whenever we toggle the open/close state of the BuildMenu, we always have to cancel the placing of a tower.
@@ -281,6 +290,10 @@ public class BuildMenu {
             /**
              * Open
              */
+            this.rememberMousePos = rememberMousePos;
+            mousePos = rememberMousePos ? MouseInfo.getPointerInfo().getLocation() : new Point(0, 0);
+            windowPos = playScreen.getGameWindow().getPanel().getLocationOnScreen();
+            
             Colors.BMENU_OUTSIDE_OVERLAY = new Color(1f, 1f, 1f, (float)0/255);
             
             if(Configuration.ANIMATIONS_ENABLED) {
@@ -320,5 +333,32 @@ public class BuildMenu {
     
     public Input getInput() {
         return playScreen.getInput();
+    }
+    
+    public boolean rememberMousePos() {
+        return rememberMousePos;
+    }
+    
+    public Point getMousePos() {
+        return mousePos;
+    }
+    
+    public void moveMouse() {
+        rememberMousePos = false;
+        
+        if(!playScreen.getGameWindow().getPanel().getLocationOnScreen().equals(windowPos)) {
+            Log.info("[BuildMenu] Failed to move mouse pointer because the location of the game window has changed.");
+            mousePos = new Point(0, 0);
+            return;
+        }
+        
+        try {
+            Robot r = new Robot();
+            r.mouseMove(getMousePos().x, getMousePos().y);
+        } catch (AWTException ex) {
+            Log.error("[BuildMenu] Failed to move mouse pointer!");
+            ex.printStackTrace();
+        }
+        mousePos = new Point(0, 0);
     }
 }

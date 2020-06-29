@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import td.Configuration;
 import td.assets.ImageCache;
+import td.assets.sounds.SoundLib;
 import td.data.Block;
 import td.entities.Entity;
 import td.entities.EntityRemoveReason;
@@ -234,6 +235,10 @@ public abstract class Tower implements Entity {
         if(canFire()) {
             MachineGunProjectile proj = new MachineGunProjectile(this, target, fireSpeed);
             PlayScreen.instance.getProjectileManager().getProjectiles().add(proj);
+            if(System.currentTimeMillis()-PlayScreen.lastShotfiredSoundTime >= 75) {
+                SoundLib.TOWER_SHOTFIRED_MACHINEGUN.play(0.15f);
+                PlayScreen.lastShotfiredSoundTime = System.currentTimeMillis();
+            }
             lastFireTime = System.currentTimeMillis();
         }
     }
