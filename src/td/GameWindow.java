@@ -56,8 +56,8 @@ public class GameWindow {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                TinySound.shutdown();
                 Log.info("Game exiting ..");
+                TinySound.shutdown();
             }
         });
     }

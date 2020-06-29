@@ -9,6 +9,7 @@ import td.assets.ImageCache;
 import td.data.Block;
 import td.data.BlockType;
 import td.screens.PlayScreen;
+import td.screens.buildmenu.BuildMenuState;
 import td.towers.Tower;
 import td.towers.TowerPlacer;
 import td.util.Debug;
@@ -92,7 +93,7 @@ public class Map {
          * Render the highlighted block.
          * Dont highlight blocks if the BuildMenu is open or if the mouse if hovering the wave info area.
          */
-        if(screen.getInput().isMouseInWindow() && !screen.getBuildMenu().isOpen() && !Util.isWithinArea(screen.getInput(), screen.getWaveInfoArea().getHitbox())) {
+        if(screen.getInput().isMouseInWindow() && !screen.getBuildMenu().isOpen() && screen.getBuildMenu().getState() != BuildMenuState.OPENING && !Util.isWithinArea(screen.getInput(), screen.getWaveInfoArea().getHitbox())) {
             Block b = getBlockAt(screen.getInput().getMouseX(), screen.getInput().getMouseY());
             
             if(b != null && b.getType() == BlockType.TOWER) {
